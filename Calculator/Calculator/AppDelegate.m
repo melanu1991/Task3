@@ -2,7 +2,7 @@
 //  AppDelegate.m
 //  Calculator
 //
-//  Created by melanu on 14.05.17.
+//  Created by melanu on 11.05.17.
 //  Copyright © 2017 melanu. All rights reserved.
 //
 
