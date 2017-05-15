@@ -29,6 +29,8 @@
     swipeLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(didSwipe:)];
     swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:swipeLeft];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)];
+    self.navigationItem.rightBarButtonItem = item;
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -42,6 +44,12 @@
     if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:@"0"]) {
         self.resultLabel.text = @"0";
     }
+}
+
+- (void)transitionAbout {
+    AboutViewController *aboutView = [[AboutViewController alloc]init];
+    [self.navigationController pushViewController:aboutView animated:YES];
+    [aboutView release];
 }
 
 - (IBAction)buttonPressNumber:(UIButton *)sender {
