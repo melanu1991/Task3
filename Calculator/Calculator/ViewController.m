@@ -12,7 +12,6 @@
     BOOL isDotButton;
     NSNumberFormatter *formatterDecimal;
     UISwipeGestureRecognizer *swipeLeft;
-    BOOL isOneNumber;
 }
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
 @end
@@ -22,7 +21,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     isDotButton = NO;
-    isOneNumber = NO;
     formatterDecimal = [[NSNumberFormatter alloc]init];
     formatterDecimal.minimumFractionDigits = 1;
     formatterDecimal.generatesDecimalNumbers = YES;
@@ -42,7 +40,6 @@
     }
     if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:@"0"]) {
         self.resultLabel.text = @"0";
-        isOneNumber = NO;
     }
 }
 
@@ -54,7 +51,7 @@
 //т,к, в таком случае делаются две проверки, на 1 строку больше
 //+промежуточное преобразование в decimal
 //Считаю что лучше хранить все в стринге(можно мутабельном) ,а  при самих расчетах уже преобразовывать в decimal
-/*- (IBAction)buttonPressNumber:(UIButton *)sender {
+- (IBAction)buttonPressNumber:(UIButton *)sender {
     
     NSString *value = [sender titleForState:UIControlStateNormal];
     NSString *result = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
@@ -68,39 +65,19 @@
         self.resultLabel.text = [NSString stringWithFormat:@"%@", decimal];
     }
 
-}*/
-
-//хотя уже начинаю сомневаться что это лучше)))
-- (IBAction)buttonPressNumber:(UIButton *)sender {
-
-    NSString *value = [sender titleForState:UIControlStateNormal];
-
-    if (isOneNumber) {
-        self.resultLabel.text = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
-    }
-    else if (![value isEqualToString:@"0"] && ![self.resultLabel.text isEqualToString:@"0"]) {
-        self.resultLabel.text = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
-        isOneNumber = YES;
-    }
-    else if ([self.resultLabel.text isEqualToString:@"0"]) {
-        self.resultLabel.text = [NSString stringWithFormat:@"%@",value];
-    }
-    
 }
+
 - (IBAction)dotButton:(UIButton *)sender {
     if (!isDotButton) {
-        //[self.resultLabel.text stringByAppendingString:@"."];
         NSString *temp = [self.resultLabel.text stringByAppendingString:@"."];
         self.resultLabel.text = temp;
         isDotButton = YES;
-        isOneNumber = YES;
     }
 }
 
 - (IBAction)buttonPressClear:(UIButton *)sender {
     self.resultLabel.text = @"0";
     isDotButton = NO;
-    isOneNumber = NO;
 }
 - (void)dealloc {
     [_resultLabel release];
