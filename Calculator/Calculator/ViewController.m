@@ -43,14 +43,6 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-//Такой вариант(хоть и рабочий) мне не очень нравиться,
-//т,к, в таком случае делаются две проверки, на 1 строку больше
-//+промежуточное преобразование в decimal
-//Считаю что лучше хранить все в стринге(можно мутабельном) ,а  при самих расчетах уже преобразовывать в decimal
 - (IBAction)buttonPressNumber:(UIButton *)sender {
     
     NSString *value = [sender titleForState:UIControlStateNormal];
