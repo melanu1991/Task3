@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "AboutViewController.h"
 
 @interface ViewController () {
     BOOL isDotButton;
@@ -71,6 +72,18 @@
     self.resultLabel.text = @"0";
     isDotButton = NO;
 }
+- (IBAction)buttonAboutModal:(id)sender {
+    AboutViewController *aboutView = [[AboutViewController alloc]init];
+    [self presentViewController:aboutView animated:YES completion:nil];
+    [aboutView release];
+}
+
+- (IBAction)buttonAbout:(id)sender {
+    AboutViewController *aboutView = [[AboutViewController alloc]init];
+    [self.navigationController pushViewController:aboutView animated:YES];
+    [aboutView release];
+}
+
 - (void)dealloc {
     [_resultLabel release];
     [formatterDecimal release];
