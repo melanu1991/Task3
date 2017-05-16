@@ -9,11 +9,11 @@
 #import "ViewController.h"
 
 @interface ViewController () {
-    BOOL isDotButton;
-    NSNumberFormatter *formatterDecimal;
-    UISwipeGestureRecognizer *swipeLeft;
-    BOOL isOneNumber;
 }
+@property (nonatomic, assign) BOOL isDotButton;
+@property (nonatomic, retain) NSNumberFormatter *formatterDecimal;
+@property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeft;
+@property (nonatomic, assign) BOOL isOneNumber;
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
 @end
 
@@ -21,15 +21,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    isDotButton = NO;
-    isOneNumber = NO;
-    formatterDecimal = [[NSNumberFormatter alloc]init];
-    formatterDecimal.minimumFractionDigits = 1;
-    formatterDecimal.generatesDecimalNumbers = YES;
-    formatterDecimal.numberStyle = NSNumberFormatterDecimalStyle;
-    swipeLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(didSwipe:)];
-    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-    [self.view addGestureRecognizer:swipeLeft];
+    self.isDotButton = NO;
+    self.isOneNumber = NO;
+    self.formatterDecimal = [[NSNumberFormatter alloc]init];
+    self.formatterDecimal.minimumFractionDigits = 1;
+    self.formatterDecimal.generatesDecimalNumbers = YES;
+    self.formatterDecimal.numberStyle = NSNumberFormatterDecimalStyle;
+    self.swipeLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(didSwipe:)];
+    self.swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:self.swipeLeft];
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -38,18 +38,14 @@
         self.resultLabel.text = result;
     }
     if (![self.resultLabel.text containsString:@"."]) {
-        isDotButton = NO;
+        self.isDotButton = NO;
     }
     if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:@"0"]) {
         self.resultLabel.text = @"0";
-        isOneNumber = NO;
+        self.isOneNumber = NO;
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 //Такой вариант(хоть и рабочий) мне не очень нравиться,
 //т,к, в таком случае делаются две проверки, на 1 строку больше
 //+промежуточное преобразование в decimal
@@ -61,7 +57,7 @@
     NSDecimalNumber *decimal = nil;
     
     if (isDotButton && [value isEqualToString:@"0"]) {
-        self.resultLabel.text = [NSString stringWithFormat:@"%@", result];
+        self.resultLabel.text = result;
     }
     else {
         decimal = (NSDecimalNumber *)[formatterDecimal numberFromString:result];
@@ -71,41 +67,40 @@
 }*/
 
 //хотя уже начинаю сомневаться что это лучше)))
-- (IBAction)buttonPressNumber:(UIButton *)sender {
+- (IBAction)buttonNumberPressed:(UIButton *)sender {
 
     NSString *value = [sender titleForState:UIControlStateNormal];
 
-    if (isOneNumber) {
+    if (self.isOneNumber) {
         self.resultLabel.text = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
     }
     else if (![value isEqualToString:@"0"] && ![self.resultLabel.text isEqualToString:@"0"]) {
         self.resultLabel.text = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
-        isOneNumber = YES;
+        self.isOneNumber = YES;
     }
     else if ([self.resultLabel.text isEqualToString:@"0"]) {
-        self.resultLabel.text = [NSString stringWithFormat:@"%@",value];
+        self.resultLabel.text = value;
     }
     
 }
 - (IBAction)dotButton:(UIButton *)sender {
-    if (!isDotButton) {
-        //[self.resultLabel.text stringByAppendingString:@"."];
+    if (!self.isDotButton) {
         NSString *temp = [self.resultLabel.text stringByAppendingString:@"."];
         self.resultLabel.text = temp;
-        isDotButton = YES;
-        isOneNumber = YES;
+        self.isDotButton = YES;
+        self.isOneNumber = YES;
     }
 }
 
 - (IBAction)buttonPressClear:(UIButton *)sender {
     self.resultLabel.text = @"0";
-    isDotButton = NO;
-    isOneNumber = NO;
+    self.isDotButton = NO;
+    self.isOneNumber = NO;
 }
 - (void)dealloc {
     [_resultLabel release];
-    [formatterDecimal release];
-    [swipeLeft release];
+    [_formatterDecimal release];
+    [_swipeLeft release];
     [super dealloc];
 }
 @end
