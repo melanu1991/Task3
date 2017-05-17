@@ -17,13 +17,5 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 }
-- (IBAction)buttonReturnMain:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-- (IBAction)buttonReturn:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-}
 
 @end

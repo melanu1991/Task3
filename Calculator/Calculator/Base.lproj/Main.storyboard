@@ -203,22 +203,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="vWF-cC-LKL">
-                        <barButtonItem key="leftBarButtonItem" id="MIz-P9-DGZ">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="UDq-Zh-E1o">
-                                <rect key="frame" x="16" y="7" width="83" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.52129952510376243" green="1" blue="0.4836403207750618" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="About"/>
-                                <connections>
-                                    <action selector="buttonAbout:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vn0-Jg-UjC"/>
-                                </connections>
-                            </button>
-                            <connections>
-                                <action selector="buttonAbout:" destination="BYZ-38-t0r" id="8ul-oG-DRE"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="vWF-cC-LKL"/>
                     <connections>
                         <outlet property="resultLabel" destination="t54-t3-ueG" id="oFK-Jh-9as"/>
                     </connections>

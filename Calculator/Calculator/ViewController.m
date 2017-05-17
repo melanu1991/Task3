@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "AboutViewController.h"
+#import "LicenseViewController.h"
 
 @interface ViewController () {
 }
@@ -30,7 +31,7 @@
     self.swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:self.swipeLeft];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)];
-    self.navigationItem.rightBarButtonItem = item;
+    self.navigationItem.leftBarButtonItem = item;
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -46,11 +47,11 @@
     }
 }
 
-//- (void)transitionAbout {
-//    AboutViewController *aboutView = [[AboutViewController alloc]init];
-//    [self.navigationController pushViewController:aboutView animated:YES];
-//    [aboutView release];
-//}
+- (void)transitionAbout {
+    AboutViewController *aboutView = [[AboutViewController alloc]init];
+    [self.navigationController pushViewController:aboutView animated:YES];
+    [aboutView release];
+}
 
 - (IBAction)buttonNumberPressed:(UIButton *)sender {
     
@@ -81,15 +82,9 @@
     self.isDotButton = NO;
 }
 - (IBAction)buttonLicense:(id)sender {
-    AboutViewController *aboutView = [[AboutViewController alloc]init];
-    [self presentViewController:aboutView animated:YES completion:nil];
-    [aboutView release];
-}
-
-- (IBAction)buttonAbout:(id)sender {
-    AboutViewController *aboutView = [[AboutViewController alloc]init];
-    [self.navigationController pushViewController:aboutView animated:YES];
-    [aboutView release];
+    LicenseViewController *licenseView = [[LicenseViewController alloc]init];
+    [self presentViewController:licenseView animated:YES completion:nil];
+    [licenseView release];
 }
 
 - (void)dealloc {
