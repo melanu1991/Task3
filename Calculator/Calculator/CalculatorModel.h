@@ -12,7 +12,10 @@
 
 @property (nonatomic, copy) NSString *operation;
 @property (nonatomic, copy) NSDecimalNumber *currentOperand;
+@property (nonatomic, retain) NSNumberFormatter *formatterDecimal;
 
 - (NSDecimalNumber *)performOperand:(NSDecimalNumber *)operand;
+
+- (instancetype)init;
 
 @end

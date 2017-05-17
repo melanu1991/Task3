@@ -72,8 +72,6 @@
         self.decimal = (NSDecimalNumber *)[self.formatterDecimal numberFromString:result];
         self.resultLabel.text = [NSString stringWithFormat:@"%@", self.decimal];
     }
-    
-    
 
 }
 
@@ -102,12 +100,25 @@
     self.waitNextOperand = NO;
 }
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
-    self.calcModel.currentOperand = self.decimal;
-    [self buttonPressClear:nil];
+   
+    if (self.waitNextOperand) {
+        NSDecimalNumber *temp = [self.calcModel performOperand:self.decimal];
+        self.resultLabel.text = [NSString stringWithFormat:@"%@",temp];
+        self.decimal = temp;
+        self.waitNextOperand = NO;
+    }
+    else {
+        self.calcModel.currentOperand = self.decimal;
+        [self buttonPressClear:nil];
+        self.waitNextOperand = YES;
+    }
     self.calcModel.operation = [sender titleForState:UIControlStateNormal];
-    self.waitNextOperand = YES;
 }
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
+    self.calcModel.operation = [sender titleForState:UIControlStateNormal];
+    NSDecimalNumber *temp = [self.calcModel performOperand:self.decimal];
+    self.resultLabel.text = [NSString stringWithFormat:@"%@",temp];
+    self.decimal = temp;
 }
 
 - (void)dealloc {
