@@ -193,11 +193,11 @@
                                 <rect key="frame" x="6" y="92" width="84" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="AboutModal">
+                                <state key="normal" title="License">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="buttonAboutModal:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6zS-Cf-0g1"/>
+                                    <action selector="buttonLicense:" destination="BYZ-38-t0r" eventType="touchUpInside" id="acu-ff-2Xg"/>
                                 </connections>
                             </button>
                         </subviews>

@@ -46,11 +46,11 @@
     }
 }
 
-- (void)transitionAbout {
-    AboutViewController *aboutView = [[AboutViewController alloc]init];
-    [self.navigationController pushViewController:aboutView animated:YES];
-    [aboutView release];
-}
+//- (void)transitionAbout {
+//    AboutViewController *aboutView = [[AboutViewController alloc]init];
+//    [self.navigationController pushViewController:aboutView animated:YES];
+//    [aboutView release];
+//}
 
 - (IBAction)buttonNumberPressed:(UIButton *)sender {
     
@@ -80,7 +80,7 @@
     self.resultLabel.text = @"0";
     self.isDotButton = NO;
 }
-- (IBAction)buttonAboutModal:(id)sender {
+- (IBAction)buttonLicense:(id)sender {
     AboutViewController *aboutView = [[AboutViewController alloc]init];
     [self presentViewController:aboutView animated:YES completion:nil];
     [aboutView release];
