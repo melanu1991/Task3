@@ -10,10 +10,10 @@
 #import "AboutViewController.h"
 
 @interface ViewController () {
-    BOOL isDotButton;
-    NSNumberFormatter *formatterDecimal;
-    UISwipeGestureRecognizer *swipeLeft;
 }
+@property (nonatomic,assign) BOOL isDotButton;
+@property (nonatomic,retain) NSNumberFormatter *formatterDecimal;
+@property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeft;
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
 @end
 
@@ -21,14 +21,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    isDotButton = NO;
-    formatterDecimal = [[NSNumberFormatter alloc]init];
-    formatterDecimal.minimumFractionDigits = 1;
-    formatterDecimal.generatesDecimalNumbers = YES;
-    formatterDecimal.numberStyle = NSNumberFormatterDecimalStyle;
-    swipeLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(didSwipe:)];
-    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-    [self.view addGestureRecognizer:swipeLeft];
+    self.isDotButton = NO;
+    self.formatterDecimal = [[NSNumberFormatter alloc]init];
+    self.formatterDecimal.minimumFractionDigits = 1;
+    self.formatterDecimal.generatesDecimalNumbers = YES;
+    self.formatterDecimal.numberStyle = NSNumberFormatterDecimalStyle;
+    self.swipeLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(didSwipe:)];
+    self.swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:self.swipeLeft];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)];
     self.navigationItem.rightBarButtonItem = item;
 }
@@ -39,7 +39,7 @@
         self.resultLabel.text = result;
     }
     if (![self.resultLabel.text containsString:@"."]) {
-        isDotButton = NO;
+        self.isDotButton = NO;
     }
     if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:@"0"]) {
         self.resultLabel.text = @"0";
@@ -52,33 +52,33 @@
     [aboutView release];
 }
 
-- (IBAction)buttonPressNumber:(UIButton *)sender {
+- (IBAction)buttonNumberPressed:(UIButton *)sender {
     
     NSString *value = [sender titleForState:UIControlStateNormal];
     NSString *result = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
     NSDecimalNumber *decimal = nil;
     
-    if (isDotButton && [value isEqualToString:@"0"]) {
-        self.resultLabel.text = [NSString stringWithFormat:@"%@", result];
+    if (self.isDotButton && [value isEqualToString:@"0"]) {
+        self.resultLabel.text = result;
     }
     else {
-        decimal = (NSDecimalNumber *)[formatterDecimal numberFromString:result];
+        decimal = (NSDecimalNumber *)[self.formatterDecimal numberFromString:result];
         self.resultLabel.text = [NSString stringWithFormat:@"%@", decimal];
     }
 
 }
 
 - (IBAction)dotButton:(UIButton *)sender {
-    if (!isDotButton) {
+    if (!self.isDotButton) {
         NSString *temp = [self.resultLabel.text stringByAppendingString:@"."];
         self.resultLabel.text = temp;
-        isDotButton = YES;
+        self.isDotButton = YES;
     }
 }
 
 - (IBAction)buttonPressClear:(UIButton *)sender {
     self.resultLabel.text = @"0";
-    isDotButton = NO;
+    self.isDotButton = NO;
 }
 - (IBAction)buttonAboutModal:(id)sender {
     AboutViewController *aboutView = [[AboutViewController alloc]init];
@@ -94,8 +94,8 @@
 
 - (void)dealloc {
     [_resultLabel release];
-    [formatterDecimal release];
-    [swipeLeft release];
+    [_formatterDecimal release];
+    [_swipeLeft release];
     [super dealloc];
 }
 @end
