@@ -9,13 +9,17 @@
 #import "ViewController.h"
 #import "AboutViewController.h"
 #import "LicenseViewController.h"
+#import "CalculatorModel.h"
 
 @interface ViewController () {
 }
 @property (nonatomic,assign) BOOL isDotButton;
+@property (nonatomic, assign) BOOL waitNextOperand;
 @property (nonatomic,retain) NSNumberFormatter *formatterDecimal;
 @property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeft;
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
+@property (retain, nonatomic) NSDecimalNumber *decimal;
+@property (nonatomic, strong) CalculatorModel *calcModel;
 @end
 
 @implementation ViewController
@@ -23,6 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.isDotButton = NO;
+    self.waitNextOperand = NO;
     self.formatterDecimal = [[NSNumberFormatter alloc]init];
     self.formatterDecimal.minimumFractionDigits = 1;
     self.formatterDecimal.generatesDecimalNumbers = YES;
@@ -32,6 +37,7 @@
     [self.view addGestureRecognizer:self.swipeLeft];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)];
     self.navigationItem.leftBarButtonItem = item;
+    self.calcModel = [[CalculatorModel alloc]init];
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -57,15 +63,17 @@
     
     NSString *value = [sender titleForState:UIControlStateNormal];
     NSString *result = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
-    NSDecimalNumber *decimal = nil;
     
     if (self.isDotButton && [value isEqualToString:@"0"]) {
         self.resultLabel.text = result;
+        self.decimal = (NSDecimalNumber *)[self.formatterDecimal numberFromString:result];
     }
     else {
-        decimal = (NSDecimalNumber *)[self.formatterDecimal numberFromString:result];
-        self.resultLabel.text = [NSString stringWithFormat:@"%@", decimal];
+        self.decimal = (NSDecimalNumber *)[self.formatterDecimal numberFromString:result];
+        self.resultLabel.text = [NSString stringWithFormat:@"%@", self.decimal];
     }
+    
+    
 
 }
 
@@ -80,17 +88,34 @@
 - (IBAction)buttonPressClear:(UIButton *)sender {
     self.resultLabel.text = @"0";
     self.isDotButton = NO;
+    self.decimal = nil;
 }
 - (IBAction)buttonLicense:(id)sender {
     LicenseViewController *licenseView = [[LicenseViewController alloc]init];
     [self presentViewController:licenseView animated:YES completion:nil];
     [licenseView release];
 }
+- (IBAction)equalKeyIsPressed:(id)sender {
+    NSDecimalNumber *temp = [self.calcModel performOperand:self.decimal];
+    self.resultLabel.text = [NSString stringWithFormat:@"%@",temp];
+    self.decimal = temp;
+    self.waitNextOperand = NO;
+}
+- (IBAction)binaryOperatorKeyIsPressed:(id)sender {
+    self.calcModel.currentOperand = self.decimal;
+    [self buttonPressClear:nil];
+    self.calcModel.operation = [sender titleForState:UIControlStateNormal];
+    self.waitNextOperand = YES;
+}
+- (IBAction)unaryOperatorKeyIsPressed:(id)sender {
+}
 
 - (void)dealloc {
     [_resultLabel release];
     [_formatterDecimal release];
     [_swipeLeft release];
+    [_calcModel release];
+    [_decimal release];
     [super dealloc];
 }
 @end

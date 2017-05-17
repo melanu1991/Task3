@@ -10,4 +10,9 @@
 
 @interface CalculatorModel : NSObject
 
+@property (nonatomic, copy) NSString *operation;
+@property (nonatomic, copy) NSDecimalNumber *currentOperand;
+
+- (NSDecimalNumber *)performOperand:(NSDecimalNumber *)operand;
+
 @end
