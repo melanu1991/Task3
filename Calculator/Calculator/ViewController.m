@@ -15,6 +15,7 @@
 }
 @property (nonatomic,assign) BOOL isDotButton;
 @property (nonatomic, assign) BOOL waitNextOperand;
+@property (nonatomic, assign) BOOL flag;
 @property (nonatomic,retain) NSNumberFormatter *formatterDecimal;
 @property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeft;
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
@@ -62,17 +63,23 @@
 - (IBAction)buttonNumberPressed:(UIButton *)sender {
     
     NSString *value = [sender titleForState:UIControlStateNormal];
-    NSString *result = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
+    NSString *result = nil;
     
-    if (self.isDotButton && [value isEqualToString:@"0"]) {
-        self.resultLabel.text = result;
-        self.decimal = (NSDecimalNumber *)[self.formatterDecimal numberFromString:result];
+    if (self.flag) {
+        self.resultLabel.text = value;
+        self.flag = NO;
     }
     else {
-        self.decimal = (NSDecimalNumber *)[self.formatterDecimal numberFromString:result];
-        self.resultLabel.text = [NSString stringWithFormat:@"%@", self.decimal];
+        result = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
+        if (self.isDotButton && [value isEqualToString:@"0"]) {
+            self.resultLabel.text = result;
+        }
+        else {
+            self.decimal = (NSDecimalNumber *)[self.formatterDecimal numberFromString:result];
+            self.resultLabel.text = [NSString stringWithFormat:@"%@", self.decimal];
+        }
     }
-
+    
 }
 
 - (IBAction)dotButton:(UIButton *)sender {
@@ -86,6 +93,9 @@
 - (IBAction)buttonPressClear:(UIButton *)sender {
     self.resultLabel.text = @"0";
     self.isDotButton = NO;
+    self.flag = NO;
+    self.waitNextOperand = NO;
+    self.calcModel.currentOperand = nil;
     self.decimal = nil;
 }
 - (IBAction)buttonLicense:(id)sender {
@@ -94,31 +104,27 @@
     [licenseView release];
 }
 - (IBAction)equalKeyIsPressed:(id)sender {
-    NSDecimalNumber *temp = [self.calcModel performOperand:self.decimal];
+    NSDecimalNumber *temp = [self.calcModel binaryOperand:(NSDecimalNumber *)[self.formatterDecimal numberFromString:self.resultLabel.text]];
     self.resultLabel.text = [NSString stringWithFormat:@"%@",temp];
-    self.decimal = temp;
     self.waitNextOperand = NO;
 }
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
-   
+    self.decimal = (NSDecimalNumber *)[self.formatterDecimal numberFromString:self.resultLabel.text];
     if (self.waitNextOperand) {
-        NSDecimalNumber *temp = [self.calcModel performOperand:self.decimal];
+        NSDecimalNumber *temp = [self.calcModel binaryOperand:self.decimal];
         self.resultLabel.text = [NSString stringWithFormat:@"%@",temp];
-        self.decimal = temp;
-        self.waitNextOperand = NO;
     }
     else {
         self.calcModel.currentOperand = self.decimal;
-        [self buttonPressClear:nil];
         self.waitNextOperand = YES;
     }
+    self.flag = YES;
+    self.isDotButton = NO;
     self.calcModel.operation = [sender titleForState:UIControlStateNormal];
 }
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
-    self.calcModel.operation = [sender titleForState:UIControlStateNormal];
-    NSDecimalNumber *temp = [self.calcModel performOperand:self.decimal];
-    self.resultLabel.text = [NSString stringWithFormat:@"%@",temp];
-    self.decimal = temp;
+    self.decimal = [self.calcModel unaryOperand:(NSDecimalNumber *)[self.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
+    self.resultLabel.text = [NSString stringWithFormat:@"%@",self.decimal];
 }
 
 - (void)dealloc {

@@ -14,8 +14,9 @@
 @property (nonatomic, copy) NSDecimalNumber *currentOperand;
 @property (nonatomic, retain) NSNumberFormatter *formatterDecimal;
 
-- (NSDecimalNumber *)performOperand:(NSDecimalNumber *)operand;
-
 - (instancetype)init;
+
+- (NSDecimalNumber *)binaryOperand:(NSDecimalNumber *)operand;
+- (NSDecimalNumber *)unaryOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
 
 @end

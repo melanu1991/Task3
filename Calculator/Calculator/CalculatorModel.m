@@ -22,9 +22,8 @@
     return self;
 }
 
-- (NSDecimalNumber *)performOperand:(NSDecimalNumber *)operand{
+- (NSDecimalNumber *)binaryOperand:(NSDecimalNumber *)operand{
     NSDecimalNumber *result = nil;
-    NSLog(@"%@ - %@",self.currentOperand, operand);
     if ([self.operation isEqualToString:@"+"]) {
         result = [self.currentOperand decimalNumberByAdding:operand];
     } else if ([self.operation isEqualToString:@"-"]) {
@@ -33,11 +32,17 @@
         result = [self.currentOperand decimalNumberByMultiplyingBy:operand];
     } else if ([self.operation isEqualToString:@"/"]) {
         result = [self.currentOperand decimalNumberByDividingBy:operand];
-    } else if  ([self.operation isEqualToString:@"sqrt"]) {
+    }
+    self.currentOperand = result;
+    return result;
+}
+
+-(NSDecimalNumber *)unaryOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
+    NSDecimalNumber *result = nil;
+    if ([operation isEqualToString:@"sqrt"]) {
         NSString *temp = [NSString stringWithFormat:@"%f",(sqrt(operand.doubleValue))];
         result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
     }
-    self.currentOperand = result;
     return result;
 }
 
