@@ -10,12 +10,12 @@
 
 @implementation CalculatorModel
 
-- (instancetype)init
-{
+-(instancetype)init {
     self = [super init];
     if (self) {
         self.formatterDecimal = [[NSNumberFormatter alloc]init];
         self.formatterDecimal.minimumFractionDigits = 1;
+        self.formatterDecimal.maximumFractionDigits = 5;
         self.formatterDecimal.generatesDecimalNumbers = YES;
         self.formatterDecimal.numberStyle = NSNumberFormatterDecimalStyle;
     }

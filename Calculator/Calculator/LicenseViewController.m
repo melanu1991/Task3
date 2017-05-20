@@ -16,8 +16,7 @@
 @implementation LicenseViewController
 
 - (IBAction)buttonReturn:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewDidLoad {

@@ -10,6 +10,7 @@
 
 @interface ViewController : UIViewController
 
+@property (nonatomic,retain) NSNumberFormatter *formatterDecimal;
 
 @end
 
