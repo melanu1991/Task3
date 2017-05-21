@@ -46,4 +46,12 @@
     return result;
 }
 
+- (void)dealloc
+{
+    [_operation release];
+    [_currentOperand release];
+    [_formatterDecimal release];
+    [super dealloc];
+}
+
 @end

@@ -126,7 +126,6 @@
 
 - (void)dealloc {
     [_resultLabel release];
-    [_formatterDecimal release];
     [_swipeLeft release];
     [_calcModel release];
     [_decimal release];
