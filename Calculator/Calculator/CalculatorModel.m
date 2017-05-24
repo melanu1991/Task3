@@ -55,7 +55,7 @@
 -(NSDecimalNumber *)unaryOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
     NSDecimalNumber *result = nil;
     if ([operation isEqualToString:@"sqrt"]) {
-        NSString *temp = [NSString stringWithFormat:@"%.5f",(sqrt(operand.doubleValue))];
+        NSString *temp = [NSString stringWithFormat:@"%g",(sqrt(operand.doubleValue))];
         result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
     } else if ([operation isEqualToString:@"±"]) {
         NSDecimalNumber *numberInvert = [NSDecimalNumber decimalNumberWithString:@"-1"];
