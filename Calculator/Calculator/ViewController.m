@@ -107,7 +107,7 @@
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
     self.decimal = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
     if (self.waitNextOperand) {
-        self.resultLabel.text = [NSString stringWithFormat:@"%@",[self.calcModel binaryOperand:self.decimal]];
+        self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:[self.calcModel binaryOperand:self.decimal]];
     }
     else {
         self.calcModel.currentOperand = self.decimal;
@@ -119,7 +119,7 @@
 }
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
     self.decimal = [self.calcModel unaryOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
-    self.resultLabel.text = [NSString stringWithFormat:@"%.5f",self.decimal.floatValue];
+    self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:self.decimal];
 }
 
 #pragma mark - deallocate
