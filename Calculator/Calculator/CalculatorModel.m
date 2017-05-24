@@ -68,6 +68,7 @@
     [_operation release];
     [_currentOperand release];
     [_formatterDecimal release];
+    [_beforeOperand release];
     [super dealloc];
 }
 

@@ -11,8 +11,8 @@
 #import "LicenseViewController.h"
 #import "CalculatorModel.h"
 
-@interface ViewController () {
-}
+@interface ViewController ()
+@property (nonatomic,assign,getter=isEqualButton) BOOL equalButton;
 @property (nonatomic,assign) BOOL isDotButton;
 @property (nonatomic, assign) BOOL waitNextOperand;
 @property (nonatomic, assign) BOOL flagNextInput;
@@ -95,14 +95,27 @@
     self.isDotButton = NO;
     self.flagNextInput = NO;
     self.waitNextOperand = NO;
+    self.equalButton = NO;
     self.calcModel.currentOperand = nil;
     self.decimal = nil;
 }
 
 - (IBAction)equalKeyIsPressed:(id)sender {
-    NSDecimalNumber *temp = [self.calcModel binaryOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text]];
-    self.resultLabel.text = [NSString stringWithFormat:@"%@",temp];
-    self.waitNextOperand = NO;
+    
+    if (!self.isEqualButton) {
+        self.calcModel.beforeOperand = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
+        NSDecimalNumber *temp = [self.calcModel binaryOperand:self.calcModel.beforeOperand];
+        self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
+        self.waitNextOperand = NO;
+        self.equalButton = YES;
+    }
+    else {
+        
+        NSDecimalNumber *temp = [self.calcModel binaryOperand:self.calcModel.beforeOperand];
+        self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
+        
+    }
+    
 }
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
     self.decimal = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
@@ -115,11 +128,14 @@
     }
     self.flagNextInput = YES;
     self.isDotButton = NO;
+    self.equalButton = NO;
     self.calcModel.operation = [sender titleForState:UIControlStateNormal];
 }
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
+    
     self.decimal = [self.calcModel unaryOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
     self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:self.decimal];
+    self.flagNextInput = YES;
 }
 
 #pragma mark - deallocate
