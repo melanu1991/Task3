@@ -16,6 +16,7 @@
         self.formatterDecimal = [[NSNumberFormatter alloc]init];
         self.formatterDecimal.generatesDecimalNumbers = YES;
         self.formatterDecimal.usesSignificantDigits = YES;
+        self.formatterDecimal.usesGroupingSeparator = NO;
         self.formatterDecimal.numberStyle = NSNumberFormatterDecimalStyle;
         [self.formatterDecimal setMinimumFractionDigits:1];
         [self.formatterDecimal setMaximumFractionDigits:5];

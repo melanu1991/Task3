@@ -107,7 +107,7 @@
         NSDecimalNumber *temp = [self.calcModel binaryOperand:self.calcModel.beforeOperand];
         self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
         self.waitNextOperand = NO;
-        self.equalButton = YES;
+        self.flagNextInput = NO;
     }
     else {
         
@@ -116,10 +116,12 @@
         
     }
     
+    self.equalButton = YES;
+    
 }
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
     self.decimal = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
-    if (self.waitNextOperand) {
+    if (self.waitNextOperand && !self.flagNextInput) {
         self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:[self.calcModel binaryOperand:self.decimal]];
     }
     else {
