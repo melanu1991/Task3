@@ -64,11 +64,15 @@
         NSDecimalNumber *numberInvert = [NSDecimalNumber decimalNumberWithString:@"-1"];
         result = [numberInvert decimalNumberByMultiplyingBy:operand];
     }
+    
+    [self.delegate setNewResultOnDisplay:result];
+    
     return result;
 }
 
 - (void)dealloc
 {
+    [_delegate release];
     [_operation release];
     [_currentOperand release];
     [_formatterDecimal release];
