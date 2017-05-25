@@ -33,7 +33,17 @@
     } else if ([self.operation isEqualToString:@"*"]) {
         result = [self.currentOperand decimalNumberByMultiplyingBy:operand];
     } else if ([self.operation isEqualToString:@"/"]) {
-        result = [self.currentOperand decimalNumberByDividingBy:operand];
+        
+        @try {
+            
+            result = [self.currentOperand decimalNumberByDividingBy:operand];
+            
+        } @catch (NSException *exception) {
+            
+            [self.delegate setResultExceptionOnDisplay:[NSString stringWithFormat:@"Деление на ноль!"]];
+            
+        }
+        
     } else if ([self.operation isEqualToString:@"%"]) {
         if (self.currentOperand.integerValue-self.currentOperand.doubleValue == 0 || operand.integerValue/operand.doubleValue == 0) {
             
@@ -50,7 +60,7 @@
     }
     self.currentOperand = result;
     
-    [self.delegate setNewResultOnDisplay:result];
+//    [self.delegate setNewResultOnDisplay:result]; --> тут не совсем понял как сделать т.к. при бинарной операцие значение на экране должно меняться только после нажатия следующей операции! А так оно поменяет его сразу!
     
     return result;
 }
@@ -58,14 +68,24 @@
 -(NSDecimalNumber *)unaryOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
     NSDecimalNumber *result = nil;
     if ([operation isEqualToString:@"sqrt"]) {
-        NSString *temp = [NSString stringWithFormat:@"%g",(sqrt(operand.doubleValue))];
-        result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
+        @try {
+            if (operand.doubleValue<0) {
+                NSException *e = [NSException exceptionWithName:@"RootOfNegativeValue" reason:@"Корень из отрицательного числа!" userInfo:nil];
+                @throw e;
+            }
+            double value = sqrt(operand.doubleValue);
+            NSString *temp = [NSString stringWithFormat:@"%g",value];
+            result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
+        } @catch (NSException *exception) {
+            [self.delegate setResultExceptionOnDisplay:exception.reason];
+        }
+        
     } else if ([operation isEqualToString:@"±"]) {
         NSDecimalNumber *numberInvert = [NSDecimalNumber decimalNumberWithString:@"-1"];
         result = [numberInvert decimalNumberByMultiplyingBy:operand];
     }
     
-    [self.delegate setNewResultOnDisplay:result];
+//    [self.delegate setNewResultOnDisplay:result];
     
     return result;
 }

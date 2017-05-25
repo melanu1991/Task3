@@ -95,14 +95,18 @@
     if (!self.isEqualButton) {
         self.calcModel.beforeOperand = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
         NSDecimalNumber *temp = [self.calcModel binaryOperand:self.calcModel.beforeOperand];
-        self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
+        if (temp!=nil) {
+            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
+        }
         self.waitNextOperand = NO;
         self.flagNextInput = NO;
     }
     else {
         
         NSDecimalNumber *temp = [self.calcModel binaryOperand:self.calcModel.beforeOperand];
-        self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
+        if (temp!=nil) {
+            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
+        }
         
     }
     
@@ -112,7 +116,10 @@
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
     self.decimal = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
     if (self.waitNextOperand && !self.flagNextInput) {
-        self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:[self.calcModel binaryOperand:self.decimal]];
+        NSDecimalNumber *temp = [self.calcModel binaryOperand:self.decimal];
+        if (temp!=nil) {
+            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:temp];
+        }
     }
     else {
         self.calcModel.currentOperand = self.decimal;
@@ -126,14 +133,21 @@
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
     
     self.decimal = [self.calcModel unaryOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
-    self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:self.decimal];
+    if (self.decimal!=nil) {
+        self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:self.decimal];
+    }
     self.flagNextInput = YES;
+    
 }
 
 #pragma mark - delegate protocol
 
 - (void)setNewResultOnDisplay:(NSDecimalNumber *)newResult {
 //    self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:newResult];
+}
+
+- (void)setResultExceptionOnDisplay:(NSString *)showDisplayException {
+    [self.resultLabel setText:showDisplayException];
 }
 
 #pragma mark - deallocate
