@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AboutViewController.h"
+#import "LicenseViewController.h"
+#import "CalculatorModel.h"
+#import "ChangedResultDelegate.h"
 
-@interface ViewController : UIViewController
-
-@property (nonatomic,retain) NSNumberFormatter *formatterDecimal;
+@interface ViewController : UIViewController <ChangedResultDelegate>
 
 @end
 

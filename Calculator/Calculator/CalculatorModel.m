@@ -49,6 +49,9 @@
         }
     }
     self.currentOperand = result;
+    
+    [self.delegate setNewResultOnDisplay:result];
+    
     return result;
 }
 

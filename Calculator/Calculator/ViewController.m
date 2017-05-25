@@ -1,15 +1,4 @@
-//
-//  ViewController.m
-//  Calculator
-//
-//  Created by melanu on 11.05.17.
-//  Copyright © 2017 melanu. All rights reserved.
-//
-
 #import "ViewController.h"
-#import "AboutViewController.h"
-#import "LicenseViewController.h"
-#import "CalculatorModel.h"
 
 @interface ViewController ()
 @property (nonatomic,assign,getter=isEqualButton) BOOL equalButton;
@@ -32,6 +21,7 @@
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)];
     self.navigationItem.leftBarButtonItem = item;
     self.calcModel = [[CalculatorModel alloc]init];
+    self.calcModel.delegate = self;
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -138,6 +128,12 @@
     self.decimal = [self.calcModel unaryOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
     self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:self.decimal];
     self.flagNextInput = YES;
+}
+
+#pragma mark - delegate protocol
+
+- (void)setNewResultOnDisplay:(NSDecimalNumber *)newResult {
+//    self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:newResult];
 }
 
 #pragma mark - deallocate
