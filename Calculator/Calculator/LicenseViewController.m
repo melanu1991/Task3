@@ -15,7 +15,7 @@
 
 @implementation LicenseViewController
 
-- (IBAction)backButtonPressed:(id)sender {
+- (IBAction)buttonReturn:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
