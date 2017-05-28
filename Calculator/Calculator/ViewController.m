@@ -1,6 +1,7 @@
 #import "ViewController.h"
 
 @interface ViewController ()
+@property (nonatomic, assign,getter=isDec) BOOL dec;
 @property (nonatomic,assign,getter=isEqualButton) BOOL equalButton;
 @property (nonatomic,assign) BOOL isDotButton;
 @property (nonatomic, assign) BOOL waitNextOperand;
@@ -9,12 +10,16 @@
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
 @property (retain, nonatomic) NSDecimalNumber *decimal;
 @property (nonatomic, strong) CalculatorModel *calcModel;
+@property (nonatomic, strong) BinarySystem *binarySystem;
+@property (nonatomic, strong) OctSystem *octSystem;
+@property (nonatomic, strong) HexSystem *hexSystem;
 @property (nonatomic, unsafe_unretained) id<SystemProtocol> delegate;
 
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *binButtons;
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *octButtons;
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *hexButtons;
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *decButtons;
+@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *disableOperation;
 
 @end
 
@@ -29,7 +34,11 @@
     self.navigationItem.leftBarButtonItem = item;
     self.calcModel = [[CalculatorModel alloc]init];
     self.calcModel.delegate = self;
+    self.binarySystem = [[BinarySystem alloc]init];
+    self.octSystem = [[OctSystem alloc]init];
+    self.hexSystem = [[HexSystem alloc]init];
     [self decButtonsEnable];
+    self.dec = YES;
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -96,10 +105,13 @@
     self.equalButton = NO;
     self.calcModel.currentOperand = nil;
     self.decimal = nil;
+    self.dec = YES;
 }
 
 - (IBAction)equalKeyIsPressed:(id)sender {
-    
+    if (self.delegate != nil) {
+        self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
+    }
     if (!self.isEqualButton) {
         self.calcModel.beforeOperand = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
         NSDecimalNumber *temp = [self.calcModel binaryOperand:self.calcModel.beforeOperand];
@@ -117,11 +129,16 @@
         }
         
     }
-    
+    if (self.delegate != nil) {
+        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
+    }
     self.equalButton = YES;
     
 }
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
+    if (self.delegate != nil) {
+        self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
+    }
     self.decimal = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
     if (self.waitNextOperand && !self.flagNextInput) {
         NSDecimalNumber *temp = [self.calcModel binaryOperand:self.decimal];
@@ -137,26 +154,34 @@
     self.isDotButton = NO;
     self.equalButton = NO;
     self.calcModel.operation = [sender titleForState:UIControlStateNormal];
+    if (self.delegate != nil) {
+        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
+    }
 }
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
-    
+    if (self.delegate != nil) {
+        self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
+    }
+    NSLog(@"%@",self.resultLabel.text);
     self.decimal = [self.calcModel unaryOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
     if (self.decimal!=nil) {
         self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:self.decimal];
     }
     self.flagNextInput = YES;
-    
+    if (self.delegate != nil) {
+        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
+    }
 }
 - (IBAction)BinOctDecHexSystemPressedButton:(UIButton *)sender {
     
     NSString *value = [sender titleForState:UIControlStateNormal];
-    NSString *tempDisplayValue = [self.delegate convertToDec:self.resultLabel.text];
-    NSString *temp = [self.delegate decToChoiceSystem:self.resultLabel.text];
-    NSLog(@"%@",temp);
+    if (!self.isDec) {
+        self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
+    }
     
     if ([value isEqualToString:@"BIN"]) {
         
-        self.delegate = [[BinarySystem alloc]init];
+        self.delegate = self.binarySystem;
         for (UIButton *button in self.binButtons) {
             button.enabled = YES;
         }
@@ -166,11 +191,15 @@
         for (UIButton *button in self.hexButtons) {
             button.enabled = NO;
         }
-//        self.resultLabel.text = [self.delegate decToChoiceSystem:tempDisplayValue];
+        for (UIButton *button in self.disableOperation) {
+            button.enabled = NO;
+        }
+        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
+        self.dec = NO;
         
     } else if ([value isEqualToString:@"OCT"]) {
         
-        self.delegate = [[OctSystem alloc]init];
+        self.delegate = self.octSystem;
         for (UIButton *button in self.binButtons) {
             button.enabled = YES;
         }
@@ -180,15 +209,20 @@
         for (UIButton *button in self.hexButtons) {
             button.enabled = NO;
         }
+        for (UIButton *button in self.disableOperation) {
+            button.enabled = NO;
+        }
+        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
+        self.dec = NO;
         
     } else if ([value isEqualToString:@"DEC"]) {
         
         [self decButtonsEnable];
-        self.resultLabel.text = tempDisplayValue;
+        self.dec = YES;
         
     } else if ([value isEqualToString:@"HEX"]) {
         
-        self.delegate = [[HexSystem alloc]init];
+        self.delegate = self.hexSystem;
         for (UIButton *button in self.binButtons) {
             button.enabled = YES;
         }
@@ -198,6 +232,11 @@
         for (UIButton *button in self.hexButtons) {
             button.enabled = YES;
         }
+        for (UIButton *button in self.disableOperation) {
+            button.enabled = NO;
+        }
+        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
+        self.dec = NO;
     }
 
 }
@@ -238,6 +277,7 @@
     [_octButtons release];
     [_hexButtons release];
     [_decButtons release];
+    [_disableOperation release];
     [super dealloc];
 }
 @end

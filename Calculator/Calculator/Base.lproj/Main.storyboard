@@ -547,6 +547,9 @@
                         <outletCollection property="hexButtons" destination="MZx-Qn-QZO" id="rLZ-06-i9z"/>
                         <outletCollection property="decButtons" destination="y96-dP-wVg" id="pCl-EL-UDI"/>
                         <outletCollection property="decButtons" destination="hX2-xg-O1i" id="p4F-g1-WhP"/>
+                        <outletCollection property="disableOperation" destination="Mik-Lc-dqg" id="sA1-tc-86N"/>
+                        <outletCollection property="disableOperation" destination="xGa-WX-k28" id="vHP-Xv-XnH"/>
+                        <outletCollection property="disableOperation" destination="S8i-q2-FYi" id="QeO-WL-tee"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
