@@ -9,6 +9,13 @@
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
 @property (retain, nonatomic) NSDecimalNumber *decimal;
 @property (nonatomic, strong) CalculatorModel *calcModel;
+@property (nonatomic, unsafe_unretained) id<SystemProtocol> delegate;
+
+@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *binButtons;
+@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *octButtons;
+@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *hexButtons;
+@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *decButtons;
+
 @end
 
 @implementation ViewController
@@ -22,6 +29,7 @@
     self.navigationItem.leftBarButtonItem = item;
     self.calcModel = [[CalculatorModel alloc]init];
     self.calcModel.delegate = self;
+    [self decButtonsEnable];
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -139,6 +147,75 @@
     self.flagNextInput = YES;
     
 }
+- (IBAction)BinOctDecHexSystemPressedButton:(UIButton *)sender {
+    
+    NSString *value = [sender titleForState:UIControlStateNormal];
+    NSString *tempDisplayValue = [self.delegate convertToDec:self.resultLabel.text];
+    NSString *temp = [self.delegate decToChoiceSystem:self.resultLabel.text];
+    NSLog(@"%@",temp);
+    
+    if ([value isEqualToString:@"BIN"]) {
+        
+        self.delegate = [[BinarySystem alloc]init];
+        for (UIButton *button in self.binButtons) {
+            button.enabled = YES;
+        }
+        for (UIButton *button in self.octButtons) {
+            button.enabled = NO;
+        }
+        for (UIButton *button in self.hexButtons) {
+            button.enabled = NO;
+        }
+//        self.resultLabel.text = [self.delegate decToChoiceSystem:tempDisplayValue];
+        
+    } else if ([value isEqualToString:@"OCT"]) {
+        
+        self.delegate = [[OctSystem alloc]init];
+        for (UIButton *button in self.binButtons) {
+            button.enabled = YES;
+        }
+        for (UIButton *button in self.octButtons) {
+            button.enabled = YES;
+        }
+        for (UIButton *button in self.hexButtons) {
+            button.enabled = NO;
+        }
+        
+    } else if ([value isEqualToString:@"DEC"]) {
+        
+        [self decButtonsEnable];
+        self.resultLabel.text = tempDisplayValue;
+        
+    } else if ([value isEqualToString:@"HEX"]) {
+        
+        self.delegate = [[HexSystem alloc]init];
+        for (UIButton *button in self.binButtons) {
+            button.enabled = YES;
+        }
+        for (UIButton *button in self.octButtons) {
+            button.enabled = YES;
+        }
+        for (UIButton *button in self.hexButtons) {
+            button.enabled = YES;
+        }
+    }
+
+}
+
+- (void)decButtonsEnable {
+    for (UIButton *button in self.binButtons) {
+        button.enabled = YES;
+    }
+    for (UIButton *button in self.octButtons) {
+        button.enabled = YES;
+    }
+    for (UIButton *button in self.hexButtons) {
+        button.enabled = NO;
+    }
+    for (UIButton *button in self.decButtons) {
+        button.enabled = YES;
+    }
+}
 
 #pragma mark - delegate protocol
 
@@ -157,6 +234,10 @@
     [_swipeLeft release];
     [_calcModel release];
     [_decimal release];
+    [_binButtons release];
+    [_octButtons release];
+    [_hexButtons release];
+    [_decButtons release];
     [super dealloc];
 }
 @end

@@ -291,6 +291,9 @@
                                 <state key="normal" title="DEC">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="BinOctDecHexSystemPressedButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="icx-jH-DgT"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5SM-3k-gxw">
                                 <rect key="frame" x="20" y="544" width="55" height="77"/>
@@ -299,6 +302,9 @@
                                 <state key="normal" title="BIN">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="BinOctDecHexSystemPressedButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dLZ-qE-E2s"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2gs-lv-qmc">
                                 <rect key="frame" x="230.5" y="544.5" width="54.5" height="76.5"/>
@@ -307,6 +313,9 @@
                                 <state key="normal" title="HEX">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="BinOctDecHexSystemPressedButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sZf-e0-f8O"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qj0-Yg-NRA">
                                 <rect key="frame" x="230.5" y="459" width="54.5" height="77.5"/>
@@ -315,6 +324,9 @@
                                 <state key="normal" title="B">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="buttonNumberPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nd4-NP-i4P"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b34-gN-DHz">
                                 <rect key="frame" x="159.5" y="459.5" width="56" height="77"/>
@@ -323,6 +335,9 @@
                                 <state key="normal" title="A">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="buttonNumberPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ldi-hq-RSr"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LcX-mZ-P9Y">
                                 <rect key="frame" x="230.5" y="374" width="54.5" height="77"/>
@@ -331,6 +346,9 @@
                                 <state key="normal" title="C">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="buttonNumberPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cQ0-Gc-bXA"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ykn-x7-f0K">
                                 <rect key="frame" x="300" y="459.5" width="55" height="77"/>
@@ -339,6 +357,9 @@
                                 <state key="normal" title="D">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="buttonNumberPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qxo-dk-rXf"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ipE-aj-pQa">
                                 <rect key="frame" x="300" y="374.5" width="55" height="77"/>
@@ -347,6 +368,9 @@
                                 <state key="normal" title="E">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="buttonNumberPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GAk-6l-KRV"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MZx-Qn-QZO">
                                 <rect key="frame" x="300" y="544.5" width="55" height="76.5"/>
@@ -355,6 +379,9 @@
                                 <state key="normal" title="F">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="buttonNumberPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="D7W-Fv-Imf"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zeB-dl-1jJ">
                                 <rect key="frame" x="90" y="544" width="54.5" height="77"/>
@@ -363,6 +390,9 @@
                                 <state key="normal" title="OCT">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="BinOctDecHexSystemPressedButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3hF-zy-wnJ"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -498,6 +528,25 @@
                     <navigationItem key="navigationItem" id="vWF-cC-LKL"/>
                     <connections>
                         <outlet property="resultLabel" destination="t54-t3-ueG" id="oFK-Jh-9as"/>
+                        <outletCollection property="binButtons" destination="Nwe-ms-Vol" id="6NG-4W-1wc"/>
+                        <outletCollection property="binButtons" destination="k89-MH-Xa7" id="hUM-dY-DSX"/>
+                        <outletCollection property="octButtons" destination="yrX-pC-X2E" id="Wv4-rW-EHX"/>
+                        <outletCollection property="octButtons" destination="0mR-hZ-KOi" id="neS-k3-kUK"/>
+                        <outletCollection property="octButtons" destination="Euj-k7-Z28" id="KS0-UD-BvY"/>
+                        <outletCollection property="octButtons" destination="CQ3-Tf-pOQ" id="f5J-EH-3eY"/>
+                        <outletCollection property="octButtons" destination="dWw-3f-F2n" id="PhH-fz-09g"/>
+                        <outletCollection property="octButtons" destination="tXs-qr-Pau" id="9xL-Hy-6fS"/>
+                        <outletCollection property="hexButtons" destination="y96-dP-wVg" id="9Ww-DC-iKI"/>
+                        <outletCollection property="hexButtons" destination="y96-dP-wVg" id="Bcv-0i-h3C"/>
+                        <outletCollection property="hexButtons" destination="hX2-xg-O1i" id="zc6-Pl-6FZ"/>
+                        <outletCollection property="hexButtons" destination="LcX-mZ-P9Y" id="Lll-CU-vsc"/>
+                        <outletCollection property="hexButtons" destination="ipE-aj-pQa" id="ddj-hd-yAX"/>
+                        <outletCollection property="hexButtons" destination="b34-gN-DHz" id="ARO-RK-dmz"/>
+                        <outletCollection property="hexButtons" destination="qj0-Yg-NRA" id="5vZ-Fk-1Ni"/>
+                        <outletCollection property="hexButtons" destination="Ykn-x7-f0K" id="vkw-1d-rXP"/>
+                        <outletCollection property="hexButtons" destination="MZx-Qn-QZO" id="rLZ-06-i9z"/>
+                        <outletCollection property="decButtons" destination="y96-dP-wVg" id="pCl-EL-UDI"/>
+                        <outletCollection property="decButtons" destination="hX2-xg-O1i" id="p4F-g1-WhP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
