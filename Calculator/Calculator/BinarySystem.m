@@ -1,11 +1,3 @@
-//
-//  BinarySystem.m
-//  Calculator
-//
-//  Created by melanu1991 on 28.05.17.
-//  Copyright © 2017 melanu. All rights reserved.
-//
-
 #import "BinarySystem.h"
 
 @implementation BinarySystem
@@ -20,21 +12,12 @@
 }
 
 - (NSString *)decToChoiceSystem:(NSString *)currentValue {
-    NSNumber *value = [NSNumber numberWithInteger:currentValue.integerValue];
-    NSMutableArray *temp = [[NSMutableArray alloc]init];
-    for (int i = 0; ; i++) {
-        [temp addObject:[NSNumber numberWithInteger:value.integerValue%2]];
-        if (value.integerValue<2) {
-            break;
-        }
-        value = [NSNumber numberWithInteger:value.integerValue/2];
+    NSMutableString *str = [NSMutableString stringWithFormat:@""];
+    for(NSInteger numberCopy = currentValue.intValue; numberCopy > 0; numberCopy >>= 1)
+    {
+        [str insertString:((numberCopy & 1) ? @"1" : @"0") atIndex:0];
     }
-    NSString *result = @"";
-    for (int i = (int)temp.count-1; i>=0; i--) {
-        result = [NSString stringWithFormat:@"%@%@",result,temp[i]];
-    }
-    [temp release];
-    return result;
+    return str;
 }
 
 @end

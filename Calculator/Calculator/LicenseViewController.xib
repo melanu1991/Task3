@@ -35,7 +35,7 @@
                     <fontDescription key="fontDescription" type="system" pointSize="22"/>
                     <state key="normal" title="Return calculator"/>
                     <connections>
-                        <action selector="buttonReturn:" destination="-1" eventType="touchUpInside" id="6aq-CH-Hrt"/>
+                        <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="LPF-Ki-BMu"/>
                     </connections>
                 </button>
             </subviews>

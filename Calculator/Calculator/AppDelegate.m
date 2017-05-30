@@ -1,11 +1,3 @@
-//
-//  AppDelegate.m
-//  Calculator
-//
-//  Created by melanu on 11.05.17.
-//  Copyright © 2017 melanu. All rights reserved.
-//
-
 #import "AppDelegate.h"
 
 @interface AppDelegate ()

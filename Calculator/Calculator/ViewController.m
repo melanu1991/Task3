@@ -94,7 +94,7 @@
     [aboutView release];
 }
 
-- (IBAction)buttonLicense:(id)sender {
+- (IBAction)buttonLicencePressed:(id)sender {
     LicenseViewController *licenseView = [[LicenseViewController alloc]init];
     [self presentViewController:licenseView animated:YES completion:nil];
     [licenseView release];
@@ -152,7 +152,7 @@
     }
     if (!self.isEqualButton) {
         self.calcModel.beforeOperand = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
-        NSDecimalNumber *temp = [self.calcModel binaryOperand:self.calcModel.beforeOperand];
+        NSDecimalNumber *temp = [self.calcModel binaryOperationWithOperand:self.calcModel.beforeOperand];
         if (temp!=nil) {
             self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
         }
@@ -161,7 +161,7 @@
     }
     else {
         
-        NSDecimalNumber *temp = [self.calcModel binaryOperand:self.calcModel.beforeOperand];
+        NSDecimalNumber *temp = [self.calcModel binaryOperationWithOperand:self.calcModel.beforeOperand];
         if (temp!=nil) {
             self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
         }
@@ -180,7 +180,7 @@
     }
     self.decimal = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
     if (self.waitNextOperand && !self.flagNextInput) {
-        NSDecimalNumber *temp = [self.calcModel binaryOperand:self.decimal];
+        NSDecimalNumber *temp = [self.calcModel binaryOperationWithOperand:self.decimal];
         if (temp!=nil) {
             self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:temp];
         }
@@ -201,7 +201,7 @@
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
     }
-    self.decimal = [self.calcModel unaryOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
+    self.decimal = [self.calcModel unaryOperationWithOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
     if (self.decimal!=nil) {
         self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:self.decimal];
     }
@@ -256,6 +256,9 @@
     } else if ([value isEqualToString:@"DEC"]) {
         
         [self decButtonsEnable];
+        for (UIButton *button in self.disableOperation) {
+            button.enabled = YES;
+        }
         self.dec = YES;
         self.delegate = nil;
         

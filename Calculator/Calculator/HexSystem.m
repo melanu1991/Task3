@@ -1,11 +1,3 @@
-//
-//  HexSystem.m
-//  Calculator
-//
-//  Created by melanu1991 on 28.05.17.
-//  Copyright © 2017 melanu. All rights reserved.
-//
-
 #import "HexSystem.h"
 
 @interface HexSystem ()
@@ -55,22 +47,12 @@
 }
 
 - (NSString *)decToChoiceSystem:(NSString *)currentValue {
-    NSString *value = currentValue;
-    NSMutableArray *temp = [[NSMutableArray alloc]init];
-    for (int i = 0; ; i++) {
-        NSString *str = [NSString stringWithFormat:@"%ld",value.integerValue%16];
-        [temp addObject:self.dictionaryHex[str]];
-        if (value.integerValue<16) {
-            break;
-        }
-        value = [NSString stringWithFormat:@"%ld", value.integerValue/16];
-    }
-    NSString *result = @"";
-    for (int i = (int)temp.count-1; i>=0; i--) {
-        result = [NSString stringWithFormat:@"%@%@",result,temp[i]];
-    }
-    [temp release];
-    return result;
+    return [NSString stringWithFormat:@"%X",currentValue.intValue];
+}
+
+- (void)dealloc {
+    [super dealloc];
+    [_dictionaryHex release];
 }
 
 @end

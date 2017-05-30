@@ -1,73 +1,59 @@
-//
-//  CalculatorModel.m
-//  Calculator
-//
-//  Created by melanu1991 on 17.05.17.
-//  Copyright © 2017 melanu. All rights reserved.
-//
-
 #import "CalculatorModel.h"
+
+NSString * const VAKPlusOperation = @"+";
+NSString * const VAKMinusOperation = @"-";
+NSString * const VAKMulOperation = @"*";
+NSString * const VAKDivOperation = @"/";
+NSString * const VAKSqrtOperation = @"√";
+NSString * const VAKPlusMinusOperation = @"±";
 
 @implementation CalculatorModel
 
--(instancetype)init {
-    self = [super init];
-    if (self) {
-        self.formatterDecimal = [[NSNumberFormatter alloc]init];
-        self.formatterDecimal.generatesDecimalNumbers = YES;
-        self.formatterDecimal.usesSignificantDigits = YES;
-        self.formatterDecimal.usesGroupingSeparator = NO;
-        self.formatterDecimal.numberStyle = NSNumberFormatterDecimalStyle;
-        [self.formatterDecimal setMinimumFractionDigits:1];
-        [self.formatterDecimal setMaximumFractionDigits:5];
+- (NSNumberFormatter *)formatterDecimal {
+    if (!_formatterDecimal) {
+        _formatterDecimal = [[NSNumberFormatter alloc]init];
+        _formatterDecimal.generatesDecimalNumbers = YES;
+        _formatterDecimal.usesSignificantDigits = YES;
+        _formatterDecimal.usesGroupingSeparator = NO;
+        _formatterDecimal.numberStyle = NSNumberFormatterDecimalStyle;
+        [_formatterDecimal setMinimumFractionDigits:1];
+        [_formatterDecimal setMaximumFractionDigits:5];
     }
-    return self;
+    return _formatterDecimal;
 }
 
-- (NSDecimalNumber *)binaryOperand:(NSDecimalNumber *)operand{
+- (NSDecimalNumber *)binaryOperationWithOperand:(NSDecimalNumber *)operand{
     NSDecimalNumber *result = nil;
-    if ([self.operation isEqualToString:@"+"]) {
+    if ([self.operation isEqualToString:VAKPlusOperation]) {
         result = [self.currentOperand decimalNumberByAdding:operand];
-    } else if ([self.operation isEqualToString:@"-"]) {
+    } else if ([self.operation isEqualToString:VAKMinusOperation]) {
         result = [self.currentOperand decimalNumberBySubtracting:operand];
-    } else if ([self.operation isEqualToString:@"*"]) {
+    } else if ([self.operation isEqualToString:VAKMulOperation]) {
         result = [self.currentOperand decimalNumberByMultiplyingBy:operand];
-    } else if ([self.operation isEqualToString:@"/"]) {
-        
+    } else if ([self.operation isEqualToString:VAKDivOperation]) {
         @try {
-            
             result = [self.currentOperand decimalNumberByDividingBy:operand];
-            
         } @catch (NSException *exception) {
-            
             [self.delegate setResultExceptionOnDisplay:[NSString stringWithFormat:@"Деление на ноль!"]];
-            
         }
-        
     } else if ([self.operation isEqualToString:@"%"]) {
-        if (self.currentOperand.integerValue-self.currentOperand.doubleValue == 0 || operand.integerValue/operand.doubleValue == 0) {
-            
+        if ( (self.currentOperand.integerValue - self.currentOperand.doubleValue == 0) || (operand.integerValue/operand.doubleValue == 0)) {
             NSString *temp = [NSString stringWithFormat:@"%ld",self.currentOperand.integerValue % operand.integerValue];
             result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
-            
         }
         else {
-            
             NSString *temp = [NSString stringWithFormat:@"%d", (int)(self.currentOperand.doubleValue/operand.doubleValue)];
              result = [self.currentOperand decimalNumberBySubtracting:[[NSDecimalNumber decimalNumberWithString:temp] decimalNumberByMultiplyingBy:operand]];
-            
         }
     }
     self.currentOperand = result;
-    
 //    [self.delegate setNewResultOnDisplay:result]; --> тут не совсем понял как сделать т.к. при бинарной операцие значение на экране должно меняться только после нажатия следующей операции! А так оно поменяет его сразу!
-    
     return result;
 }
 
--(NSDecimalNumber *)unaryOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
+-(NSDecimalNumber *)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
     NSDecimalNumber *result = nil;
-    if ([operation isEqualToString:@"√"]) {
+    if ([operation isEqualToString:VAKSqrtOperation]) {
         @try {
             if (operand.doubleValue<0) {
                 NSException *e = [NSException exceptionWithName:@"RootOfNegativeValue" reason:@"Корень из отрицательного числа!" userInfo:nil];
@@ -80,13 +66,11 @@
             [self.delegate setResultExceptionOnDisplay:exception.reason];
         }
         
-    } else if ([operation isEqualToString:@"±"]) {
+    } else if ([operation isEqualToString:VAKPlusMinusOperation]) {
         NSDecimalNumber *numberInvert = [NSDecimalNumber decimalNumberWithString:@"-1"];
         result = [numberInvert decimalNumberByMultiplyingBy:operand];
     }
-    
 //    [self.delegate setNewResultOnDisplay:result];
-    
     return result;
 }
 

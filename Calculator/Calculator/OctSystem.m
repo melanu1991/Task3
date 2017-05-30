@@ -1,11 +1,3 @@
-//
-//  OctSystem.m
-//  Calculator
-//
-//  Created by melanu1991 on 28.05.17.
-//  Copyright © 2017 melanu. All rights reserved.
-//
-
 #import "OctSystem.h"
 
 @implementation OctSystem
@@ -20,21 +12,7 @@
 }
 
 - (NSString *)decToChoiceSystem:(NSString *)currentValue {
-    NSNumber *value = [NSNumber numberWithInteger:currentValue.integerValue];
-    NSMutableArray *temp = [[NSMutableArray alloc]init];
-    for (int i = 0; ; i++) {
-        [temp addObject:[NSNumber numberWithInteger:value.integerValue%8]];
-        if (value.integerValue<8) {
-            break;
-        }
-        value = [NSNumber numberWithInteger:value.integerValue/8];
-    }
-    NSString *result = @"";
-    for (int i = (int)temp.count-1; i>=0; i--) {
-        result = [NSString stringWithFormat:@"%@%@",result,temp[i]];
-    }
-    [temp release];
-    return result;
+    return [NSString stringWithFormat:@"%O",currentValue.intValue];
 }
 
 @end
