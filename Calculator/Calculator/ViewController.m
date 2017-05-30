@@ -21,6 +21,19 @@
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *decButtons;
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *disableOperation;
 
+@property (retain, nonatomic) IBOutlet UIStackView *stackView1;
+@property (retain, nonatomic) IBOutlet UIStackView *stackView2;
+@property (retain, nonatomic) IBOutlet UIStackView *stackView3;
+@property (retain, nonatomic) IBOutlet UIStackView *stackView4;
+@property (retain, nonatomic) IBOutlet UIStackView *stackView5;
+@property (retain, nonatomic) IBOutlet UIStackView *stackView6;
+
+@property (retain, nonatomic) IBOutlet UIButton *binButton;
+@property (retain, nonatomic) IBOutlet UIButton *octButton;
+@property (retain, nonatomic) IBOutlet UIButton *decButton;
+@property (retain, nonatomic) IBOutlet UIButton *hexButton;
+@property (retain, nonatomic) IBOutlet UIButton *fButton;
+
 @end
 
 @implementation ViewController
@@ -51,6 +64,25 @@
     }
     if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:@"0"]) {
         self.resultLabel.text = @"0";
+    }
+}
+
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+    if (newCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
+        [self.stackView1 addArrangedSubview:self.binButton];
+        [self.stackView2 addArrangedSubview:self.octButton];
+        [self.stackView3 addArrangedSubview:self.decButton];
+        [self.stackView4 addArrangedSubview:self.hexButton];
+        [self.stackView5 addArrangedSubview:self.fButton];
+        self.stackView6.hidden = true;
+    } else {
+        self.stackView6.hidden = false;
+        [self.stackView6 addArrangedSubview:self.binButton];
+        [self.stackView6 addArrangedSubview:self.octButton];
+        [self.stackView6 addArrangedSubview:self.decButton];
+        [self.stackView6 addArrangedSubview:self.hexButton];
+        [self.stackView6 addArrangedSubview:self.fButton];
     }
 }
 
@@ -288,6 +320,17 @@
     [_binarySystem release];
     [_octSystem release];
     [_binarySystem release];
+    [_stackView1 release];
+    [_stackView2 release];
+    [_stackView3 release];
+    [_stackView4 release];
+    [_stackView5 release];
+    [_binButton release];
+    [_octButton release];
+    [_decButton release];
+    [_hexButton release];
+    [_fButton release];
+    [_stackView6 release];
     [super dealloc];
 }
 @end
