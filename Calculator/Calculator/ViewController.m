@@ -32,11 +32,11 @@
     [self.view addGestureRecognizer:self.swipeLeft];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)];
     self.navigationItem.leftBarButtonItem = item;
-    self.calcModel = [[CalculatorModel alloc]init];
+    self.calcModel = [[[CalculatorModel alloc]init]autorelease];
     self.calcModel.delegate = self;
-    self.binarySystem = [[BinarySystem alloc]init];
-    self.octSystem = [[OctSystem alloc]init];
-    self.hexSystem = [[HexSystem alloc]init];
+    self.binarySystem = [[[BinarySystem alloc]init]autorelease];
+    self.octSystem = [[[OctSystem alloc]init]autorelease];
+    self.hexSystem = [[[HexSystem alloc]init]autorelease];
     [self decButtonsEnable];
     self.dec = YES;
 }
@@ -78,12 +78,18 @@
         self.flagNextInput = NO;
     }
     else {
-        result = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
+        result = [NSString stringWithFormat:@"%@%@",[self.resultLabel.text isEqualToString:@"0"] ? @"": self.resultLabel.text,value];
         if (self.isDotButton && [value isEqualToString:@"0"]) {
             self.resultLabel.text = result;
         }
         else {
-            self.resultLabel.text = [NSString stringWithFormat:@"%@", (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:result]];
+            NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEF"];
+            if ([result rangeOfCharacterFromSet:set].length != 0) {
+                self.resultLabel.text = result;
+            }
+            else {
+                self.resultLabel.text = [NSString stringWithFormat:@"%@", (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:result]];
+            }
         }
     }
     
@@ -133,6 +139,7 @@
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
     }
     self.equalButton = YES;
+    self.flagNextInput = YES;
     
 }
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
@@ -162,7 +169,6 @@
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
     }
-    NSLog(@"%@",self.resultLabel.text);
     self.decimal = [self.calcModel unaryOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
     if (self.decimal!=nil) {
         self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:self.decimal];
@@ -219,6 +225,7 @@
         
         [self decButtonsEnable];
         self.dec = YES;
+        self.delegate = nil;
         
     } else if ([value isEqualToString:@"HEX"]) {
         
@@ -278,6 +285,9 @@
     [_hexButtons release];
     [_decButtons release];
     [_disableOperation release];
+    [_binarySystem release];
+    [_octSystem release];
+    [_binarySystem release];
     [super dealloc];
 }
 @end

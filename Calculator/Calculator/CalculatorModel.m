@@ -67,7 +67,7 @@
 
 -(NSDecimalNumber *)unaryOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
     NSDecimalNumber *result = nil;
-    if ([operation isEqualToString:@"sqrt"]) {
+    if ([operation isEqualToString:@"√"]) {
         @try {
             if (operand.doubleValue<0) {
                 NSException *e = [NSException exceptionWithName:@"RootOfNegativeValue" reason:@"Корень из отрицательного числа!" userInfo:nil];

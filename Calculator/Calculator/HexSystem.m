@@ -17,7 +17,7 @@
 
 - (NSDictionary *)dictionaryHex {
     if (!_dictionaryHex) {
-        _dictionaryHex = @{ @"0":@"0",
+        _dictionaryHex = [@{ @"0":@"0",
                             @"1":@"1",
                             @"2":@"2",
                             @"3":@"3",
@@ -39,7 +39,7 @@
                             @"D":@"13",
                             @"E":@"14",
                             @"F":@"15"
-                            };
+                            }retain];
     }
     return _dictionaryHex;
 }
