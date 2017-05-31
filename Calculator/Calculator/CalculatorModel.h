@@ -10,6 +10,6 @@
 @property (nonatomic, copy) NSDecimalNumber *beforeOperand;
 
 - (NSDecimalNumber *)binaryOperationWithOperand:(NSDecimalNumber *)operand;
-- (NSDecimalNumber *)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
+- (void)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
 
 @end

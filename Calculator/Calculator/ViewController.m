@@ -193,10 +193,7 @@ NSString * const VAKNullCharacter = @"0";
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
     }
-    self.decimal = [self.calcModel unaryOperationWithOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
-    if (self.decimal!=nil) {
-        self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:self.decimal];
-    }
+    [self.calcModel unaryOperationWithOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
     self.flagNextInput = YES;
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
@@ -235,7 +232,7 @@ NSString * const VAKNullCharacter = @"0";
 #pragma mark - delegate protocol
 
 - (void)setNewResultOnDisplay:(NSDecimalNumber *)newResult {
-//    self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:newResult];
+    self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:newResult];
 }
 
 - (void)setResultExceptionOnDisplay:(NSString *)showDisplayException {

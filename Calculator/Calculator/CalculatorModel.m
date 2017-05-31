@@ -47,11 +47,10 @@ NSString * const VAKPlusMinusOperation = @"±";
         }
     }
     self.currentOperand = result;
-//    [self.delegate setNewResultOnDisplay:result]; --> тут не совсем понял как сделать т.к. при бинарной операцие значение на экране должно меняться только после нажатия следующей операции! А так оно поменяет его сразу!
     return result;
 }
 
--(NSDecimalNumber *)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
+-(void)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
     NSDecimalNumber *result = nil;
     if ([operation isEqualToString:VAKSqrtOperation]) {
         @try {
@@ -70,8 +69,7 @@ NSString * const VAKPlusMinusOperation = @"±";
         NSDecimalNumber *numberInvert = [NSDecimalNumber decimalNumberWithString:@"-1"];
         result = [numberInvert decimalNumberByMultiplyingBy:operand];
     }
-//    [self.delegate setNewResultOnDisplay:result];
-    return result;
+    [self.delegate setNewResultOnDisplay:result];
 }
 
 - (void)dealloc
