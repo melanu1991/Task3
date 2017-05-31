@@ -3,21 +3,42 @@
 @implementation BinarySystem
 
 - (NSString *)convertToDec:(NSString *)currentValue {
-    int sum = 0;
-    for (int i = (int)currentValue.length-1, j=0; i>=0; i--,j++) {
-        unichar temp = [currentValue characterAtIndex:i];
-        sum+=pow(2, j)*((int)temp-'0');
+    NSString *decimalValue = nil;
+    NSString *sign = [NSString stringWithFormat:@"%C",[currentValue characterAtIndex:0]];
+    if ([sign isEqualToString:@"-"]) {
+        NSString *binaryValue = [currentValue stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        decimalValue = [NSString stringWithFormat:@"%ld",strtol([binaryValue UTF8String], NULL, 2)];
+        decimalValue = [NSString stringWithFormat:@"-%@",decimalValue];
     }
-    return [NSString stringWithFormat:@"%d",sum];
+    else {
+        decimalValue = [NSString stringWithFormat:@"%ld",strtol([currentValue UTF8String], NULL, 2)];
+    }
+    return decimalValue;
 }
 
 - (NSString *)decToChoiceSystem:(NSString *)currentValue {
-    NSMutableString *str = [NSMutableString stringWithFormat:@""];
-    for(NSInteger numberCopy = currentValue.intValue; numberCopy > 0; numberCopy >>= 1)
-    {
-        [str insertString:((numberCopy & 1) ? @"1" : @"0") atIndex:0];
+    NSUInteger decimalNumber = [currentValue integerValue];
+    int index = 0;
+    NSString *binary = @"";
+    NSString *sign = [NSString stringWithFormat:@"%C",[currentValue characterAtIndex:0]];
+    if ([sign isEqualToString:@"-"]) {
+        NSString *decimalValue = [currentValue stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        decimalNumber = decimalValue.integerValue;
+        while (decimalNumber > 0) {
+            binary = [[NSString stringWithFormat:@"%lu", decimalNumber&1] stringByAppendingString:binary];
+            decimalNumber = decimalNumber>> 1;
+            ++index;
+        }
+        binary = [NSString stringWithFormat:@"-%@",binary];
     }
-    return str;
+    else {
+        while (decimalNumber > 0) {
+            binary = [[NSString stringWithFormat:@"%lu", decimalNumber&1] stringByAppendingString:binary];
+            decimalNumber = decimalNumber>> 1;
+            ++index;
+        }
+    }
+    return binary;
 }
 
 @end

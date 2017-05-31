@@ -1,5 +1,8 @@
 #import "ViewController.h"
 
+NSString * const VAKDotCharacter = @".";
+NSString * const VAKNullCharacter = @"0";
+
 @interface ViewController ()
 @property (nonatomic, assign,getter=isDec) BOOL dec;
 @property (nonatomic,assign,getter=isEqualButton) BOOL equalButton;
@@ -59,11 +62,11 @@
         NSString *result = [self.resultLabel.text substringToIndex:self.resultLabel.text.length-1 ];
         self.resultLabel.text = result;
     }
-    if (![self.resultLabel.text containsString:@"."]) {
+    if (![self.resultLabel.text containsString:VAKDotCharacter]) {
         self.isDotButton = NO;
     }
-    if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:@"0"]) {
-        self.resultLabel.text = @"0";
+    if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:VAKNullCharacter]) {
+        self.resultLabel.text = VAKNullCharacter;
     }
 }
 
@@ -101,30 +104,23 @@
 }
 
 - (IBAction)buttonNumberPressed:(UIButton *)sender {
-    
     NSString *value = [sender titleForState:UIControlStateNormal];
     NSString *result = nil;
-    
     if (self.flagNextInput) {
-        self.resultLabel.text = value;
+        result = value;
         self.flagNextInput = NO;
     }
     else {
-        result = [NSString stringWithFormat:@"%@%@",[self.resultLabel.text isEqualToString:@"0"] ? @"": self.resultLabel.text,value];
-        if (self.isDotButton && [value isEqualToString:@"0"]) {
-            self.resultLabel.text = result;
-        }
-        else {
-            NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEF"];
-            if ([result rangeOfCharacterFromSet:set].length != 0) {
-                self.resultLabel.text = result;
-            }
-            else {
-                self.resultLabel.text = [NSString stringWithFormat:@"%@", (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:result]];
-            }
+        
+        if (![self.resultLabel.text isEqualToString:@"0"]) {
+            result = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
+        } else if ([self.resultLabel.text isEqualToString:VAKNullCharacter]) {
+            result = [NSString stringWithFormat:@"%@",value];
+        } else if (self.isDotButton && [value isEqualToString:VAKDotCharacter]) {
+            result = self.resultLabel.text;
         }
     }
-    
+    self.resultLabel.text = result;
 }
 
 - (IBAction)dotButton:(UIButton *)sender {
@@ -136,14 +132,13 @@
 }
 
 - (IBAction)buttonPressClear:(UIButton *)sender {
-    self.resultLabel.text = @"0";
+    self.resultLabel.text = VAKNullCharacter;
     self.isDotButton = NO;
-    self.flagNextInput = NO;
+    self.flagNextInput = YES;
     self.waitNextOperand = NO;
     self.equalButton = NO;
     self.calcModel.currentOperand = nil;
     self.decimal = nil;
-    self.dec = YES;
 }
 
 - (IBAction)equalKeyIsPressed:(id)sender {
@@ -160,19 +155,16 @@
         self.flagNextInput = NO;
     }
     else {
-        
         NSDecimalNumber *temp = [self.calcModel binaryOperationWithOperand:self.calcModel.beforeOperand];
         if (temp!=nil) {
             self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
         }
-        
     }
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
     }
     self.equalButton = YES;
     self.flagNextInput = YES;
-    
 }
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
     if (self.delegate != nil) {
@@ -211,76 +203,93 @@
     }
 }
 - (IBAction)BinOctDecHexSystemPressedButton:(UIButton *)sender {
-    
     NSString *value = [sender titleForState:UIControlStateNormal];
     if (!self.isDec) {
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
     }
-    
     if ([value isEqualToString:@"BIN"]) {
-        
         self.delegate = self.binarySystem;
-        for (UIButton *button in self.binButtons) {
-            button.enabled = YES;
-        }
-        for (UIButton *button in self.octButtons) {
-            button.enabled = NO;
-        }
-        for (UIButton *button in self.hexButtons) {
-            button.enabled = NO;
-        }
-        for (UIButton *button in self.disableOperation) {
-            button.enabled = NO;
-        }
+        [self binaryButtonsEnable];
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
         self.dec = NO;
         
     } else if ([value isEqualToString:@"OCT"]) {
-        
         self.delegate = self.octSystem;
-        for (UIButton *button in self.binButtons) {
-            button.enabled = YES;
-        }
-        for (UIButton *button in self.octButtons) {
-            button.enabled = YES;
-        }
-        for (UIButton *button in self.hexButtons) {
-            button.enabled = NO;
-        }
-        for (UIButton *button in self.disableOperation) {
-            button.enabled = NO;
-        }
+        [self octButtonsEnable];
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
         self.dec = NO;
         
     } else if ([value isEqualToString:@"DEC"]) {
-        
         [self decButtonsEnable];
-        for (UIButton *button in self.disableOperation) {
-            button.enabled = YES;
-        }
         self.dec = YES;
         self.delegate = nil;
-        
     } else if ([value isEqualToString:@"HEX"]) {
-        
         self.delegate = self.hexSystem;
-        for (UIButton *button in self.binButtons) {
-            button.enabled = YES;
-        }
-        for (UIButton *button in self.octButtons) {
-            button.enabled = YES;
-        }
-        for (UIButton *button in self.hexButtons) {
-            button.enabled = YES;
-        }
-        for (UIButton *button in self.disableOperation) {
-            button.enabled = NO;
-        }
+        [self hexButtonsEnable];
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
         self.dec = NO;
     }
+    self.flagNextInput = YES;
+}
 
+#pragma mark - delegate protocol
+
+- (void)setNewResultOnDisplay:(NSDecimalNumber *)newResult {
+//    self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:newResult];
+}
+
+- (void)setResultExceptionOnDisplay:(NSString *)showDisplayException {
+    [self.resultLabel setText:showDisplayException];
+}
+
+#pragma mark - buttons enable
+
+- (void)hexButtonsEnable {
+    for (UIButton *button in self.binButtons) {
+        button.enabled = YES;
+    }
+    for (UIButton *button in self.octButtons) {
+        button.enabled = YES;
+    }
+    for (UIButton *button in self.hexButtons) {
+        button.enabled = YES;
+    }
+    for (UIButton *button in self.disableOperation) {
+        button.enabled = NO;
+    }
+    for (UIButton *button in self.disableOperation) {
+        button.enabled = NO;
+    }
+}
+
+- (void)octButtonsEnable {
+    for (UIButton *button in self.binButtons) {
+        button.enabled = YES;
+    }
+    for (UIButton *button in self.octButtons) {
+        button.enabled = YES;
+    }
+    for (UIButton *button in self.hexButtons) {
+        button.enabled = NO;
+    }
+    for (UIButton *button in self.disableOperation) {
+        button.enabled = NO;
+    }
+}
+
+- (void)binaryButtonsEnable {
+    for (UIButton *button in self.binButtons) {
+        button.enabled = YES;
+    }
+    for (UIButton *button in self.octButtons) {
+        button.enabled = NO;
+    }
+    for (UIButton *button in self.hexButtons) {
+        button.enabled = NO;
+    }
+    for (UIButton *button in self.disableOperation) {
+        button.enabled = NO;
+    }
 }
 
 - (void)decButtonsEnable {
@@ -296,16 +305,9 @@
     for (UIButton *button in self.decButtons) {
         button.enabled = YES;
     }
-}
-
-#pragma mark - delegate protocol
-
-- (void)setNewResultOnDisplay:(NSDecimalNumber *)newResult {
-//    self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:newResult];
-}
-
-- (void)setResultExceptionOnDisplay:(NSString *)showDisplayException {
-    [self.resultLabel setText:showDisplayException];
+    for (UIButton *button in self.disableOperation) {
+        button.enabled = YES;
+    }
 }
 
 #pragma mark - deallocate
