@@ -166,6 +166,7 @@ NSString * const VAKNullCharacter = @"0";
     self.equalButton = YES;
     self.flagNextInput = YES;
 }
+
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
@@ -189,6 +190,7 @@ NSString * const VAKNullCharacter = @"0";
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
     }
 }
+
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
@@ -199,6 +201,7 @@ NSString * const VAKNullCharacter = @"0";
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
     }
 }
+
 - (IBAction)BinOctDecHexSystemPressedButton:(UIButton *)sender {
     NSString *value = [sender titleForState:UIControlStateNormal];
     if (!self.isDec) {
