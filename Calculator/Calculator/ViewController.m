@@ -5,13 +5,13 @@ NSString * const VAKNullCharacter = @"0";
 
 @interface ViewController ()
 @property (nonatomic, assign,getter=isDec) BOOL dec;
-@property (nonatomic,assign,getter=isEqualButton) BOOL equalButton;
+//@property (nonatomic,assign,getter=isEqualButton) BOOL equalButton;
 @property (nonatomic,assign) BOOL isDotButton;
-@property (nonatomic, assign) BOOL waitNextOperand;
-@property (nonatomic, assign) BOOL flagNextInput;
+//@property (nonatomic, assign) BOOL waitNextOperand;
+@property (nonatomic, assign, getter=isWaitNextInput) BOOL waitNextInput;
 @property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeft;
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
-@property (retain, nonatomic) NSDecimalNumber *decimal;
+//@property (retain, nonatomic) NSDecimalNumber *decimal;
 @property (nonatomic, strong) CalculatorModel *calcModel;
 @property (nonatomic, strong) BinarySystem *binarySystem;
 @property (nonatomic, strong) OctSystem *octSystem;
@@ -106,9 +106,10 @@ NSString * const VAKNullCharacter = @"0";
 - (IBAction)buttonNumberPressed:(UIButton *)sender {
     NSString *value = [sender titleForState:UIControlStateNormal];
     NSString *result = nil;
-    if (self.flagNextInput) {
+    if (self.isWaitNextInput) {
         result = value;
-        self.flagNextInput = NO;
+        self.waitNextInput = NO;
+        self.calcModel.NextOperand = YES;
     }
     else {
         
@@ -134,58 +135,66 @@ NSString * const VAKNullCharacter = @"0";
 - (IBAction)buttonPressClear:(UIButton *)sender {
     self.resultLabel.text = VAKNullCharacter;
     self.isDotButton = NO;
-    self.flagNextInput = YES;
-    self.waitNextOperand = NO;
-    self.equalButton = NO;
-    self.calcModel.currentOperand = nil;
-    self.decimal = nil;
+    self.waitNextInput = YES;
+    [self.calcModel clearValue];
+//    self.waitNextOperand = NO;
+//    self.equalButton = NO;
+//    self.calcModel.currentOperand = nil;
+//    self.decimal = nil;
 }
 
 - (IBAction)equalKeyIsPressed:(id)sender {
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
     }
-    if (!self.isEqualButton) {
-        self.calcModel.beforeOperand = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
-        NSDecimalNumber *temp = [self.calcModel binaryOperationWithOperand:self.calcModel.beforeOperand];
-        if (temp!=nil) {
-            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
-        }
-        self.waitNextOperand = NO;
-        self.flagNextInput = NO;
-    }
-    else {
-        NSDecimalNumber *temp = [self.calcModel binaryOperationWithOperand:self.calcModel.beforeOperand];
-        if (temp!=nil) {
-            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
-        }
-    }
+    
+    [self.calcModel executeOperation:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text]];
+    
+//    if (!self.isEqualButton) {
+//        self.calcModel.beforeOperand = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
+//        NSDecimalNumber *temp = [self.calcModel binaryOperationWithOperand:self.calcModel.beforeOperand];
+//        if (temp!=nil) {
+//            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
+//        }
+//        self.waitNextOperand = NO;
+//        self.flagNextInput = NO;
+//    }
+//    else {
+//        NSDecimalNumber *temp = [self.calcModel binaryOperationWithOperand:self.calcModel.beforeOperand];
+//        if (temp!=nil) {
+//            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
+//        }
+//    }
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
     }
-    self.equalButton = YES;
-    self.flagNextInput = YES;
+//    self.equalButton = YES;
+//    self.flagNextInput = YES;
 }
 
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
     }
-    self.decimal = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
-    if (self.waitNextOperand && !self.flagNextInput) {
-        NSDecimalNumber *temp = [self.calcModel binaryOperationWithOperand:self.decimal];
-        if (temp!=nil) {
-            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:temp];
-        }
-    }
-    else {
-        self.calcModel.currentOperand = self.decimal;
-        self.waitNextOperand = YES;
-    }
-    self.flagNextInput = YES;
-    self.isDotButton = NO;
-    self.equalButton = NO;
-    self.calcModel.operation = [sender titleForState:UIControlStateNormal];
+    NSDecimalNumber *lableValue = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
+    [self.calcModel binaryOperationWithOperand:lableValue operation:[sender titleForState:UIControlStateNormal]];
+    self.waitNextInput = YES;
+    self.calcModel.NextOperand = NO;
+//    self.decimal = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
+//    if (self.waitNextOperand && !self.flagNextInput) {
+//        NSDecimalNumber *temp = [self.calcModel binaryOperationWithOperand:self.decimal];
+//        if (temp!=nil) {
+//            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:temp];
+//        }
+//    }
+//    else {
+//        self.calcModel.currentOperand = self.decimal;
+//        self.waitNextOperand = YES;
+//    }
+//    self.flagNextInput = YES;
+//    self.isDotButton = NO;
+//    self.equalButton = NO;
+//    self.calcModel.operation = [sender titleForState:UIControlStateNormal];
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
     }
@@ -196,7 +205,7 @@ NSString * const VAKNullCharacter = @"0";
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
     }
     [self.calcModel unaryOperationWithOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
-    self.flagNextInput = YES;
+    self.waitNextInput = YES;
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
     }
@@ -229,7 +238,7 @@ NSString * const VAKNullCharacter = @"0";
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
         self.dec = NO;
     }
-    self.flagNextInput = YES;
+    self.waitNextInput = YES;
 }
 
 #pragma mark - delegate protocol
@@ -313,10 +322,10 @@ NSString * const VAKNullCharacter = @"0";
 #pragma mark - deallocate
 
 - (void)dealloc {
+    [_calcModel release];
     [_resultLabel release];
     [_swipeLeft release];
-    [_calcModel release];
-    [_decimal release];
+//    [_decimal release];
     [_binButtons release];
     [_octButtons release];
     [_hexButtons release];

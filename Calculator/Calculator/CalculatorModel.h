@@ -4,12 +4,12 @@
 @interface CalculatorModel : NSObject
 
 @property (nonatomic,unsafe_unretained) id<ChangedResultDelegate> delegate;
-@property (nonatomic, copy) NSString *operation;
-@property (nonatomic, copy) NSDecimalNumber *currentOperand;
 @property (nonatomic,retain) NSNumberFormatter *formatterDecimal;
-@property (nonatomic, copy) NSDecimalNumber *beforeOperand;
+@property (nonatomic, assign, getter=isNextOperand) BOOL NextOperand;
 
-- (NSDecimalNumber *)binaryOperationWithOperand:(NSDecimalNumber *)operand;
+- (void)binaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
 - (void)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
+- (void)executeOperation:(NSDecimalNumber *)newOperand;
+- (void)clearValue;
 
 @end
