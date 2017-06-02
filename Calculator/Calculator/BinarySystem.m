@@ -18,6 +18,9 @@
 
 - (NSString *)decToChoiceSystem:(NSString *)currentValue {
     NSUInteger decimalNumber = [currentValue integerValue];
+    if (!decimalNumber) {
+        return @"0";
+    }
     int index = 0;
     NSString *binary = @"";
     NSString *sign = [NSString stringWithFormat:@"%C",[currentValue characterAtIndex:0]];

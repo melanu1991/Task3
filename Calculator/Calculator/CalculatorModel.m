@@ -10,10 +10,12 @@ NSString * const VAKProcentOperation = @"%";
 
 @interface CalculatorModel ()
 @property (nonatomic, copy) NSString *operation;
+@property (nonatomic, copy) NSString *unaryOperation;
 @property (nonatomic, copy) NSDecimalNumber *currentOperand;
 @property (nonatomic, copy) NSDecimalNumber *beforeOperand;
 @property (nonatomic, assign, getter=isFirstOperand) BOOL firstOperand;
 @property (nonatomic, assign, getter=isEqualOperation) BOOL equalOperation;
+@property (nonatomic, assign, getter=isBinaryOperation) BOOL binaryOperation;
 @property (nonatomic, retain) NSDictionary *arrayOfOperation;
 @end
 
@@ -53,17 +55,30 @@ NSString * const VAKProcentOperation = @"%";
     self.NextOperand = NO;
     self.firstOperand = NO;
     self.equalOperation = NO;
+    self.unaryOperation = nil;
+    self.binaryOperation = nil;
 }
 
 - (void)executeOperation:(NSDecimalNumber *)newOperand {
+    NSDecimalNumber *result = nil;
     if (!self.equalOperation) {
             self.beforeOperand = newOperand;
     }
-    SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.operation]);
-    NSDecimalNumber *result = [self performSelector:selectorOperation];
-    if (result != nil) {
-        self.currentOperand = result;
-        [self.delegate setNewResultOnDisplay:result];
+    if (self.isBinaryOperation) {
+        SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.operation]);
+        result = [self performSelector:selectorOperation];
+        if (result != nil) {
+            self.currentOperand = result;
+            [self.delegate setNewResultOnDisplay:result];
+        }
+    }
+    else {
+        SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.unaryOperation]);
+        result = [self performSelector:selectorOperation];
+        if (result != nil) {
+            self.beforeOperand = result;
+            [self.delegate setNewResultOnDisplay:result];
+        }
     }
     self.NextOperand = NO;
     self.equalOperation = YES;
@@ -71,13 +86,13 @@ NSString * const VAKProcentOperation = @"%";
 
 - (void)binaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation{
     self.equalOperation = NO;
+    self.binaryOperation = YES;
     if (!self.isFirstOperand) {
         self.operation = operation;
         self.currentOperand = operand;
         self.firstOperand = YES;
         return;
     }
-    
     if (self.isNextOperand) {
         self.beforeOperand = operand;
         NSString *opr = self.arrayOfOperation[self.operation];
@@ -92,7 +107,6 @@ NSString * const VAKProcentOperation = @"%";
     if (self.currentOperand != nil) {
         [self.delegate setNewResultOnDisplay:self.currentOperand];
     }
-
 //    NSDecimalNumber *result = nil;
 //    if ([self.operation isEqualToString:VAKPlusOperation]) {
 //        result = [self.currentOperand decimalNumberByAdding:operand];
@@ -121,9 +135,11 @@ NSString * const VAKProcentOperation = @"%";
 }
 
 -(void)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
+    self.equalOperation = NO;
+    self.unaryOperation = operation;
     NSDecimalNumber *result = nil;
     self.beforeOperand = operand;
-    SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[operation]);
+    SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.unaryOperation]);
     result = [self performSelector:selectorOperation];
     if (result != nil) {
         [self.delegate setNewResultOnDisplay:result];
