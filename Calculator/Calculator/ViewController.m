@@ -165,7 +165,6 @@ NSString * const VAKNullCharacter = @"0";
     else if ([newSystem isEqualToString:@"HEX"]) {
         [self hexButtonsEnable];
     }
-    NSLog(@"resultLabel: %@", self.resultLabel.text);
     [self.calcModel changeNumberSystemWithNewSystem:newSystem withCurrentValue:self.resultLabel.text];
     self.waitNextInput = YES;
 }

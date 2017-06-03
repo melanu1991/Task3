@@ -115,7 +115,6 @@ NSString * const VAKProcentOperation = @"%";
 }
 
 - (void)changeNumberSystemWithNewSystem:(NSString *)newNumberSystem withCurrentValue:(NSString *)currentValue {
-    NSLog(@"currentValue: %@", currentValue);
     NSString *tempValue = currentValue;
     if ([self.currentNumberSystem isEqualToString:newNumberSystem]) {
         return;
