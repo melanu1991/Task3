@@ -292,6 +292,7 @@ NSString * const VAKProcentOperation = @"%";
     [_binSystem release];
     [_hexSystem release];
     [_octSystem release];
+    [_currentNumberSystem release];
     [super dealloc];
 }
 
