@@ -52,7 +52,7 @@ NSString * const VAKProcentOperation = @"%";
     self.currentOperand = nil;
     self.beforeOperand = nil;
     self.operation = nil;
-    self.NextOperand = NO;
+    self.nextOperand = NO;
     self.firstOperand = NO;
     self.equalOperation = NO;
     self.unaryOperation = nil;
@@ -86,7 +86,7 @@ NSString * const VAKProcentOperation = @"%";
             [self.delegate setNewResultOnDisplay:result];
         }
     }
-    self.NextOperand = NO;
+    self.nextOperand = NO;
     self.equalOperation = YES;
 }
 

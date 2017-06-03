@@ -5,7 +5,7 @@
 
 @property (nonatomic,unsafe_unretained) id<ChangedResultDelegate> delegate;
 @property (nonatomic,retain) NSNumberFormatter *formatterDecimal;
-@property (nonatomic, assign, getter=isNextOperand) BOOL NextOperand;
+@property (nonatomic, assign, getter=isNextOperand) BOOL nextOperand;
 
 - (void)binaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
 - (void)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;

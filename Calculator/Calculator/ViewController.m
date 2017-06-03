@@ -5,7 +5,6 @@ NSString * const VAKNullCharacter = @"0";
 
 @interface ViewController ()
 @property (nonatomic, assign,getter=isDec) BOOL dec;
-@property (nonatomic, assign, getter=isDotButton) BOOL dotButton;
 @property (nonatomic, assign, getter=isWaitNextInput) BOOL waitNextInput;
 @property (nonatomic, assign, getter=isEqualButtonPressed) BOOL equalButtonPressed;
 @property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeft;
@@ -60,9 +59,6 @@ NSString * const VAKNullCharacter = @"0";
         NSString *result = [self.resultLabel.text substringToIndex:self.resultLabel.text.length-1 ];
         self.resultLabel.text = result;
     }
-    if (![self.resultLabel.text containsString:VAKDotCharacter]) {
-        self.dotButton = NO;
-    }
     if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:VAKNullCharacter]) {
         self.resultLabel.text = VAKNullCharacter;
     }
@@ -113,14 +109,14 @@ NSString * const VAKNullCharacter = @"0";
     if (self.isWaitNextInput) {
         result = value;
         self.waitNextInput = NO;
-        self.calcModel.NextOperand = YES;
+        self.calcModel.nextOperand = YES;
     }
     else {
-        if (![self.resultLabel.text isEqualToString:@"0"]) {
+        if (![self.resultLabel.text isEqualToString:VAKNullCharacter]) {
             result = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
         } else if ([self.resultLabel.text isEqualToString:VAKNullCharacter]) {
             result = [NSString stringWithFormat:@"%@",value];
-        } else if (self.isDotButton && [value isEqualToString:VAKDotCharacter]) {
+        } else if ([self.resultLabel.text containsString:VAKDotCharacter] && [value isEqualToString:VAKDotCharacter]) {
             result = self.resultLabel.text;
         }
     }
@@ -128,16 +124,14 @@ NSString * const VAKNullCharacter = @"0";
 }
 
 - (IBAction)dotButton:(UIButton *)sender {
-    if (!self.isDotButton) {
-        NSString *temp = [self.resultLabel.text stringByAppendingString:@"."];
+    if (![self.resultLabel.text containsString:VAKDotCharacter]) {
+        NSString *temp = [self.resultLabel.text stringByAppendingString:VAKDotCharacter];
         self.resultLabel.text = temp;
-        self.dotButton = YES;
     }
 }
 
 - (IBAction)buttonPressClear:(UIButton *)sender {
     self.resultLabel.text = VAKNullCharacter;
-    self.dotButton = NO;
     self.waitNextInput = YES;
     [self.calcModel clearValue];
 }
@@ -161,7 +155,7 @@ NSString * const VAKNullCharacter = @"0";
     NSDecimalNumber *lableValue = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
     [self.calcModel binaryOperationWithOperand:lableValue operation:[sender titleForState:UIControlStateNormal]];
     self.waitNextInput = YES;
-    self.calcModel.NextOperand = NO;
+    self.calcModel.nextOperand = NO;
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
     }
@@ -222,69 +216,32 @@ NSString * const VAKNullCharacter = @"0";
 #pragma mark - buttons enable
 
 - (void)hexButtonsEnable {
-    for (UIButton *button in self.binButtons) {
-        button.enabled = YES;
-    }
-    for (UIButton *button in self.octButtons) {
-        button.enabled = YES;
-    }
-    for (UIButton *button in self.hexButtons) {
-        button.enabled = YES;
-    }
-    for (UIButton *button in self.disableOperation) {
-        button.enabled = NO;
-    }
-    for (UIButton *button in self.disableOperation) {
-        button.enabled = NO;
-    }
+    [self.binButtons setValue:@"YES" forKey:@"enabled"];
+    [self.octButtons setValue:@"YES" forKey:@"enabled"];
+    [self.hexButtons setValue:@"YES" forKey:@"enabled"];
+    [self.disableOperation setValue:@"NO" forKey:@"enabled"];
 }
 
 - (void)octButtonsEnable {
-    for (UIButton *button in self.binButtons) {
-        button.enabled = YES;
-    }
-    for (UIButton *button in self.octButtons) {
-        button.enabled = YES;
-    }
-    for (UIButton *button in self.hexButtons) {
-        button.enabled = NO;
-    }
-    for (UIButton *button in self.disableOperation) {
-        button.enabled = NO;
-    }
+    [self.binButtons setValue:@"YES" forKey:@"enabled"];
+    [self.octButtons setValue:@"YES" forKey:@"enabled"];
+    [self.hexButtons setValue:@"NO" forKey:@"enabled"];
+    [self.disableOperation setValue:@"NO" forKey:@"enabled"];
 }
 
 - (void)binaryButtonsEnable {
-    for (UIButton *button in self.binButtons) {
-        button.enabled = YES;
-    }
-    for (UIButton *button in self.octButtons) {
-        button.enabled = NO;
-    }
-    for (UIButton *button in self.hexButtons) {
-        button.enabled = NO;
-    }
-    for (UIButton *button in self.disableOperation) {
-        button.enabled = NO;
-    }
+    [self.binButtons setValue:@"YES" forKey:@"enabled"];
+    [self.octButtons setValue:@"NO" forKey:@"enabled"];
+    [self.hexButtons setValue:@"NO" forKey:@"enabled"];
+    [self.disableOperation setValue:@"NO" forKey:@"enabled"];
 }
 
 - (void)decButtonsEnable {
-    for (UIButton *button in self.binButtons) {
-        button.enabled = YES;
-    }
-    for (UIButton *button in self.octButtons) {
-        button.enabled = YES;
-    }
-    for (UIButton *button in self.hexButtons) {
-        button.enabled = NO;
-    }
-    for (UIButton *button in self.decButtons) {
-        button.enabled = YES;
-    }
-    for (UIButton *button in self.disableOperation) {
-        button.enabled = YES;
-    }
+    [self.binButtons setValue:@"YES" forKey:@"enabled"];
+    [self.octButtons setValue:@"YES" forKey:@"enabled"];
+    [self.hexButtons setValue:@"NO" forKey:@"enabled"];
+    [self.disableOperation setValue:@"YES" forKey:@"enabled"];
+    [self.decButtons setValue:@"YES" forKey:@"enabled"];
 }
 
 #pragma mark - deallocate
