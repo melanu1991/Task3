@@ -1,5 +1,8 @@
 #import <Foundation/Foundation.h>
 #import "ChangedResultDelegate.h"
+#import "OctSystem.h"
+#import "BinarySystem.h"
+#import "HexSystem.h"
 
 @interface CalculatorModel : NSObject
 
@@ -12,5 +15,8 @@
 - (void)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
 - (void)executeOperation:(NSDecimalNumber *)newOperand;
 - (void)clearValue;
+- (void)changeNumberSystemWithNewSystem:(NSString *)newNumberSystem withCurrentValue:(NSString *)currentValue;
+- (void)convertAnyNumberSystemToDecimalNumberSystemWithNumber:(NSString *)number;
+- (void)convertDecimalNumberSystemToAnyNumberSystemWithNumber:(NSString *)number;
 
 @end

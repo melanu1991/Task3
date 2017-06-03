@@ -15,10 +15,41 @@ NSString * const VAKProcentOperation = @"%";
 @property (nonatomic, copy) NSDecimalNumber *beforeOperand;
 @property (nonatomic, assign, getter=isFirstOperand) BOOL firstOperand;
 @property (nonatomic, assign, getter=isBinaryOperation) BOOL binaryOperation;
+@property (nonatomic, copy) NSString *currentNumberSystem;
 @property (nonatomic, retain) NSDictionary *arrayOfOperation;
+@property (nonatomic, retain) BinarySystem *binSystem;
+@property (nonatomic, retain) OctSystem *octSystem;
+@property (nonatomic, retain) HexSystem *hexSystem;
 @end
 
 @implementation CalculatorModel
+
+- (BinarySystem *)binSystem {
+    if (!_binSystem) {
+        _binSystem = [[[BinarySystem alloc]init]retain];
+    }
+    return _binSystem;
+}
+
+- (OctSystem *)octSystem {
+    if (!_octSystem) {
+        _octSystem = [[[OctSystem alloc]init]retain];
+    }
+    return _octSystem;
+}
+
+- (HexSystem *)hexSystem {
+    if (!_hexSystem) {
+        _hexSystem = [[[HexSystem alloc]init]retain];
+    }
+    return _hexSystem;
+}
+- (NSString *)currentNumberSystem {
+    if (!_currentNumberSystem) {
+        _currentNumberSystem = [@"DEC" retain];
+    }
+    return _currentNumberSystem;
+}
 
 - (NSDictionary *)arrayOfOperation {
     if (!_arrayOfOperation) {
@@ -47,6 +78,70 @@ NSString * const VAKProcentOperation = @"%";
     return _formatterDecimal;
 }
 
+- (void)convertAnyNumberSystemToDecimalNumberSystemWithNumber:(NSString *)number {
+    NSString *tempValue = nil;
+    if ([self.currentNumberSystem isEqualToString:@"DEC"]) {
+        return;
+    }
+    if ([self.currentNumberSystem isEqualToString:@"BIN"]) {
+        tempValue = [self.binSystem convertToDec:number];
+    }
+    else if ([self.currentNumberSystem isEqualToString:@"OCT"]) {
+        tempValue = [self.octSystem convertToDec:number];
+    }
+    else if ([self.currentNumberSystem isEqualToString:@"HEX"]) {
+        tempValue = [self.hexSystem convertToDec:number];
+    }
+    if (tempValue != nil) {
+        [self.delegate setNewResultOnDisplayNotDecimalSystem:tempValue];
+    }
+}
+
+- (void)convertDecimalNumberSystemToAnyNumberSystemWithNumber:(NSString *)number {
+    NSString *tempValue = number;
+    if ([self.currentNumberSystem isEqualToString:@"DEC"]) {
+        return;
+    }
+    if ([self.currentNumberSystem isEqualToString:@"BIN"]) {
+        tempValue = [self.binSystem decToChoiceSystem:tempValue];
+    }
+    else if ([self.currentNumberSystem isEqualToString:@"OCT"]) {
+        tempValue = [self.octSystem decToChoiceSystem:tempValue];
+    }
+    else if ([self.currentNumberSystem isEqualToString:@"HEX"]) {
+        tempValue = [self.hexSystem decToChoiceSystem:tempValue];
+    }
+    [self.delegate setNewResultOnDisplayNotDecimalSystem:tempValue];
+}
+
+- (void)changeNumberSystemWithNewSystem:(NSString *)newNumberSystem withCurrentValue:(NSString *)currentValue {
+    NSLog(@"currentValue: %@", currentValue);
+    NSString *tempValue = currentValue;
+    if ([self.currentNumberSystem isEqualToString:newNumberSystem]) {
+        return;
+    }
+    if ([self.currentNumberSystem isEqualToString:@"BIN"]) {
+        tempValue = [self.binSystem convertToDec:currentValue];
+    }
+    else if ([self.currentNumberSystem isEqualToString:@"OCT"]) {
+        tempValue = [self.octSystem convertToDec:currentValue];
+    }
+    else if ([self.currentNumberSystem isEqualToString:@"HEX"]) {
+        tempValue = [self.hexSystem convertToDec:currentValue];
+    }
+    if ([newNumberSystem isEqualToString:@"BIN"]) {
+        tempValue = [self.binSystem decToChoiceSystem:tempValue];
+    }
+    else if ([newNumberSystem isEqualToString:@"OCT"]) {
+        tempValue = [self.octSystem decToChoiceSystem:tempValue];
+    }
+    else if ([newNumberSystem isEqualToString:@"HEX"]) {
+        tempValue = [self.hexSystem decToChoiceSystem:tempValue];
+    }
+    [self.delegate setNewResultOnDisplayNotDecimalSystem:tempValue];
+    self.currentNumberSystem = newNumberSystem;
+}
+
 - (void)clearValue {
     self.currentOperand = nil;
     self.beforeOperand = nil;
@@ -61,7 +156,7 @@ NSString * const VAKProcentOperation = @"%";
 - (void)executeOperation:(NSDecimalNumber *)newOperand {
     NSDecimalNumber *result = nil;
     if (!self.equalOperation) {
-            self.beforeOperand = newOperand;
+        self.beforeOperand = newOperand;
     }
     if (self.isBinaryOperation) {
         if (self.operation == nil) {
@@ -195,6 +290,9 @@ NSString * const VAKProcentOperation = @"%";
     [_beforeOperand release];
     [_unaryOperation release];
     [_arrayOfOperation release];
+    [_binSystem release];
+    [_hexSystem release];
+    [_octSystem release];
     [super dealloc];
 }
 

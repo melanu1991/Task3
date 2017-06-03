@@ -4,15 +4,10 @@ NSString * const VAKDotCharacter = @".";
 NSString * const VAKNullCharacter = @"0";
 
 @interface ViewController ()
-@property (nonatomic, assign,getter=isDec) BOOL dec;
 @property (nonatomic, assign, getter=isWaitNextInput) BOOL waitNextInput;
 @property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeft;
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
 @property (nonatomic, strong) CalculatorModel *calcModel;
-@property (nonatomic, strong) BinarySystem *binarySystem;
-@property (nonatomic, strong) OctSystem *octSystem;
-@property (nonatomic, strong) HexSystem *hexSystem;
-@property (nonatomic, unsafe_unretained) id<SystemProtocol> delegate;
 
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *binButtons;
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *octButtons;
@@ -46,11 +41,7 @@ NSString * const VAKNullCharacter = @"0";
     self.navigationItem.leftBarButtonItem = item;
     self.calcModel = [[[CalculatorModel alloc]init]autorelease];
     self.calcModel.delegate = self;
-    self.binarySystem = [[[BinarySystem alloc]init]autorelease];
-    self.octSystem = [[[OctSystem alloc]init]autorelease];
-    self.hexSystem = [[[HexSystem alloc]init]autorelease];
     [self decButtonsEnable];
-    self.dec = YES;
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -136,69 +127,46 @@ NSString * const VAKNullCharacter = @"0";
 }
 
 - (IBAction)equalKeyIsPressed:(id)sender {
-    if (self.delegate != nil) {
-        self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
-    }
+    [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
     [self.calcModel executeOperation:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text]];
-    if (self.delegate != nil) {
-        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
-    }
     self.calcModel.equalOperation = YES;
+    [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];
 }
 
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
+    [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
     self.calcModel.equalOperation = NO;
-    if (self.delegate != nil) {
-        self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
-    }
     NSDecimalNumber *lableValue = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
     [self.calcModel binaryOperationWithOperand:lableValue operation:[sender titleForState:UIControlStateNormal]];
     self.waitNextInput = YES;
     self.calcModel.nextOperand = NO;
-    if (self.delegate != nil) {
-        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
-    }
+    [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];
 }
 
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
+    [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
     self.calcModel.equalOperation = NO;
-    if (self.delegate != nil) {
-        self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
-    }
     [self.calcModel unaryOperationWithOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
     self.waitNextInput = YES;
-    if (self.delegate != nil) {
-        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
-    }
+    [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];    
 }
 
 - (IBAction)BinOctDecHexSystemPressedButton:(UIButton *)sender {
-    NSString *value = [sender titleForState:UIControlStateNormal];
-    if (!self.isDec) {
-        self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
-    }
-    if ([value isEqualToString:@"BIN"]) {
-        self.delegate = self.binarySystem;
+    NSString *newSystem = [sender titleForState:UIControlStateNormal];
+    if ([newSystem isEqualToString:@"BIN"]) {
         [self binaryButtonsEnable];
-        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
-        self.dec = NO;
-        
-    } else if ([value isEqualToString:@"OCT"]) {
-        self.delegate = self.octSystem;
-        [self octButtonsEnable];
-        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
-        self.dec = NO;
-        
-    } else if ([value isEqualToString:@"DEC"]) {
-        [self decButtonsEnable];
-        self.dec = YES;
-        self.delegate = nil;
-    } else if ([value isEqualToString:@"HEX"]) {
-        self.delegate = self.hexSystem;
-        [self hexButtonsEnable];
-        self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
-        self.dec = NO;
     }
+    else if ([newSystem isEqualToString:@"OCT"]) {
+        [self octButtonsEnable];
+    }
+    else if ([newSystem isEqualToString:@"DEC"]) {
+        [self decButtonsEnable];
+    }
+    else if ([newSystem isEqualToString:@"HEX"]) {
+        [self hexButtonsEnable];
+    }
+    NSLog(@"resultLabel: %@", self.resultLabel.text);
+    [self.calcModel changeNumberSystemWithNewSystem:newSystem withCurrentValue:self.resultLabel.text];
     self.waitNextInput = YES;
 }
 
@@ -210,6 +178,10 @@ NSString * const VAKNullCharacter = @"0";
 
 - (void)setResultExceptionOnDisplay:(NSString *)showDisplayException {
     [self.resultLabel setText:showDisplayException];
+}
+
+- (void)setNewResultOnDisplayNotDecimalSystem:(NSString *)newResult {
+    self.resultLabel.text = newResult;
 }
 
 #pragma mark - buttons enable
@@ -247,7 +219,6 @@ NSString * const VAKNullCharacter = @"0";
 
 - (void)dealloc {
     [_calcModel release];
-    [_delegate release];
     [_resultLabel release];
     [_swipeLeft release];
     [_binButtons release];
@@ -255,9 +226,6 @@ NSString * const VAKNullCharacter = @"0";
     [_hexButtons release];
     [_decButtons release];
     [_disableOperation release];
-    [_binarySystem release];
-    [_octSystem release];
-    [_binarySystem release];
     [_stackView1 release];
     [_stackView2 release];
     [_stackView3 release];
