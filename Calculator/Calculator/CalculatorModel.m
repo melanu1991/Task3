@@ -14,7 +14,6 @@ NSString * const VAKProcentOperation = @"%";
 @property (nonatomic, copy) NSDecimalNumber *currentOperand;
 @property (nonatomic, copy) NSDecimalNumber *beforeOperand;
 @property (nonatomic, assign, getter=isFirstOperand) BOOL firstOperand;
-@property (nonatomic, assign, getter=isEqualOperation) BOOL equalOperation;
 @property (nonatomic, assign, getter=isBinaryOperation) BOOL binaryOperation;
 @property (nonatomic, retain) NSDictionary *arrayOfOperation;
 @end

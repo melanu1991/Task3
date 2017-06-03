@@ -6,7 +6,6 @@ NSString * const VAKNullCharacter = @"0";
 @interface ViewController ()
 @property (nonatomic, assign,getter=isDec) BOOL dec;
 @property (nonatomic, assign, getter=isWaitNextInput) BOOL waitNextInput;
-@property (nonatomic, assign, getter=isEqualButtonPressed) BOOL equalButtonPressed;
 @property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeft;
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
 @property (nonatomic, strong) CalculatorModel *calcModel;
@@ -100,9 +99,9 @@ NSString * const VAKNullCharacter = @"0";
 - (IBAction)buttonNumberPressed:(UIButton *)sender {
     NSString *value = [sender titleForState:UIControlStateNormal];
     NSString *result = nil;
-    if (self.isEqualButtonPressed) {
+    if (self.calcModel.equalOperation) {
         self.resultLabel.text = value;
-        self.equalButtonPressed = NO;
+        self.calcModel.equalOperation = NO;
         [self.calcModel clearValue];
         return;
     }
@@ -144,11 +143,11 @@ NSString * const VAKNullCharacter = @"0";
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate decToChoiceSystem:self.resultLabel.text];
     }
-    self.equalButtonPressed = YES;
+    self.calcModel.equalOperation = YES;
 }
 
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
-    self.equalButtonPressed = NO;
+    self.calcModel.equalOperation = NO;
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
     }
@@ -162,7 +161,7 @@ NSString * const VAKNullCharacter = @"0";
 }
 
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
-    self.equalButtonPressed = NO;
+    self.calcModel.equalOperation = NO;
     if (self.delegate != nil) {
         self.resultLabel.text = [self.delegate convertToDec:self.resultLabel.text];
     }
