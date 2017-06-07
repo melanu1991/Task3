@@ -1,7 +1,5 @@
 #import "ViewController.h"
-
-NSString * const VAKDotCharacter = @".";
-NSString * const VAKNullCharacter = @"0";
+#import "Constants.h"
 
 @interface ViewController ()
 @property (nonatomic, assign, getter=isWaitNextInput) BOOL waitNextInput;
@@ -9,10 +7,8 @@ NSString * const VAKNullCharacter = @"0";
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
 @property (nonatomic, strong) CalculatorModel *calcModel;
 
-@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *binButtons;
-@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *octButtons;
-@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *hexButtons;
-@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *decButtons;
+@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
+
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *disableOperation;
 
 @property (retain, nonatomic) IBOutlet UIStackView *stackView1;
@@ -34,14 +30,17 @@ NSString * const VAKNullCharacter = @"0";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.swipeLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(didSwipe:)];
     self.swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:self.swipeLeft];
+    
     UIBarButtonItem *item = [[[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)]autorelease];
     self.navigationItem.leftBarButtonItem = item;
+    
     self.calcModel = [[[CalculatorModel alloc]init]autorelease];
     self.calcModel.delegate = self;
-    [self decButtonsEnable];
+    [self changeStateNotationButtonsForSystem:VAKSystemDec];
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -49,6 +48,7 @@ NSString * const VAKNullCharacter = @"0";
         NSString *result = [self.resultLabel.text substringToIndex:self.resultLabel.text.length-1 ];
         self.resultLabel.text = result;
     }
+    
     if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:VAKNullCharacter]) {
         self.resultLabel.text = VAKNullCharacter;
     }
@@ -56,6 +56,7 @@ NSString * const VAKNullCharacter = @"0";
 
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+
     if (newCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
         [self.stackView1 addArrangedSubview:self.binButton];
         [self.stackView2 addArrangedSubview:self.octButton];
@@ -110,6 +111,7 @@ NSString * const VAKNullCharacter = @"0";
             result = self.resultLabel.text;
         }
     }
+    
     self.resultLabel.text = result;
 }
 
@@ -153,20 +155,10 @@ NSString * const VAKNullCharacter = @"0";
 
 - (IBAction)BinOctDecHexSystemPressedButton:(UIButton *)sender {
     NSString *newSystem = [sender titleForState:UIControlStateNormal];
-    if ([newSystem isEqualToString:@"BIN"]) {
-        [self binaryButtonsEnable];
-    }
-    else if ([newSystem isEqualToString:@"OCT"]) {
-        [self octButtonsEnable];
-    }
-    else if ([newSystem isEqualToString:@"DEC"]) {
-        [self decButtonsEnable];
-    }
-    else if ([newSystem isEqualToString:@"HEX"]) {
-        [self hexButtonsEnable];
-    }
+
+    [self changeStateNotationButtonsForSystem:newSystem];
     [self.calcModel changeNumberSystemWithNewSystem:newSystem withCurrentValue:self.resultLabel.text];
-    self.waitNextInput = YES;
+//    self.waitNextInput = YES;
 }
 
 #pragma mark - delegate protocol
@@ -185,33 +177,33 @@ NSString * const VAKNullCharacter = @"0";
 
 #pragma mark - buttons enable
 
-- (void)hexButtonsEnable {
-    [self.binButtons setValue:@"YES" forKey:@"enabled"];
-    [self.octButtons setValue:@"YES" forKey:@"enabled"];
-    [self.hexButtons setValue:@"YES" forKey:@"enabled"];
-    [self.disableOperation setValue:@"NO" forKey:@"enabled"];
-}
-
-- (void)octButtonsEnable {
-    [self.binButtons setValue:@"YES" forKey:@"enabled"];
-    [self.octButtons setValue:@"YES" forKey:@"enabled"];
-    [self.hexButtons setValue:@"NO" forKey:@"enabled"];
-    [self.disableOperation setValue:@"NO" forKey:@"enabled"];
-}
-
-- (void)binaryButtonsEnable {
-    [self.binButtons setValue:@"YES" forKey:@"enabled"];
-    [self.octButtons setValue:@"NO" forKey:@"enabled"];
-    [self.hexButtons setValue:@"NO" forKey:@"enabled"];
-    [self.disableOperation setValue:@"NO" forKey:@"enabled"];
-}
-
-- (void)decButtonsEnable {
-    [self.binButtons setValue:@"YES" forKey:@"enabled"];
-    [self.octButtons setValue:@"YES" forKey:@"enabled"];
-    [self.hexButtons setValue:@"NO" forKey:@"enabled"];
-    [self.disableOperation setValue:@"YES" forKey:@"enabled"];
-    [self.decButtons setValue:@"YES" forKey:@"enabled"];
+- (void)changeStateNotationButtonsForSystem:(NSString *)notation {
+    int count = 0, i = 0;
+    if ([notation isEqualToString:VAKSystemBin]) {
+        count = VAKCountBinaryNumber;
+        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
+    }
+    else if ([notation isEqualToString:VAKSystemDec]) {
+        count = VAKCountDecNumber;
+        [self.disableOperation setValue:@"YES" forKey:@"enabled"];
+    }
+    else if ([notation isEqualToString:VAKSystemHex]) {
+        count = VAKCountHexNumber;
+        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
+    }
+    else {
+        count = VAKCountOctNumber;
+        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
+    }
+    for (UIButton *button in self.buttons) {
+        if (i < count) {
+            [button setEnabled:YES];
+        }
+        else {
+            [button setEnabled:NO];
+        }
+        i++;
+    }
 }
 
 #pragma mark - deallocate
@@ -220,10 +212,7 @@ NSString * const VAKNullCharacter = @"0";
     [_calcModel release];
     [_resultLabel release];
     [_swipeLeft release];
-    [_binButtons release];
-    [_octButtons release];
-    [_hexButtons release];
-    [_decButtons release];
+    [_buttons release];
     [_disableOperation release];
     [_stackView1 release];
     [_stackView2 release];

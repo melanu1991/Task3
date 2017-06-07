@@ -14,7 +14,9 @@
 - (void)binaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
 - (void)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
 - (void)executeOperation:(NSDecimalNumber *)newOperand;
+
 - (void)clearValue;
+
 - (void)changeNumberSystemWithNewSystem:(NSString *)newNumberSystem withCurrentValue:(NSString *)currentValue;
 - (void)convertAnyNumberSystemToDecimalNumberSystemWithNumber:(NSString *)number;
 - (void)convertDecimalNumberSystemToAnyNumberSystemWithNumber:(NSString *)number;

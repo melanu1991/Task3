@@ -134,7 +134,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="65.5" height="81.5"/>
                                                 <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                <state key="normal" title="1">
+                                                <state key="normal" title="7">
                                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
@@ -145,7 +145,7 @@
                                                 <rect key="frame" x="67.5" y="0.0" width="65.5" height="81.5"/>
                                                 <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                <state key="normal" title="2">
+                                                <state key="normal" title="8">
                                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
@@ -156,7 +156,7 @@
                                                 <rect key="frame" x="135" y="0.0" width="65" height="81.5"/>
                                                 <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                <state key="normal" title="3">
+                                                <state key="normal" title="9">
                                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
@@ -254,7 +254,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="65.5" height="82"/>
                                                 <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                <state key="normal" title="7">
+                                                <state key="normal" title="1">
                                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
@@ -265,7 +265,7 @@
                                                 <rect key="frame" x="67.5" y="0.0" width="65.5" height="82"/>
                                                 <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                <state key="normal" title="8">
+                                                <state key="normal" title="2">
                                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
@@ -276,7 +276,7 @@
                                                 <rect key="frame" x="135" y="0.0" width="65" height="82"/>
                                                 <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                <state key="normal" title="9">
+                                                <state key="normal" title="3">
                                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
@@ -459,25 +459,23 @@
                         <outlet property="stackView5" destination="jSu-YX-E4P" id="Jid-CF-rcZ"/>
                         <outlet property="stackView6" destination="brD-8j-DH4" id="ngk-5h-wp8"/>
                         <outletCollection property="disableOperation" destination="Mik-Lc-dqg" id="zNv-QX-cGO"/>
-                        <outletCollection property="hexButtons" destination="mdd-hJ-Wgu" id="DfE-KB-QX9"/>
-                        <outletCollection property="octButtons" destination="0mR-hZ-KOi" id="neS-k3-kUK"/>
-                        <outletCollection property="binButtons" destination="Nwe-ms-Vol" id="6NG-4W-1wc"/>
-                        <outletCollection property="octButtons" destination="yrX-pC-X2E" id="Wv4-rW-EHX"/>
-                        <outletCollection property="hexButtons" destination="RVs-AH-ydq" id="t7o-kJ-CwW"/>
-                        <outletCollection property="octButtons" destination="dWw-3f-F2n" id="PhH-fz-09g"/>
-                        <outletCollection property="hexButtons" destination="xGa-WX-k28" id="BMD-wu-wUc"/>
-                        <outletCollection property="octButtons" destination="Euj-k7-Z28" id="KS0-UD-BvY"/>
-                        <outletCollection property="octButtons" destination="CQ3-Tf-pOQ" id="f5J-EH-3eY"/>
-                        <outletCollection property="decButtons" destination="hX2-xg-O1i" id="p4F-g1-WhP"/>
-                        <outletCollection property="decButtons" destination="y96-dP-wVg" id="pCl-EL-UDI"/>
-                        <outletCollection property="hexButtons" destination="ipE-aj-pQa" id="nbo-BB-Dpt"/>
-                        <outletCollection property="hexButtons" destination="hX2-xg-O1i" id="zc6-Pl-6FZ"/>
-                        <outletCollection property="hexButtons" destination="y96-dP-wVg" id="9Ww-DC-iKI"/>
-                        <outletCollection property="octButtons" destination="tXs-qr-Pau" id="9xL-Hy-6fS"/>
-                        <outletCollection property="hexButtons" destination="Ykn-x7-f0K" id="fdc-yD-Ox4"/>
                         <outletCollection property="disableOperation" destination="S8i-q2-FYi" id="QeO-WL-tee"/>
-                        <outletCollection property="binButtons" destination="k89-MH-Xa7" id="hUM-dY-DSX"/>
-                        <outletCollection property="hexButtons" destination="MZx-Qn-QZO" id="HA8-RF-OnM"/>
+                        <outletCollection property="buttons" destination="k89-MH-Xa7" id="G1v-PC-lje"/>
+                        <outletCollection property="buttons" destination="tXs-qr-Pau" id="LGA-gc-tWf"/>
+                        <outletCollection property="buttons" destination="y96-dP-wVg" id="0bL-9f-hyq"/>
+                        <outletCollection property="buttons" destination="hX2-xg-O1i" id="vO9-dP-wQa"/>
+                        <outletCollection property="buttons" destination="Euj-k7-Z28" id="qi8-2A-mIT"/>
+                        <outletCollection property="buttons" destination="CQ3-Tf-pOQ" id="ayc-nZ-S5c"/>
+                        <outletCollection property="buttons" destination="dWw-3f-F2n" id="Wzr-tI-MQW"/>
+                        <outletCollection property="buttons" destination="Nwe-ms-Vol" id="K8P-qa-QvC"/>
+                        <outletCollection property="buttons" destination="yrX-pC-X2E" id="B12-cH-YZc"/>
+                        <outletCollection property="buttons" destination="0mR-hZ-KOi" id="epF-s3-PK7"/>
+                        <outletCollection property="buttons" destination="mdd-hJ-Wgu" id="vDR-RM-Qp2"/>
+                        <outletCollection property="buttons" destination="RVs-AH-ydq" id="brP-Bt-50U"/>
+                        <outletCollection property="buttons" destination="xGa-WX-k28" id="Z9y-oA-ZQB"/>
+                        <outletCollection property="buttons" destination="ipE-aj-pQa" id="SYM-Kh-E9A"/>
+                        <outletCollection property="buttons" destination="Ykn-x7-f0K" id="ZmA-9e-HwM"/>
+                        <outletCollection property="buttons" destination="MZx-Qn-QZO" id="HSD-h6-cOu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

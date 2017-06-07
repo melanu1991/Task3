@@ -1,12 +1,13 @@
 #import "HexSystem.h"
+#import "Constants.h"
 
 @implementation HexSystem
 
 - (NSString *)convertToDec:(NSString *)currentValue {
     NSString *dec = nil;
     NSString *sign = [NSString stringWithFormat:@"%C",[currentValue characterAtIndex:0]];
-    if ([sign isEqualToString:@"-"]) {
-        NSString *hexValue = [currentValue stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    if ([sign isEqualToString:VAKMinusOperation]) {
+        NSString *hexValue = [currentValue stringByReplacingOccurrencesOfString:VAKMinusOperation withString:VAKEmptyString];
         hexValue = [NSString stringWithFormat:@"%llu",(UInt64)strtoull([hexValue UTF8String], NULL, 16)];;
         dec = [NSString stringWithFormat:@"-%@",hexValue];
     }
@@ -19,8 +20,8 @@
 - (NSString *)decToChoiceSystem:(NSString *)currentValue {
     NSString *hex = nil;
     NSString *sign = [NSString stringWithFormat:@"%C",[currentValue characterAtIndex:0]];
-    if ([sign isEqualToString:@"-"]) {
-        NSString *decimalValue = [currentValue stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    if ([sign isEqualToString:VAKMinusOperation]) {
+        NSString *decimalValue = [currentValue stringByReplacingOccurrencesOfString:VAKMinusOperation withString:VAKEmptyString];
         hex = [NSString stringWithFormat:@"%2lX", (unsigned long)[decimalValue integerValue]];
         hex = [NSString stringWithFormat:@"-%@",hex];
     }

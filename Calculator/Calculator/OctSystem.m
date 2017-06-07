@@ -1,12 +1,13 @@
 #import "OctSystem.h"
+#import "Constants.h"
 
 @implementation OctSystem
 
 - (NSString *)convertToDec:(NSString *)currentValue {
     NSString *decimalValue = nil;
     NSString *sign = [NSString stringWithFormat:@"%C",[currentValue characterAtIndex:0]];
-    if ([sign isEqualToString:@"-"]) {
-        NSString *octValue = [currentValue stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    if ([sign isEqualToString:VAKMinusOperation]) {
+        NSString *octValue = [currentValue stringByReplacingOccurrencesOfString:VAKMinusOperation withString:VAKEmptyString];
         decimalValue = [NSString stringWithFormat:@"%ld",strtol(octValue.UTF8String, NULL, 8)];
         decimalValue = [NSString stringWithFormat:@"-%@",decimalValue];
     }
@@ -19,8 +20,8 @@
 - (NSString *)decToChoiceSystem:(NSString *)currentValue {
     NSString *octValue = nil;
     NSString *sign = [NSString stringWithFormat:@"%C",[currentValue characterAtIndex:0]];
-    if ([sign isEqualToString:@"-"]) {
-        NSString *decimalValue = [currentValue stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    if ([sign isEqualToString:VAKMinusOperation]) {
+        NSString *decimalValue = [currentValue stringByReplacingOccurrencesOfString:VAKMinusOperation withString:VAKEmptyString];
         octValue = [NSString stringWithFormat:@"%2lO", (unsigned long)[decimalValue integerValue]];
         octValue = [NSString stringWithFormat:@"-%@",octValue];
     }
