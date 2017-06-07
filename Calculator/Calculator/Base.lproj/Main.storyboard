@@ -378,7 +378,7 @@
                                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="BinOctDecHexSystemPressedButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dLZ-qE-E2s"/>
+                                                    <action selector="numberSystemButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LR6-tV-7QS"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zeB-dl-1jJ">
@@ -389,7 +389,7 @@
                                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="BinOctDecHexSystemPressedButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3hF-zy-wnJ"/>
+                                                    <action selector="numberSystemButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="znN-On-ree"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dSe-o8-3mQ">
@@ -400,7 +400,7 @@
                                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="BinOctDecHexSystemPressedButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="icx-jH-DgT"/>
+                                                    <action selector="numberSystemButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="S75-74-zwE"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2gs-lv-qmc">
@@ -411,7 +411,7 @@
                                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="BinOctDecHexSystemPressedButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sZf-e0-f8O"/>
+                                                    <action selector="numberSystemButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="82Q-dK-gL0"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MZx-Qn-QZO">
@@ -460,22 +460,22 @@
                         <outlet property="stackView6" destination="brD-8j-DH4" id="ngk-5h-wp8"/>
                         <outletCollection property="disableOperation" destination="Mik-Lc-dqg" id="zNv-QX-cGO"/>
                         <outletCollection property="disableOperation" destination="S8i-q2-FYi" id="QeO-WL-tee"/>
-                        <outletCollection property="buttons" destination="k89-MH-Xa7" id="G1v-PC-lje"/>
-                        <outletCollection property="buttons" destination="tXs-qr-Pau" id="LGA-gc-tWf"/>
-                        <outletCollection property="buttons" destination="y96-dP-wVg" id="0bL-9f-hyq"/>
-                        <outletCollection property="buttons" destination="hX2-xg-O1i" id="vO9-dP-wQa"/>
-                        <outletCollection property="buttons" destination="Euj-k7-Z28" id="qi8-2A-mIT"/>
-                        <outletCollection property="buttons" destination="CQ3-Tf-pOQ" id="ayc-nZ-S5c"/>
-                        <outletCollection property="buttons" destination="dWw-3f-F2n" id="Wzr-tI-MQW"/>
-                        <outletCollection property="buttons" destination="Nwe-ms-Vol" id="K8P-qa-QvC"/>
-                        <outletCollection property="buttons" destination="yrX-pC-X2E" id="B12-cH-YZc"/>
-                        <outletCollection property="buttons" destination="0mR-hZ-KOi" id="epF-s3-PK7"/>
-                        <outletCollection property="buttons" destination="mdd-hJ-Wgu" id="vDR-RM-Qp2"/>
-                        <outletCollection property="buttons" destination="RVs-AH-ydq" id="brP-Bt-50U"/>
-                        <outletCollection property="buttons" destination="xGa-WX-k28" id="Z9y-oA-ZQB"/>
-                        <outletCollection property="buttons" destination="ipE-aj-pQa" id="SYM-Kh-E9A"/>
-                        <outletCollection property="buttons" destination="Ykn-x7-f0K" id="ZmA-9e-HwM"/>
-                        <outletCollection property="buttons" destination="MZx-Qn-QZO" id="HSD-h6-cOu"/>
+                        <outletCollection property="digitButtons" destination="k89-MH-Xa7" id="JlB-Gz-cG6"/>
+                        <outletCollection property="digitButtons" destination="tXs-qr-Pau" id="6SP-le-6C2"/>
+                        <outletCollection property="digitButtons" destination="y96-dP-wVg" id="6za-bY-S10"/>
+                        <outletCollection property="digitButtons" destination="hX2-xg-O1i" id="uOc-up-Vjo"/>
+                        <outletCollection property="digitButtons" destination="Euj-k7-Z28" id="s4J-Ev-DQ9"/>
+                        <outletCollection property="digitButtons" destination="CQ3-Tf-pOQ" id="jdY-wb-bb8"/>
+                        <outletCollection property="digitButtons" destination="dWw-3f-F2n" id="BsF-kk-xMi"/>
+                        <outletCollection property="digitButtons" destination="Nwe-ms-Vol" id="X2i-XV-jat"/>
+                        <outletCollection property="digitButtons" destination="yrX-pC-X2E" id="Tnn-s8-gf7"/>
+                        <outletCollection property="digitButtons" destination="0mR-hZ-KOi" id="N1s-65-DNA"/>
+                        <outletCollection property="digitButtons" destination="mdd-hJ-Wgu" id="LSd-ML-viJ"/>
+                        <outletCollection property="digitButtons" destination="RVs-AH-ydq" id="FUc-5a-h9d"/>
+                        <outletCollection property="digitButtons" destination="xGa-WX-k28" id="KJ2-lc-VQz"/>
+                        <outletCollection property="digitButtons" destination="ipE-aj-pQa" id="8Zg-du-ex2"/>
+                        <outletCollection property="digitButtons" destination="Ykn-x7-f0K" id="X1X-ej-i02"/>
+                        <outletCollection property="digitButtons" destination="MZx-Qn-QZO" id="H7W-AZ-RLt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

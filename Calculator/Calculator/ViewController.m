@@ -7,7 +7,7 @@
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
 @property (nonatomic, strong) CalculatorModel *calcModel;
 
-@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
+@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *digitButtons;
 
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *disableOperation;
 
@@ -153,12 +153,12 @@
     [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];    
 }
 
-- (IBAction)BinOctDecHexSystemPressedButton:(UIButton *)sender {
+- (IBAction)numberSystemButtonPressed:(UIButton *)sender {
     NSString *newSystem = [sender titleForState:UIControlStateNormal];
 
     [self changeStateNotationButtonsForSystem:newSystem];
     [self.calcModel changeNumberSystemWithNewSystem:newSystem withCurrentValue:self.resultLabel.text];
-//    self.waitNextInput = YES;
+    
 }
 
 #pragma mark - delegate protocol
@@ -178,31 +178,30 @@
 #pragma mark - buttons enable
 
 - (void)changeStateNotationButtonsForSystem:(NSString *)notation {
-    int count = 0, i = 0;
+    int countDigitsNotation = 0;
     if ([notation isEqualToString:VAKSystemBin]) {
-        count = VAKCountBinaryNumber;
+        countDigitsNotation = VAKCountBinaryNumber;
         [self.disableOperation setValue:@"NO" forKey:@"enabled"];
     }
     else if ([notation isEqualToString:VAKSystemDec]) {
-        count = VAKCountDecNumber;
+        countDigitsNotation = VAKCountDecNumber;
         [self.disableOperation setValue:@"YES" forKey:@"enabled"];
     }
     else if ([notation isEqualToString:VAKSystemHex]) {
-        count = VAKCountHexNumber;
+        countDigitsNotation = VAKCountHexNumber;
         [self.disableOperation setValue:@"NO" forKey:@"enabled"];
     }
     else {
-        count = VAKCountOctNumber;
+        countDigitsNotation = VAKCountOctNumber;
         [self.disableOperation setValue:@"NO" forKey:@"enabled"];
     }
-    for (UIButton *button in self.buttons) {
-        if (i < count) {
-            [button setEnabled:YES];
-        }
-        else {
-            [button setEnabled:NO];
-        }
-        i++;
+    for (int i = 0; i < countDigitsNotation; i++) {
+        UIButton *currentButton = self.digitButtons[i];
+        [currentButton setValue:@"YES" forKey:@"enabled"];
+    }
+    for (int i = countDigitsNotation; i < VAKCountHexNumber; i++) {
+        UIButton *currentButton = self.digitButtons[i];
+        [currentButton setValue:@"NO" forKey:@"enabled"];
     }
 }
 
@@ -212,7 +211,7 @@
     [_calcModel release];
     [_resultLabel release];
     [_swipeLeft release];
-    [_buttons release];
+    [_digitButtons release];
     [_disableOperation release];
     [_stackView1 release];
     [_stackView2 release];
