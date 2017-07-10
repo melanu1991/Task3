@@ -15,6 +15,7 @@
 		159E7F751EC8634B00A9C8C5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 159E7F731EC8634B00A9C8C5 /* LaunchScreen.storyboard */; };
 		58DA42231ECC925400DA1802 /* LicenseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DA42211ECC925400DA1802 /* LicenseViewController.m */; };
 		58DA42241ECC925400DA1802 /* LicenseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58DA42221ECC925400DA1802 /* LicenseViewController.xib */; };
+		58DA42271ECC9BEE00DA1802 /* CalculatorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DA42261ECC9BEE00DA1802 /* CalculatorModel.m */; };
 		58DB4EB61ECA3711007FA930 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DB4EB41ECA3711007FA930 /* AboutViewController.m */; };
 		58DB4EB71ECA3711007FA930 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58DB4EB51ECA3711007FA930 /* AboutViewController.xib */; };
 /* End PBXBuildFile section */
@@ -30,9 +31,12 @@
 		159E7F711EC8634B00A9C8C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		159E7F741EC8634B00A9C8C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		159E7F761EC8634B00A9C8C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		58AD7F0D1ED5A3B000637980 /* ChangedResultDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangedResultDelegate.h; sourceTree = "<group>"; };
 		58DA42201ECC925400DA1802 /* LicenseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LicenseViewController.h; sourceTree = "<group>"; };
 		58DA42211ECC925400DA1802 /* LicenseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LicenseViewController.m; sourceTree = "<group>"; };
 		58DA42221ECC925400DA1802 /* LicenseViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LicenseViewController.xib; sourceTree = "<group>"; };
+		58DA42251ECC9BEE00DA1802 /* CalculatorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorModel.h; sourceTree = "<group>"; };
+		58DA42261ECC9BEE00DA1802 /* CalculatorModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculatorModel.m; sourceTree = "<group>"; };
 		58DB4EB31ECA3711007FA930 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		58DB4EB41ECA3711007FA930 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		58DB4EB51ECA3711007FA930 /* AboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
@@ -68,6 +72,9 @@
 		159E7F641EC8634B00A9C8C5 /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				58AD7F0D1ED5A3B000637980 /* ChangedResultDelegate.h */,
+				58DA42251ECC9BEE00DA1802 /* CalculatorModel.h */,
+				58DA42261ECC9BEE00DA1802 /* CalculatorModel.m */,
 				58DA42201ECC925400DA1802 /* LicenseViewController.h */,
 				58DA42211ECC925400DA1802 /* LicenseViewController.m */,
 				58DA42221ECC925400DA1802 /* LicenseViewController.xib */,
@@ -172,6 +179,7 @@
 				159E7F6A1EC8634B00A9C8C5 /* AppDelegate.m in Sources */,
 				58DB4EB61ECA3711007FA930 /* AboutViewController.m in Sources */,
 				159E7F671EC8634B00A9C8C5 /* main.m in Sources */,
+				58DA42271ECC9BEE00DA1802 /* CalculatorModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
