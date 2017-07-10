@@ -1,11 +1,3 @@
-//
-//  LicenseViewController.m
-//  Calculator
-//
-//  Created by melanu1991 on 17.05.17.
-//  Copyright © 2017 melanu. All rights reserved.
-//
-
 #import "LicenseViewController.h"
 
 @interface LicenseViewController ()
@@ -15,7 +7,7 @@
 
 @implementation LicenseViewController
 
-- (IBAction)buttonReturn:(id)sender {
+- (IBAction)backButtonPressed:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

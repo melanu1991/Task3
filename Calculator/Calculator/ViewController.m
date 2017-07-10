@@ -1,27 +1,46 @@
 #import "ViewController.h"
+#import "Constants.h"
 
 @interface ViewController ()
-@property (nonatomic,assign,getter=isEqualButton) BOOL equalButton;
-@property (nonatomic,assign) BOOL isDotButton;
-@property (nonatomic, assign) BOOL waitNextOperand;
-@property (nonatomic, assign) BOOL flagNextInput;
+@property (nonatomic, assign, getter=isWaitNextInput) BOOL waitNextInput;
 @property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeft;
 @property (retain, nonatomic) IBOutlet UILabel *resultLabel;
-@property (retain, nonatomic) NSDecimalNumber *decimal;
 @property (nonatomic, strong) CalculatorModel *calcModel;
+
+@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *digitButtons;
+
+@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *disableOperation;
+
+@property (retain, nonatomic) IBOutlet UIStackView *stackView1;
+@property (retain, nonatomic) IBOutlet UIStackView *stackView2;
+@property (retain, nonatomic) IBOutlet UIStackView *stackView3;
+@property (retain, nonatomic) IBOutlet UIStackView *stackView4;
+@property (retain, nonatomic) IBOutlet UIStackView *stackView5;
+@property (retain, nonatomic) IBOutlet UIStackView *stackView6;
+
+@property (retain, nonatomic) IBOutlet UIButton *binButton;
+@property (retain, nonatomic) IBOutlet UIButton *octButton;
+@property (retain, nonatomic) IBOutlet UIButton *decButton;
+@property (retain, nonatomic) IBOutlet UIButton *hexButton;
+@property (retain, nonatomic) IBOutlet UIButton *fButton;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.swipeLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(didSwipe:)];
     self.swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:self.swipeLeft];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)];
+    
+    UIBarButtonItem *item = [[[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)]autorelease];
     self.navigationItem.leftBarButtonItem = item;
-    self.calcModel = [[CalculatorModel alloc]init];
+    
+    self.calcModel = [[[CalculatorModel alloc]init]autorelease];
     self.calcModel.delegate = self;
+    [self changeStateNotationButtonsForSystem:VAKSystemDec];
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -29,11 +48,29 @@
         NSString *result = [self.resultLabel.text substringToIndex:self.resultLabel.text.length-1 ];
         self.resultLabel.text = result;
     }
-    if (![self.resultLabel.text containsString:@"."]) {
-        self.isDotButton = NO;
+    
+    if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:VAKNullCharacter]) {
+        self.resultLabel.text = VAKNullCharacter;
     }
-    if (self.resultLabel.text.length == 0 || [self.resultLabel.text isEqualToString:@"0"]) {
-        self.resultLabel.text = @"0";
+}
+
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+
+    if (newCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
+        [self.stackView1 addArrangedSubview:self.binButton];
+        [self.stackView2 addArrangedSubview:self.octButton];
+        [self.stackView3 addArrangedSubview:self.decButton];
+        [self.stackView4 addArrangedSubview:self.hexButton];
+        [self.stackView5 addArrangedSubview:self.fButton];
+        self.stackView6.hidden = true;
+    } else {
+        self.stackView6.hidden = false;
+        [self.stackView6 addArrangedSubview:self.binButton];
+        [self.stackView6 addArrangedSubview:self.octButton];
+        [self.stackView6 addArrangedSubview:self.decButton];
+        [self.stackView6 addArrangedSubview:self.hexButton];
+        [self.stackView6 addArrangedSubview:self.fButton];
     }
 }
 
@@ -45,118 +82,148 @@
     [aboutView release];
 }
 
-- (IBAction)buttonLicense:(id)sender {
+- (IBAction)buttonLicencePressed:(id)sender {
     LicenseViewController *licenseView = [[LicenseViewController alloc]init];
     [self presentViewController:licenseView animated:YES completion:nil];
     [licenseView release];
 }
 
 - (IBAction)buttonNumberPressed:(UIButton *)sender {
-    
     NSString *value = [sender titleForState:UIControlStateNormal];
     NSString *result = nil;
-    
-    if (self.flagNextInput) {
+    if (self.calcModel.equalOperation) {
         self.resultLabel.text = value;
-        self.flagNextInput = NO;
+        self.calcModel.equalOperation = NO;
+        [self.calcModel clearValue];
+        return;
+    }
+    if (self.isWaitNextInput) {
+        result = value;
+        self.waitNextInput = NO;
+        self.calcModel.nextOperand = YES;
     }
     else {
-        result = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
-        if (self.isDotButton && [value isEqualToString:@"0"]) {
-            self.resultLabel.text = result;
-        }
-        else {
-            self.resultLabel.text = [NSString stringWithFormat:@"%@", (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:result]];
+        if (![self.resultLabel.text isEqualToString:VAKNullCharacter]) {
+            result = [NSString stringWithFormat:@"%@%@",self.resultLabel.text,value];
+        } else if ([self.resultLabel.text isEqualToString:VAKNullCharacter]) {
+            result = [NSString stringWithFormat:@"%@",value];
+        } else if ([self.resultLabel.text containsString:VAKDotCharacter] && [value isEqualToString:VAKDotCharacter]) {
+            result = self.resultLabel.text;
         }
     }
     
+    self.resultLabel.text = result;
 }
 
 - (IBAction)dotButton:(UIButton *)sender {
-    if (!self.isDotButton) {
-        NSString *temp = [self.resultLabel.text stringByAppendingString:@"."];
+    if (![self.resultLabel.text containsString:VAKDotCharacter]) {
+        NSString *temp = [self.resultLabel.text stringByAppendingString:VAKDotCharacter];
         self.resultLabel.text = temp;
-        self.isDotButton = YES;
     }
 }
 
 - (IBAction)buttonPressClear:(UIButton *)sender {
-    self.resultLabel.text = @"0";
-    self.isDotButton = NO;
-    self.flagNextInput = NO;
-    self.waitNextOperand = NO;
-    self.equalButton = NO;
-    self.calcModel.currentOperand = nil;
-    self.decimal = nil;
+    self.resultLabel.text = VAKNullCharacter;
+    self.waitNextInput = YES;
+    [self.calcModel clearValue];
 }
 
 - (IBAction)equalKeyIsPressed:(id)sender {
-    
-    if (!self.isEqualButton) {
-        self.calcModel.beforeOperand = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
-        NSDecimalNumber *temp = [self.calcModel binaryOperand:self.calcModel.beforeOperand];
-        if (temp!=nil) {
-            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
-        }
-        self.waitNextOperand = NO;
-        self.flagNextInput = NO;
-    }
-    else {
-        
-        NSDecimalNumber *temp = [self.calcModel binaryOperand:self.calcModel.beforeOperand];
-        if (temp!=nil) {
-            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber: temp];
-        }
-        
-    }
-    
-    self.equalButton = YES;
-    
+    [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
+    [self.calcModel executeOperation:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text]];
+    self.calcModel.equalOperation = YES;
+    [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];
 }
+
 - (IBAction)binaryOperatorKeyIsPressed:(id)sender {
-    self.decimal = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
-    if (self.waitNextOperand && !self.flagNextInput) {
-        NSDecimalNumber *temp = [self.calcModel binaryOperand:self.decimal];
-        if (temp!=nil) {
-            self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:temp];
-        }
-    }
-    else {
-        self.calcModel.currentOperand = self.decimal;
-        self.waitNextOperand = YES;
-    }
-    self.flagNextInput = YES;
-    self.isDotButton = NO;
-    self.equalButton = NO;
-    self.calcModel.operation = [sender titleForState:UIControlStateNormal];
+    [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
+    self.calcModel.equalOperation = NO;
+    NSDecimalNumber *lableValue = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
+    [self.calcModel binaryOperationWithOperand:lableValue operation:[sender titleForState:UIControlStateNormal]];
+    self.waitNextInput = YES;
+    self.calcModel.nextOperand = NO;
+    [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];
 }
+
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
-    
-    self.decimal = [self.calcModel unaryOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
-    if (self.decimal!=nil) {
-        self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:self.decimal];
-    }
-    self.flagNextInput = YES;
+    [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
+    self.calcModel.equalOperation = NO;
+    [self.calcModel unaryOperationWithOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
+    self.waitNextInput = YES;
+    [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];    
+}
+
+- (IBAction)numberSystemButtonPressed:(UIButton *)sender {
+    NSString *newSystem = [sender titleForState:UIControlStateNormal];
+
+    [self changeStateNotationButtonsForSystem:newSystem];
+    [self.calcModel changeNumberSystemWithNewSystem:newSystem withCurrentValue:self.resultLabel.text];
     
 }
 
 #pragma mark - delegate protocol
 
 - (void)setNewResultOnDisplay:(NSDecimalNumber *)newResult {
-//    self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:newResult];
+    self.resultLabel.text = [self.calcModel.formatterDecimal stringFromNumber:newResult];
 }
 
 - (void)setResultExceptionOnDisplay:(NSString *)showDisplayException {
     [self.resultLabel setText:showDisplayException];
 }
 
+- (void)setNewResultOnDisplayNotDecimalSystem:(NSString *)newResult {
+    self.resultLabel.text = newResult;
+}
+
+#pragma mark - buttons enable
+
+- (void)changeStateNotationButtonsForSystem:(NSString *)notation {
+    int countDigitsNotation = 0;
+    if ([notation isEqualToString:VAKSystemBin]) {
+        countDigitsNotation = VAKCountBinaryNumber;
+        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
+    }
+    else if ([notation isEqualToString:VAKSystemDec]) {
+        countDigitsNotation = VAKCountDecNumber;
+        [self.disableOperation setValue:@"YES" forKey:@"enabled"];
+    }
+    else if ([notation isEqualToString:VAKSystemHex]) {
+        countDigitsNotation = VAKCountHexNumber;
+        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
+    }
+    else {
+        countDigitsNotation = VAKCountOctNumber;
+        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
+    }
+    for (int i = 0; i < countDigitsNotation; i++) {
+        UIButton *currentButton = self.digitButtons[i];
+        [currentButton setValue:@"YES" forKey:@"enabled"];
+    }
+    for (int i = countDigitsNotation; i < VAKCountHexNumber; i++) {
+        UIButton *currentButton = self.digitButtons[i];
+        [currentButton setValue:@"NO" forKey:@"enabled"];
+    }
+}
+
 #pragma mark - deallocate
 
 - (void)dealloc {
+    [_calcModel release];
     [_resultLabel release];
     [_swipeLeft release];
-    [_calcModel release];
-    [_decimal release];
+    [_digitButtons release];
+    [_disableOperation release];
+    [_stackView1 release];
+    [_stackView2 release];
+    [_stackView3 release];
+    [_stackView4 release];
+    [_stackView5 release];
+    [_binButton release];
+    [_octButton release];
+    [_decButton release];
+    [_hexButton release];
+    [_fButton release];
+    [_stackView6 release];
     [super dealloc];
 }
 @end

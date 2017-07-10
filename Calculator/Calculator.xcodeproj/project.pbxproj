@@ -13,6 +13,11 @@
 		159E7F701EC8634B00A9C8C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 159E7F6E1EC8634B00A9C8C5 /* Main.storyboard */; };
 		159E7F721EC8634B00A9C8C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 159E7F711EC8634B00A9C8C5 /* Assets.xcassets */; };
 		159E7F751EC8634B00A9C8C5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 159E7F731EC8634B00A9C8C5 /* LaunchScreen.storyboard */; };
+		5890D7581EE6C3C100FB8C50 /* NotationSystemFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5890D7571EE6C3C100FB8C50 /* NotationSystemFactory.m */; };
+		58B7012A1EE6FAAA0049C331 /* VAKDecimalSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B701291EE6FAAA0049C331 /* VAKDecimalSystem.m */; };
+		58C974BF1EDADFF100ED8A28 /* BinarySystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C974BE1EDADFF100ED8A28 /* BinarySystem.m */; };
+		58C974C21EDAE03200ED8A28 /* OctSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C974C11EDAE03200ED8A28 /* OctSystem.m */; };
+		58C974C51EDAE04600ED8A28 /* HexSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C974C41EDAE04600ED8A28 /* HexSystem.m */; };
 		58DA42231ECC925400DA1802 /* LicenseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DA42211ECC925400DA1802 /* LicenseViewController.m */; };
 		58DA42241ECC925400DA1802 /* LicenseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58DA42221ECC925400DA1802 /* LicenseViewController.xib */; };
 		58DA42271ECC9BEE00DA1802 /* CalculatorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DA42261ECC9BEE00DA1802 /* CalculatorModel.m */; };
@@ -31,7 +36,19 @@
 		159E7F711EC8634B00A9C8C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		159E7F741EC8634B00A9C8C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		159E7F761EC8634B00A9C8C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5890D7551EE6C2EF00FB8C50 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		5890D7561EE6C3C100FB8C50 /* NotationSystemFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotationSystemFactory.h; sourceTree = "<group>"; };
+		5890D7571EE6C3C100FB8C50 /* NotationSystemFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotationSystemFactory.m; sourceTree = "<group>"; };
 		58AD7F0D1ED5A3B000637980 /* ChangedResultDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangedResultDelegate.h; sourceTree = "<group>"; };
+		58B701281EE6FAAA0049C331 /* VAKDecimalSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAKDecimalSystem.h; sourceTree = "<group>"; };
+		58B701291EE6FAAA0049C331 /* VAKDecimalSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VAKDecimalSystem.m; sourceTree = "<group>"; };
+		58C974BD1EDADFF100ED8A28 /* BinarySystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinarySystem.h; sourceTree = "<group>"; };
+		58C974BE1EDADFF100ED8A28 /* BinarySystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BinarySystem.m; sourceTree = "<group>"; };
+		58C974C01EDAE03200ED8A28 /* OctSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OctSystem.h; sourceTree = "<group>"; };
+		58C974C11EDAE03200ED8A28 /* OctSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OctSystem.m; sourceTree = "<group>"; };
+		58C974C31EDAE04600ED8A28 /* HexSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HexSystem.h; sourceTree = "<group>"; };
+		58C974C41EDAE04600ED8A28 /* HexSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HexSystem.m; sourceTree = "<group>"; };
+		58C974CA1EDAF18100ED8A28 /* SystemProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SystemProtocol.h; sourceTree = "<group>"; };
 		58DA42201ECC925400DA1802 /* LicenseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LicenseViewController.h; sourceTree = "<group>"; };
 		58DA42211ECC925400DA1802 /* LicenseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LicenseViewController.m; sourceTree = "<group>"; };
 		58DA42221ECC925400DA1802 /* LicenseViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LicenseViewController.xib; sourceTree = "<group>"; };
@@ -72,6 +89,8 @@
 		159E7F641EC8634B00A9C8C5 /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				5890D7541EE6C2D200FB8C50 /* Constant */,
+				58C974C91EDAE23200ED8A28 /* Calc3.0 */,
 				58AD7F0D1ED5A3B000637980 /* ChangedResultDelegate.h */,
 				58DA42251ECC9BEE00DA1802 /* CalculatorModel.h */,
 				58DA42261ECC9BEE00DA1802 /* CalculatorModel.m */,
@@ -100,6 +119,32 @@
 				159E7F661EC8634B00A9C8C5 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5890D7541EE6C2D200FB8C50 /* Constant */ = {
+			isa = PBXGroup;
+			children = (
+				5890D7551EE6C2EF00FB8C50 /* Constants.h */,
+			);
+			name = Constant;
+			sourceTree = "<group>";
+		};
+		58C974C91EDAE23200ED8A28 /* Calc3.0 */ = {
+			isa = PBXGroup;
+			children = (
+				58C974BD1EDADFF100ED8A28 /* BinarySystem.h */,
+				58C974BE1EDADFF100ED8A28 /* BinarySystem.m */,
+				58C974C01EDAE03200ED8A28 /* OctSystem.h */,
+				58C974C11EDAE03200ED8A28 /* OctSystem.m */,
+				58C974C31EDAE04600ED8A28 /* HexSystem.h */,
+				58C974C41EDAE04600ED8A28 /* HexSystem.m */,
+				58C974CA1EDAF18100ED8A28 /* SystemProtocol.h */,
+				5890D7561EE6C3C100FB8C50 /* NotationSystemFactory.h */,
+				5890D7571EE6C3C100FB8C50 /* NotationSystemFactory.m */,
+				58B701281EE6FAAA0049C331 /* VAKDecimalSystem.h */,
+				58B701291EE6FAAA0049C331 /* VAKDecimalSystem.m */,
+			);
+			name = Calc3.0;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,10 +220,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				159E7F6D1EC8634B00A9C8C5 /* ViewController.m in Sources */,
+				5890D7581EE6C3C100FB8C50 /* NotationSystemFactory.m in Sources */,
+				58C974C21EDAE03200ED8A28 /* OctSystem.m in Sources */,
+				58C974BF1EDADFF100ED8A28 /* BinarySystem.m in Sources */,
 				58DA42231ECC925400DA1802 /* LicenseViewController.m in Sources */,
 				159E7F6A1EC8634B00A9C8C5 /* AppDelegate.m in Sources */,
+				58B7012A1EE6FAAA0049C331 /* VAKDecimalSystem.m in Sources */,
 				58DB4EB61ECA3711007FA930 /* AboutViewController.m in Sources */,
 				159E7F671EC8634B00A9C8C5 /* main.m in Sources */,
+				58C974C51EDAE04600ED8A28 /* HexSystem.m in Sources */,
 				58DA42271ECC9BEE00DA1802 /* CalculatorModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -227,6 +277,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -272,6 +323,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

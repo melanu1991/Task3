@@ -1,102 +1,237 @@
-//
-//  CalculatorModel.m
-//  Calculator
-//
-//  Created by melanu1991 on 17.05.17.
-//  Copyright © 2017 melanu. All rights reserved.
-//
-
 #import "CalculatorModel.h"
+#import "Constants.h"
+#import "NotationSystemFactory.h"
+
+@interface CalculatorModel ()
+
+@property (nonatomic, copy) NSString *operation;
+@property (nonatomic, copy) NSString *unaryOperation;
+@property (nonatomic, copy) NSDecimalNumber *currentOperand;
+@property (nonatomic, copy) NSDecimalNumber *beforeOperand;
+@property (nonatomic, assign, getter=isFirstOperand) BOOL firstOperand;
+@property (nonatomic, assign, getter=isBinaryOperation) BOOL binaryOperation;
+@property (nonatomic, copy) NSString *currentNumberSystem;
+@property (nonatomic, retain) NSDictionary *arrayOfOperation;
+@property (nonatomic, retain) id<SystemProtocol> system;
+
+@end
 
 @implementation CalculatorModel
 
--(instancetype)init {
-    self = [super init];
-    if (self) {
-        self.formatterDecimal = [[NSNumberFormatter alloc]init];
-        self.formatterDecimal.generatesDecimalNumbers = YES;
-        self.formatterDecimal.usesSignificantDigits = YES;
-        self.formatterDecimal.usesGroupingSeparator = NO;
-        self.formatterDecimal.numberStyle = NSNumberFormatterDecimalStyle;
-        [self.formatterDecimal setMinimumFractionDigits:1];
-        [self.formatterDecimal setMaximumFractionDigits:5];
+- (NSDictionary *)arrayOfOperation {
+    if (!_arrayOfOperation) {
+        _arrayOfOperation = [@{VAKPlusOperation : @"plusOperation",
+                               VAKMinusOperation : @"minusOperation",
+                               VAKMulOperation : @"mulOperation",
+                               VAKDivOperation : @"divOperation",
+                               VAKProcentOperation : @"procentOperation",
+                               VAKSqrtOperation : @"sqrtOperation",
+                               VAKPlusMinusOperation : @"plusMinusOperation"
+                               } retain];
     }
-    return self;
+    return _arrayOfOperation;
 }
 
-- (NSDecimalNumber *)binaryOperand:(NSDecimalNumber *)operand{
+- (id<SystemProtocol>)system {
+    if (!_system) {
+        _system = [[VAKDecimalSystem alloc] init];
+    }
+    return _system;
+}
+
+- (NSNumberFormatter *)formatterDecimal {
+    if (!_formatterDecimal) {
+        _formatterDecimal = [[NSNumberFormatter alloc]init];
+        _formatterDecimal.generatesDecimalNumbers = YES;
+        _formatterDecimal.usesSignificantDigits = YES;
+        _formatterDecimal.usesGroupingSeparator = NO;
+        _formatterDecimal.numberStyle = NSNumberFormatterDecimalStyle;
+        [_formatterDecimal setMinimumFractionDigits:1];
+        [_formatterDecimal setMaximumFractionDigits:5];
+    }
+    return _formatterDecimal;
+}
+
+- (void)convertAnyNumberSystemToDecimalNumberSystemWithNumber:(NSString *)number {
+    NSString *tempValue = nil;
+
+    tempValue = [self.system convertToDec:number];
+    
+    if (tempValue != nil) {
+        [self.delegate setNewResultOnDisplayNotDecimalSystem:tempValue];
+    }
+}
+
+- (void)convertDecimalNumberSystemToAnyNumberSystemWithNumber:(NSString *)number {
+    NSString *tempValue = number;
+
+    tempValue = [self.system decToChoiceSystem:number];
+    
+    [self.delegate setNewResultOnDisplayNotDecimalSystem:tempValue];
+}
+
+- (void)changeNumberSystemWithNewSystem:(NSString *)newNumberSystem withCurrentValue:(NSString *)currentValue {
+    NSString *tempValue = currentValue;
+    
+    tempValue = [self.system convertToDec:currentValue];
+    self.system = [NotationSystemFactory notationForSystem:newNumberSystem];
+    tempValue = [self.system decToChoiceSystem:tempValue];
+    
+    [self.delegate setNewResultOnDisplayNotDecimalSystem:tempValue];
+    self.currentNumberSystem = newNumberSystem;
+}
+
+- (void)clearValue {
+    self.currentOperand = nil;
+    self.beforeOperand = nil;
+    self.operation = nil;
+    self.nextOperand = NO;
+    self.firstOperand = NO;
+    self.equalOperation = NO;
+    self.unaryOperation = nil;
+    self.binaryOperation = nil;
+}
+
+- (void)executeOperation:(NSDecimalNumber *)newOperand {
     NSDecimalNumber *result = nil;
-    if ([self.operation isEqualToString:@"+"]) {
-        result = [self.currentOperand decimalNumberByAdding:operand];
-    } else if ([self.operation isEqualToString:@"-"]) {
-        result = [self.currentOperand decimalNumberBySubtracting:operand];
-    } else if ([self.operation isEqualToString:@"*"]) {
-        result = [self.currentOperand decimalNumberByMultiplyingBy:operand];
-    } else if ([self.operation isEqualToString:@"/"]) {
-        
-        @try {
-            
-            result = [self.currentOperand decimalNumberByDividingBy:operand];
-            
-        } @catch (NSException *exception) {
-            
-            [self.delegate setResultExceptionOnDisplay:[NSString stringWithFormat:@"Деление на ноль!"]];
-            
+    if (!self.equalOperation) {
+        self.beforeOperand = newOperand;
+    }
+    if (self.isBinaryOperation) {
+        if (self.operation == nil) {
+            return;
         }
-        
-    } else if ([self.operation isEqualToString:@"%"]) {
-        if (self.currentOperand.integerValue-self.currentOperand.doubleValue == 0 || operand.integerValue/operand.doubleValue == 0) {
-            
-            NSString *temp = [NSString stringWithFormat:@"%ld",self.currentOperand.integerValue % operand.integerValue];
-            result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
-            
-        }
-        else {
-            
-            NSString *temp = [NSString stringWithFormat:@"%d", (int)(self.currentOperand.doubleValue/operand.doubleValue)];
-             result = [self.currentOperand decimalNumberBySubtracting:[[NSDecimalNumber decimalNumberWithString:temp] decimalNumberByMultiplyingBy:operand]];
-            
+        SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.operation]);
+        result = [self performSelector:selectorOperation];
+        if (result != nil) {
+            self.currentOperand = result;
+            [self.delegate setNewResultOnDisplay:result];
         }
     }
-    self.currentOperand = result;
-    
-//    [self.delegate setNewResultOnDisplay:result]; --> тут не совсем понял как сделать т.к. при бинарной операцие значение на экране должно меняться только после нажатия следующей операции! А так оно поменяет его сразу!
-    
+    else {
+        if (self.unaryOperation == nil) {
+            return;
+        }
+        SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.unaryOperation]);
+        result = [self performSelector:selectorOperation];
+        if (result != nil) {
+            self.beforeOperand = result;
+            
+            [self.delegate setNewResultOnDisplay:result];
+        }
+    }
+    self.nextOperand = NO;
+    self.equalOperation = YES;
+}
+
+- (void)binaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation{
+    self.equalOperation = NO;
+    self.binaryOperation = YES;
+    if (!self.isFirstOperand) {
+        self.operation = operation;
+        self.currentOperand = operand;
+        self.firstOperand = YES;
+        return;
+    }
+    if (self.isNextOperand) {
+        self.beforeOperand = operand;
+        NSString *opr = self.arrayOfOperation[self.operation];
+        SEL selectorOperation = NSSelectorFromString(opr);
+        self.currentOperand = [self performSelector:selectorOperation];
+    }
+    else {
+        self.operation = operation;
+        return;
+    }
+    self.operation = operation;
+    if (self.currentOperand != nil) {
+        [self.delegate setNewResultOnDisplay:self.currentOperand];
+    }
+}
+
+-(void)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
+    self.equalOperation = NO;
+    self.unaryOperation = operation;
+    NSDecimalNumber *result = nil;
+    self.beforeOperand = operand;
+    SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.unaryOperation]);
+    result = [self performSelector:selectorOperation];
+    if (result != nil) {
+        [self.delegate setNewResultOnDisplay:result];
+    }
+}
+
+- (NSDecimalNumber *)sqrtOperation {
+    NSDecimalNumber *result = nil;
+    @try {
+        if (self.beforeOperand.doubleValue<0) {
+            NSException *e = [NSException exceptionWithName:@"RootOfNegativeValue" reason:@"Корень из отрицательного числа!" userInfo:nil];
+            @throw e;
+        }
+        double value = sqrt(self.beforeOperand.doubleValue);
+        NSString *temp = [NSString stringWithFormat:@"%g",value];
+        result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
+    } @catch (NSException *exception) {
+        [self.delegate setResultExceptionOnDisplay:exception.reason];
+        [self clearValue];
+        return nil;
+    }
     return result;
 }
 
--(NSDecimalNumber *)unaryOperand:(NSDecimalNumber *)operand operation:(NSString *)operation {
+- (NSDecimalNumber *)plusMinusOperation {
+    NSDecimalNumber *numberInvert = [NSDecimalNumber decimalNumberWithString:@"-1"];
+    return [numberInvert decimalNumberByMultiplyingBy:self.beforeOperand];
+}
+
+- (NSDecimalNumber *)plusOperation {
+    return [self.currentOperand decimalNumberByAdding:self.beforeOperand];
+}
+
+- (NSDecimalNumber *)minusOperation {
+    return [self.currentOperand decimalNumberBySubtracting:self.beforeOperand];;
+}
+
+- (NSDecimalNumber *)mulOperation {
+    return [self.currentOperand decimalNumberByMultiplyingBy:self.beforeOperand];
+}
+
+- (NSDecimalNumber *)divOperation {
     NSDecimalNumber *result = nil;
-    if ([operation isEqualToString:@"sqrt"]) {
-        @try {
-            if (operand.doubleValue<0) {
-                NSException *e = [NSException exceptionWithName:@"RootOfNegativeValue" reason:@"Корень из отрицательного числа!" userInfo:nil];
-                @throw e;
-            }
-            double value = sqrt(operand.doubleValue);
-            NSString *temp = [NSString stringWithFormat:@"%g",value];
-            result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
-        } @catch (NSException *exception) {
-            [self.delegate setResultExceptionOnDisplay:exception.reason];
-        }
-        
-    } else if ([operation isEqualToString:@"±"]) {
-        NSDecimalNumber *numberInvert = [NSDecimalNumber decimalNumberWithString:@"-1"];
-        result = [numberInvert decimalNumberByMultiplyingBy:operand];
+    @try {
+        result = [self.currentOperand decimalNumberByDividingBy:self.beforeOperand];
+    } @catch (NSException *exception) {
+        [self.delegate setResultExceptionOnDisplay:[NSString stringWithFormat:@"Деление на ноль!"]];
+        [self clearValue];
+        return nil;
     }
-    
-//    [self.delegate setNewResultOnDisplay:result];
-    
+    return result;
+}
+
+- (NSDecimalNumber *)procentOperation {
+    NSDecimalNumber *result = nil;
+    if ( (self.currentOperand.integerValue - self.currentOperand.doubleValue == 0) || (self.beforeOperand.integerValue/self.beforeOperand.doubleValue == 0)) {
+        NSString *temp = [NSString stringWithFormat:@"%ld",self.currentOperand.integerValue % self.beforeOperand.integerValue];
+        result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
+    }
+    else {
+        NSString *temp = [NSString stringWithFormat:@"%d", (int)(self.currentOperand.doubleValue/self.beforeOperand.doubleValue)];
+        result = [self.currentOperand decimalNumberBySubtracting:[[NSDecimalNumber decimalNumberWithString:temp] decimalNumberByMultiplyingBy:self.beforeOperand]];
+    }
     return result;
 }
 
 - (void)dealloc
 {
     [_delegate release];
+    [_system release];
     [_operation release];
     [_currentOperand release];
     [_formatterDecimal release];
     [_beforeOperand release];
+    [_unaryOperation release];
+    [_arrayOfOperation release];
+    [_currentNumberSystem release];
     [super dealloc];
 }
 
