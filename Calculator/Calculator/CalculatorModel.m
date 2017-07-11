@@ -2,6 +2,8 @@
 #import "Constants.h"
 #import "NotationSystemFactory.h"
 
+typedef NSDecimalNumber *(^ExecuteOperation)(void);
+
 @interface CalculatorModel ()
 
 @property (nonatomic, copy) NSString *operation;
@@ -11,25 +13,76 @@
 @property (nonatomic, assign, getter=isFirstOperand) BOOL firstOperand;
 @property (nonatomic, assign, getter=isBinaryOperation) BOOL binaryOperation;
 @property (nonatomic, copy) NSString *currentNumberSystem;
-@property (nonatomic, retain) NSDictionary *arrayOfOperation;
+@property (nonatomic, retain) NSMutableDictionary *arrayOfOperation;
 @property (nonatomic, retain) id<SystemProtocol> system;
 
 @end
 
 @implementation CalculatorModel
 
-- (NSDictionary *)arrayOfOperation {
+- (NSMutableDictionary *)arrayOfOperation {
     if (!_arrayOfOperation) {
-        _arrayOfOperation = @{VAKPlusOperation : @"plusOperation",
-                               VAKMinusOperation : @"minusOperation",
-                               VAKMulOperation : @"mulOperation",
-                               VAKDivOperation : @"divOperation",
-                               VAKProcentOperation : @"procentOperation",
-                               VAKSqrtOperation : @"sqrtOperation",
-                               VAKPlusMinusOperation : @"plusMinusOperation"
-                               };
+        ExecuteOperation plusOperation = ^{ return [self.currentOperand decimalNumberByAdding:self.beforeOperand]; };
+        ExecuteOperation minusOperation = ^{ return [self.currentOperand decimalNumberBySubtracting:self.beforeOperand]; };
+        ExecuteOperation mulOperation = ^{ return [self.currentOperand decimalNumberByMultiplyingBy:self.beforeOperand]; };
+        ExecuteOperation divOperation = ^{
+            NSDecimalNumber *result = [NSDecimalNumber notANumber];
+            @try {
+                result = [self.currentOperand decimalNumberByDividingBy:self.beforeOperand];
+            } @catch (NSException *exception) {
+                [self.delegate setResultExceptionOnDisplay:[NSString stringWithFormat:@"Деление на ноль!"]];
+                [self clearValue];
+                return result;
+            }
+            return result;
+        };
+        ExecuteOperation procentOperation = ^{
+            NSDecimalNumber *result = nil;
+            if ( (self.currentOperand.integerValue - self.currentOperand.doubleValue == 0) || (self.beforeOperand.integerValue/self.beforeOperand.doubleValue == 0)) {
+                NSString *temp = [NSString stringWithFormat:@"%ld",self.currentOperand.integerValue % self.beforeOperand.integerValue];
+                result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
+            }
+            else {
+                NSString *temp = [NSString stringWithFormat:@"%d", (int)(self.currentOperand.doubleValue/self.beforeOperand.doubleValue)];
+                result = [self.currentOperand decimalNumberBySubtracting:[[NSDecimalNumber decimalNumberWithString:temp] decimalNumberByMultiplyingBy:self.beforeOperand]];
+            }
+            return result;
+        };
+        ExecuteOperation sqrtOperation = ^{
+            NSDecimalNumber *result = [NSDecimalNumber notANumber];
+            @try {
+                if (self.beforeOperand.doubleValue<0) {
+                    NSException *e = [NSException exceptionWithName:@"RootOfNegativeValue" reason:@"Корень из отрицательного числа!" userInfo:nil];
+                    @throw e;
+                }
+                double value = sqrt(self.beforeOperand.doubleValue);
+                NSString *temp = [NSString stringWithFormat:@"%g",value];
+                result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
+            } @catch (NSException *exception) {
+                [self.delegate setResultExceptionOnDisplay:exception.reason];
+                [self clearValue];
+                return result;
+            }
+            return result;
+        };
+        ExecuteOperation plusMinusOperation = ^{
+            NSDecimalNumber *numberInvert = [NSDecimalNumber decimalNumberWithString:@"-1"];
+            return [numberInvert decimalNumberByMultiplyingBy:self.beforeOperand];
+        };
+        _arrayOfOperation = [NSMutableDictionary dictionaryWithObjectsAndKeys:plusOperation, VAKPlusOperation,
+                                                                              minusOperation, VAKMinusOperation,
+                                                                              mulOperation, VAKMulOperation,
+                                                                              divOperation, VAKDivOperation,
+                                                                              procentOperation, VAKProcentOperation,
+                                                                              sqrtOperation, VAKSqrtOperation,
+                                                                              plusMinusOperation, VAKPlusMinusOperation,
+                                                                              nil];
     }
     return _arrayOfOperation;
+}
+
+- (void)addOperation:(NSString *)operation withExecuteBlock:(ExecuteOperation)executeBlock {
+    self.arrayOfOperation[operation] = executeBlock;
 }
 
 - (id<SystemProtocol>)system {
@@ -101,11 +154,8 @@
         if (self.operation == nil) {
             return;
         }
-        SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.operation]);
-        #pragma clang diagnostic push
-        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        result = [self performSelector:selectorOperation];
-        #pragma clang diagnostic pop
+        ExecuteOperation executeOperation = self.arrayOfOperation[self.operation];
+        result = executeOperation();
         if (result != nil) {
             self.currentOperand = result;
             [self.delegate setNewResultOnDisplay:result];
@@ -115,11 +165,8 @@
         if (self.unaryOperation == nil) {
             return;
         }
-        SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.unaryOperation]);
-        #pragma clang diagnostic push
-        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        result = [self performSelector:selectorOperation];
-        #pragma clang diagnostic pop
+        ExecuteOperation executeOperation = self.arrayOfOperation[self.unaryOperation];
+        result = executeOperation();
         if (result != nil) {
             self.beforeOperand = result;
             
@@ -141,12 +188,8 @@
     }
     if (self.isNextOperand) {
         self.beforeOperand = operand;
-        NSString *opr = self.arrayOfOperation[self.operation];
-        SEL selectorOperation = NSSelectorFromString(opr);
-        #pragma clang diagnostic push
-        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        self.currentOperand = [self performSelector:selectorOperation];
-        #pragma clang diagnostic pop
+        ExecuteOperation executeOperation = self.arrayOfOperation[self.operation];
+        self.currentOperand = executeOperation();
     }
     else {
         self.operation = operation;
@@ -163,74 +206,11 @@
     self.unaryOperation = operation;
     NSDecimalNumber *result = nil;
     self.beforeOperand = operand;
-    SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.unaryOperation]);
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    result = [self performSelector:selectorOperation];
-    #pragma clang diagnostic pop
+    ExecuteOperation executeOperation = self.arrayOfOperation[self.unaryOperation];
+    result = executeOperation();
     if (result != nil) {
         [self.delegate setNewResultOnDisplay:result];
     }
-}
-
-- (NSDecimalNumber *)sqrtOperation {
-    NSDecimalNumber *result = nil;
-    @try {
-        if (self.beforeOperand.doubleValue<0) {
-            NSException *e = [NSException exceptionWithName:@"RootOfNegativeValue" reason:@"Корень из отрицательного числа!" userInfo:nil];
-            @throw e;
-        }
-        double value = sqrt(self.beforeOperand.doubleValue);
-        NSString *temp = [NSString stringWithFormat:@"%g",value];
-        result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
-    } @catch (NSException *exception) {
-        [self.delegate setResultExceptionOnDisplay:exception.reason];
-        [self clearValue];
-        return nil;
-    }
-    return result;
-}
-
-- (NSDecimalNumber *)plusMinusOperation {
-    NSDecimalNumber *numberInvert = [NSDecimalNumber decimalNumberWithString:@"-1"];
-    return [numberInvert decimalNumberByMultiplyingBy:self.beforeOperand];
-}
-
-- (NSDecimalNumber *)plusOperation {
-    return [self.currentOperand decimalNumberByAdding:self.beforeOperand];
-}
-
-- (NSDecimalNumber *)minusOperation {
-    return [self.currentOperand decimalNumberBySubtracting:self.beforeOperand];;
-}
-
-- (NSDecimalNumber *)mulOperation {
-    return [self.currentOperand decimalNumberByMultiplyingBy:self.beforeOperand];
-}
-
-- (NSDecimalNumber *)divOperation {
-    NSDecimalNumber *result = nil;
-    @try {
-        result = [self.currentOperand decimalNumberByDividingBy:self.beforeOperand];
-    } @catch (NSException *exception) {
-        [self.delegate setResultExceptionOnDisplay:[NSString stringWithFormat:@"Деление на ноль!"]];
-        [self clearValue];
-        return nil;
-    }
-    return result;
-}
-
-- (NSDecimalNumber *)procentOperation {
-    NSDecimalNumber *result = nil;
-    if ( (self.currentOperand.integerValue - self.currentOperand.doubleValue == 0) || (self.beforeOperand.integerValue/self.beforeOperand.doubleValue == 0)) {
-        NSString *temp = [NSString stringWithFormat:@"%ld",self.currentOperand.integerValue % self.beforeOperand.integerValue];
-        result = (NSDecimalNumber *)[self.formatterDecimal numberFromString:temp];
-    }
-    else {
-        NSString *temp = [NSString stringWithFormat:@"%d", (int)(self.currentOperand.doubleValue/self.beforeOperand.doubleValue)];
-        result = [self.currentOperand decimalNumberBySubtracting:[[NSDecimalNumber decimalNumberWithString:temp] decimalNumberByMultiplyingBy:self.beforeOperand]];
-    }
-    return result;
 }
 
 @end
