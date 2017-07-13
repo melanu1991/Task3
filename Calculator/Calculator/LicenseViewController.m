@@ -1,7 +1,7 @@
 #import "LicenseViewController.h"
 
 @interface LicenseViewController ()
-@property (retain, nonatomic) IBOutlet UILabel *licenseLabel;
+@property (strong, nonatomic) IBOutlet UILabel *licenseLabel;
 
 @end
 

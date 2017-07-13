@@ -11,8 +11,8 @@
 @property (nonatomic, assign, getter=isFirstOperand) BOOL firstOperand;
 @property (nonatomic, assign, getter=isBinaryOperation) BOOL binaryOperation;
 @property (nonatomic, copy) NSString *currentNumberSystem;
-@property (nonatomic, retain) NSDictionary *arrayOfOperation;
-@property (nonatomic, retain) id<SystemProtocol> system;
+@property (nonatomic, strong) NSDictionary *arrayOfOperation;
+@property (nonatomic, strong) id<SystemProtocol> system;
 
 @end
 

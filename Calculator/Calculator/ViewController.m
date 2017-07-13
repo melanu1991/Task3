@@ -3,26 +3,26 @@
 
 @interface ViewController ()
 @property (nonatomic, assign, getter=isWaitNextInput) BOOL waitNextInput;
-@property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeft;
-@property (retain, nonatomic) IBOutlet UILabel *resultLabel;
+@property (nonatomic, strong) UISwipeGestureRecognizer *swipeLeft;
+@property (weak, nonatomic) IBOutlet UILabel *resultLabel;
 @property (nonatomic, strong) CalculatorModel *calcModel;
 
-@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *digitButtons;
+@property (weak, nonatomic) IBOutletCollection(UIButton) NSArray *digitButtons;
 
-@property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *disableOperation;
+@property (weak, nonatomic) IBOutletCollection(UIButton) NSArray *disableOperation;
 
-@property (retain, nonatomic) IBOutlet UIStackView *stackView1;
-@property (retain, nonatomic) IBOutlet UIStackView *stackView2;
-@property (retain, nonatomic) IBOutlet UIStackView *stackView3;
-@property (retain, nonatomic) IBOutlet UIStackView *stackView4;
-@property (retain, nonatomic) IBOutlet UIStackView *stackView5;
-@property (retain, nonatomic) IBOutlet UIStackView *stackView6;
+@property (weak, nonatomic) IBOutlet UIStackView *stackView1;
+@property (weak, nonatomic) IBOutlet UIStackView *stackView2;
+@property (weak, nonatomic) IBOutlet UIStackView *stackView3;
+@property (weak, nonatomic) IBOutlet UIStackView *stackView4;
+@property (weak, nonatomic) IBOutlet UIStackView *stackView5;
+@property (weak, nonatomic) IBOutlet UIStackView *stackView6;
 
-@property (retain, nonatomic) IBOutlet UIButton *binButton;
-@property (retain, nonatomic) IBOutlet UIButton *octButton;
-@property (retain, nonatomic) IBOutlet UIButton *decButton;
-@property (retain, nonatomic) IBOutlet UIButton *hexButton;
-@property (retain, nonatomic) IBOutlet UIButton *fButton;
+@property (weak, nonatomic) IBOutlet UIButton *binButton;
+@property (weak, nonatomic) IBOutlet UIButton *octButton;
+@property (weak, nonatomic) IBOutlet UIButton *decButton;
+@property (weak, nonatomic) IBOutlet UIButton *hexButton;
+@property (weak, nonatomic) IBOutlet UIButton *fButton;
 
 @end
 

@@ -6,8 +6,8 @@
 
 @interface CalculatorModel : NSObject
 
-@property (nonatomic,unsafe_unretained) id<ChangedResultDelegate> delegate;
-@property (nonatomic,retain) NSNumberFormatter *formatterDecimal;
+@property (nonatomic,weak) id<ChangedResultDelegate> delegate;
+@property (nonatomic,strong) NSNumberFormatter *formatterDecimal;
 @property (nonatomic, assign, getter=isNextOperand) BOOL nextOperand;
 @property (nonatomic, assign, getter=isEqualOperation) BOOL equalOperation;
 
