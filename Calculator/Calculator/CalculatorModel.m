@@ -20,14 +20,14 @@
 
 - (NSDictionary *)arrayOfOperation {
     if (!_arrayOfOperation) {
-        _arrayOfOperation = [@{VAKPlusOperation : @"plusOperation",
+        _arrayOfOperation = @{VAKPlusOperation : @"plusOperation",
                                VAKMinusOperation : @"minusOperation",
                                VAKMulOperation : @"mulOperation",
                                VAKDivOperation : @"divOperation",
                                VAKProcentOperation : @"procentOperation",
                                VAKSqrtOperation : @"sqrtOperation",
                                VAKPlusMinusOperation : @"plusMinusOperation"
-                               } retain];
+                               };
     }
     return _arrayOfOperation;
 }
@@ -102,7 +102,10 @@
             return;
         }
         SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.operation]);
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         result = [self performSelector:selectorOperation];
+        #pragma clang diagnostic pop
         if (result != nil) {
             self.currentOperand = result;
             [self.delegate setNewResultOnDisplay:result];
@@ -113,7 +116,10 @@
             return;
         }
         SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.unaryOperation]);
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         result = [self performSelector:selectorOperation];
+        #pragma clang diagnostic pop
         if (result != nil) {
             self.beforeOperand = result;
             
@@ -137,7 +143,10 @@
         self.beforeOperand = operand;
         NSString *opr = self.arrayOfOperation[self.operation];
         SEL selectorOperation = NSSelectorFromString(opr);
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         self.currentOperand = [self performSelector:selectorOperation];
+        #pragma clang diagnostic pop
     }
     else {
         self.operation = operation;
@@ -155,7 +164,10 @@
     NSDecimalNumber *result = nil;
     self.beforeOperand = operand;
     SEL selectorOperation = NSSelectorFromString(self.arrayOfOperation[self.unaryOperation]);
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     result = [self performSelector:selectorOperation];
+    #pragma clang diagnostic pop
     if (result != nil) {
         [self.delegate setNewResultOnDisplay:result];
     }
@@ -219,20 +231,6 @@
         result = [self.currentOperand decimalNumberBySubtracting:[[NSDecimalNumber decimalNumberWithString:temp] decimalNumberByMultiplyingBy:self.beforeOperand]];
     }
     return result;
-}
-
-- (void)dealloc
-{
-    [_delegate release];
-    [_system release];
-    [_operation release];
-    [_currentOperand release];
-    [_formatterDecimal release];
-    [_beforeOperand release];
-    [_unaryOperation release];
-    [_arrayOfOperation release];
-    [_currentNumberSystem release];
-    [super dealloc];
 }
 
 @end

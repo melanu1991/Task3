@@ -35,10 +35,10 @@
     self.swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:self.swipeLeft];
     
-    UIBarButtonItem *item = [[[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)]autorelease];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)];
     self.navigationItem.leftBarButtonItem = item;
     
-    self.calcModel = [[[CalculatorModel alloc]init]autorelease];
+    self.calcModel = [[CalculatorModel alloc]init];
     self.calcModel.delegate = self;
     [self changeStateNotationButtonsForSystem:VAKSystemDec];
 }
@@ -79,13 +79,11 @@
 - (void)transitionAbout {
     AboutViewController *aboutView = [[AboutViewController alloc]init];
     [self.navigationController pushViewController:aboutView animated:YES];
-    [aboutView release];
 }
 
 - (IBAction)buttonLicencePressed:(id)sender {
     LicenseViewController *licenseView = [[LicenseViewController alloc]init];
     [self presentViewController:licenseView animated:YES completion:nil];
-    [licenseView release];
 }
 
 - (IBAction)buttonNumberPressed:(UIButton *)sender {
@@ -205,25 +203,4 @@
     }
 }
 
-#pragma mark - deallocate
-
-- (void)dealloc {
-    [_calcModel release];
-    [_resultLabel release];
-    [_swipeLeft release];
-    [_digitButtons release];
-    [_disableOperation release];
-    [_stackView1 release];
-    [_stackView2 release];
-    [_stackView3 release];
-    [_stackView4 release];
-    [_stackView5 release];
-    [_binButton release];
-    [_octButton release];
-    [_decButton release];
-    [_hexButton release];
-    [_fButton release];
-    [_stackView6 release];
-    [super dealloc];
-}
 @end
