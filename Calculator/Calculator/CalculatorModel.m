@@ -13,8 +13,8 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 @property (nonatomic, assign, getter=isFirstOperand) BOOL firstOperand;
 @property (nonatomic, assign, getter=isBinaryOperation) BOOL binaryOperation;
 @property (nonatomic, copy) NSString *currentNumberSystem;
-@property (nonatomic, retain) NSMutableDictionary *arrayOfOperation;
-@property (nonatomic, retain) id<SystemProtocol> system;
+@property (nonatomic, strong) NSMutableDictionary *arrayOfOperation;
+@property (nonatomic, strong) id<SystemProtocol> system;
 
 @end
 
