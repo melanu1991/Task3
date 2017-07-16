@@ -9,9 +9,7 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 @property (weak, nonatomic) IBOutlet UILabel *resultLabel;
 @property (nonatomic, strong) CalculatorModel *calcModel;
 
-@property (weak, nonatomic) IBOutletCollection(UIButton) NSArray *digitButtons;
-
-@property (weak, nonatomic) IBOutletCollection(UIButton) NSArray *disableOperation;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *digitButtons;
 
 @property (weak, nonatomic) IBOutlet UIStackView *stackView1;
 @property (weak, nonatomic) IBOutlet UIStackView *stackView2;
@@ -24,7 +22,24 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 @property (weak, nonatomic) IBOutlet UIButton *octButton;
 @property (weak, nonatomic) IBOutlet UIButton *decButton;
 @property (weak, nonatomic) IBOutlet UIButton *hexButton;
+@property (weak, nonatomic) IBOutlet UIButton *aButton;
+@property (weak, nonatomic) IBOutlet UIButton *bButton;
+@property (weak, nonatomic) IBOutlet UIButton *cButton;
+@property (weak, nonatomic) IBOutlet UIButton *dButton;
+@property (weak, nonatomic) IBOutlet UIButton *eButton;
 @property (weak, nonatomic) IBOutlet UIButton *fButton;
+@property (weak, nonatomic) IBOutlet UIButton *sinButton;
+@property (weak, nonatomic) IBOutlet UIButton *cosButton;
+@property (weak, nonatomic) IBOutlet UIButton *tanButton;
+@property (weak, nonatomic) IBOutlet UIButton *ctgButton;
+@property (weak, nonatomic) IBOutlet UIButton *piButton;
+@property (weak, nonatomic) IBOutlet UIButton *lnButton;
+@property (weak, nonatomic) IBOutlet UIButton *dotButton;
+@property (weak, nonatomic) IBOutlet UIButton *reverseButton;
+@property (weak, nonatomic) IBOutlet UIButton *sqrtButton;
+@property (weak, nonatomic) IBOutlet UIButton *modButton;
+
+@property (strong, nonatomic) UIBarButtonItem *beforeItem;
 
 @end
 
@@ -38,11 +53,79 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
     [self.view addGestureRecognizer:self.swipeLeft];
     
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)];
+    item.tintColor = [UIColor blueColor];
     self.navigationItem.leftBarButtonItem = item;
+    
+    UIBarButtonItem *simpleCalc = [[UIBarButtonItem alloc]initWithTitle:VAKSimpleCalc style:UIBarButtonItemStylePlain target:self action:@selector(changeCalc:)];
+    UIBarButtonItem *ingenerCalc = [[UIBarButtonItem alloc]initWithTitle:VAKIngenerCalc style:UIBarButtonItemStylePlain target:self action:@selector(changeCalc:)];
+    UIBarButtonItem *notationCalc = [[UIBarButtonItem alloc]initWithTitle:VAKNotationCalc style:UIBarButtonItemStylePlain target:self action:@selector(changeCalc:)];
+    simpleCalc.tintColor = [UIColor blueColor];
+    ingenerCalc.tintColor = [UIColor blueColor];
+    notationCalc.tintColor = [UIColor blueColor];
+    self.navigationItem.rightBarButtonItems = @[simpleCalc, ingenerCalc, notationCalc];
+    [self changeCalc:simpleCalc];
     
     self.calcModel = [[CalculatorModel alloc]init];
     self.calcModel.delegate = self;
     [self changeStateNotationButtonsForSystem:VAKSystemDec];
+}
+
+- (void)changeCalc:(UIBarButtonItem *)item {
+    if ([item.title isEqualToString:VAKSimpleCalc] && ![self.beforeItem isEqual:item]) {
+        [self.stackView1 addArrangedSubview:self.reverseButton];
+        [self.stackView1 addArrangedSubview:self.modButton];
+        [self.stackView1 removeArrangedSubview:self.sqrtButton];
+        [self.stackView1 removeArrangedSubview:self.aButton];
+        [self.stackView1 removeArrangedSubview:self.sinButton];
+        [self.stackView2 removeArrangedSubview:self.bButton];
+        [self.stackView2 removeArrangedSubview:self.cosButton];
+        [self.stackView3 removeArrangedSubview:self.cButton];
+        [self.stackView3 removeArrangedSubview:self.tanButton];
+        [self.stackView4 removeArrangedSubview:self.dButton];
+        [self.stackView4 removeArrangedSubview:self.ctgButton];
+        [self.stackView5 removeArrangedSubview:self.eButton];
+        [self.stackView5 removeArrangedSubview:self.piButton];
+        [self.stackView5 removeArrangedSubview:self.lnButton];
+        self.stackView6.hidden = YES;
+    }
+    else if ([item.title isEqualToString:VAKIngenerCalc] && ![self.beforeItem isEqual:item]) {
+        [self.stackView1 addArrangedSubview:self.reverseButton];
+        [self.stackView1 addArrangedSubview:self.sqrtButton];
+        [self.stackView1 addArrangedSubview:self.modButton];
+        [self.stackView1 removeArrangedSubview:self.aButton];
+        [self.stackView1 addArrangedSubview:self.sinButton];
+        [self.stackView2 removeArrangedSubview:self.bButton];
+        [self.stackView2 addArrangedSubview:self.cosButton];
+        [self.stackView3 removeArrangedSubview:self.cButton];
+        [self.stackView3 addArrangedSubview:self.tanButton];
+        [self.stackView4 removeArrangedSubview:self.dButton];
+        [self.stackView4 addArrangedSubview:self.ctgButton];
+        [self.stackView5 removeArrangedSubview:self.eButton];
+        [self.stackView5 addArrangedSubview:self.piButton];
+        [self.stackView5 addArrangedSubview:self.lnButton];
+        self.stackView6.hidden = YES;
+    }
+    else if ([item.title isEqualToString:VAKNotationCalc] && ![self.beforeItem isEqual:item]) {
+        [self.stackView1 addArrangedSubview:self.aButton];
+        [self.stackView1 removeArrangedSubview:self.sinButton];
+        [self.stackView1 removeArrangedSubview:self.modButton];
+        [self.stackView1 removeArrangedSubview:self.reverseButton];
+        [self.stackView1 removeArrangedSubview:self.sqrtButton];
+        [self.stackView2 addArrangedSubview:self.bButton];
+        [self.stackView2 removeArrangedSubview:self.cosButton];
+        [self.stackView3 addArrangedSubview:self.cButton];
+        [self.stackView3 removeArrangedSubview:self.tanButton];
+        [self.stackView4 addArrangedSubview:self.dButton];
+        [self.stackView4 removeArrangedSubview:self.ctgButton];
+        [self.stackView5 addArrangedSubview:self.eButton];
+        [self.stackView5 removeArrangedSubview:self.piButton];
+        [self.stackView6 removeArrangedSubview:self.lnButton];
+        [self.stackView5 removeArrangedSubview:self.lnButton];
+        self.stackView6.hidden = NO;
+    }
+    [self.beforeItem setTintColor:[UIColor blueColor]];
+    self.beforeItem = item;
+    [item setTintColor:[UIColor grayColor]];
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -56,25 +139,25 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
     }
 }
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
-
-    if (newCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
-        [self.stackView1 addArrangedSubview:self.binButton];
-        [self.stackView2 addArrangedSubview:self.octButton];
-        [self.stackView3 addArrangedSubview:self.decButton];
-        [self.stackView4 addArrangedSubview:self.hexButton];
-        [self.stackView5 addArrangedSubview:self.fButton];
-        self.stackView6.hidden = true;
-    } else {
-        self.stackView6.hidden = false;
-        [self.stackView6 addArrangedSubview:self.binButton];
-        [self.stackView6 addArrangedSubview:self.octButton];
-        [self.stackView6 addArrangedSubview:self.decButton];
-        [self.stackView6 addArrangedSubview:self.hexButton];
-        [self.stackView6 addArrangedSubview:self.fButton];
-    }
-}
+//- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+//    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+//
+//    if (newCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
+//        [self.stackView1 addArrangedSubview:self.binButton];
+//        [self.stackView2 addArrangedSubview:self.octButton];
+//        [self.stackView3 addArrangedSubview:self.decButton];
+//        [self.stackView4 addArrangedSubview:self.hexButton];
+//        [self.stackView5 addArrangedSubview:self.fButton];
+//        self.stackView6.hidden = true;
+//    } else {
+//        self.stackView6.hidden = false;
+//        [self.stackView6 addArrangedSubview:self.binButton];
+//        [self.stackView6 addArrangedSubview:self.octButton];
+//        [self.stackView6 addArrangedSubview:self.decButton];
+//        [self.stackView6 addArrangedSubview:self.hexButton];
+//        [self.stackView6 addArrangedSubview:self.fButton];
+//    }
+//}
 
 #pragma mark - action
 
@@ -223,27 +306,25 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
     int countDigitsNotation = 0;
     if ([notation isEqualToString:VAKSystemBin]) {
         countDigitsNotation = VAKCountBinaryNumber;
-        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
     }
     else if ([notation isEqualToString:VAKSystemDec]) {
         countDigitsNotation = VAKCountDecNumber;
-        [self.disableOperation setValue:@"YES" forKey:@"enabled"];
     }
     else if ([notation isEqualToString:VAKSystemHex]) {
         countDigitsNotation = VAKCountHexNumber;
-        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
     }
     else {
         countDigitsNotation = VAKCountOctNumber;
-        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
     }
     for (int i = 0; i < countDigitsNotation; i++) {
         UIButton *currentButton = self.digitButtons[i];
         [currentButton setValue:@"YES" forKey:@"enabled"];
+        [currentButton setTintColor:[UIColor blackColor]];
     }
     for (int i = countDigitsNotation; i < VAKCountHexNumber; i++) {
         UIButton *currentButton = self.digitButtons[i];
         [currentButton setValue:@"NO" forKey:@"enabled"];
+        [currentButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     }
 }
 

@@ -23,6 +23,10 @@ static NSString * const VAKCtgOperation = @"Ctg";
 static NSString * const VAKLnOperation = @"Ln";
 static NSString * const VAKPi = @"П";
 
+static NSString * const VAKSimpleCalc = @"SimpleCalc";
+static NSString * const VAKIngenerCalc = @"IngenerCalc";
+static NSString * const VAKNotationCalc = @"NotationCalc";
+
 static NSString * const VAKEmptyString = @"";
 static NSString * const VAKDotCharacter = @".";
 static NSString * const VAKNullCharacter = @"0";

@@ -512,20 +512,33 @@
                     </view>
                     <navigationItem key="navigationItem" id="vWF-cC-LKL"/>
                     <connections>
+                        <outlet property="aButton" destination="mdd-hJ-Wgu" id="FTB-7k-gZK"/>
+                        <outlet property="bButton" destination="RVs-AH-ydq" id="cif-tA-eed"/>
                         <outlet property="binButton" destination="5SM-3k-gxw" id="0MI-BV-nOu"/>
+                        <outlet property="cButton" destination="xGa-WX-k28" id="WGe-p0-BHE"/>
+                        <outlet property="cosButton" destination="EaE-5L-83N" id="YcQ-FE-cPG"/>
+                        <outlet property="ctgButton" destination="zPf-HS-Z8L" id="W0E-zS-VYb"/>
+                        <outlet property="dButton" destination="ipE-aj-pQa" id="rba-rN-8Yn"/>
                         <outlet property="decButton" destination="dSe-o8-3mQ" id="Aw1-sl-0WJ"/>
+                        <outlet property="dotButton" destination="S8i-q2-FYi" id="Bdp-Rr-b5Q"/>
+                        <outlet property="eButton" destination="Ykn-x7-f0K" id="xaJ-0e-JTW"/>
                         <outlet property="fButton" destination="MZx-Qn-QZO" id="yqy-Jh-JSR"/>
                         <outlet property="hexButton" destination="2gs-lv-qmc" id="drK-W7-OhH"/>
+                        <outlet property="lnButton" destination="9VT-Gz-vft" id="Q2Z-3s-1Fn"/>
+                        <outlet property="modButton" destination="9oh-2V-Czn" id="1kA-Ra-I0G"/>
                         <outlet property="octButton" destination="zeB-dl-1jJ" id="mqx-GA-8dV"/>
+                        <outlet property="piButton" destination="WG7-Dj-aV6" id="3lq-it-R1X"/>
                         <outlet property="resultLabel" destination="t54-t3-ueG" id="oFK-Jh-9as"/>
+                        <outlet property="reverseButton" destination="Mik-Lc-dqg" id="Wtl-UK-pGu"/>
+                        <outlet property="sinButton" destination="Vju-N1-NIe" id="kRE-nf-D6o"/>
+                        <outlet property="sqrtButton" destination="Fvg-qb-O0W" id="ZFH-fU-Kjl"/>
                         <outlet property="stackView1" destination="ggp-8M-bQ6" id="RHB-SI-5d9"/>
                         <outlet property="stackView2" destination="gEK-rh-gpx" id="EgD-qb-LIF"/>
                         <outlet property="stackView3" destination="kJb-ra-dGh" id="sd0-nl-UCX"/>
                         <outlet property="stackView4" destination="bxH-sE-iaa" id="Yjh-eu-J5i"/>
                         <outlet property="stackView5" destination="jSu-YX-E4P" id="Jid-CF-rcZ"/>
                         <outlet property="stackView6" destination="brD-8j-DH4" id="ngk-5h-wp8"/>
-                        <outletCollection property="disableOperation" destination="Mik-Lc-dqg" id="zNv-QX-cGO"/>
-                        <outletCollection property="disableOperation" destination="S8i-q2-FYi" id="QeO-WL-tee"/>
+                        <outlet property="tanButton" destination="DFv-xS-VAY" id="F9Q-lQ-Eg2"/>
                         <outletCollection property="digitButtons" destination="k89-MH-Xa7" id="JlB-Gz-cG6"/>
                         <outletCollection property="digitButtons" destination="tXs-qr-Pau" id="6SP-le-6C2"/>
                         <outletCollection property="digitButtons" destination="y96-dP-wVg" id="6za-bY-S10"/>
