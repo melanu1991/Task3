@@ -4,6 +4,8 @@
 #import "BinarySystem.h"
 #import "HexSystem.h"
 
+typedef NSDecimalNumber *(^ExecuteOperation)(void);
+
 @interface CalculatorModel : NSObject
 
 @property (nonatomic,weak) id<ChangedResultDelegate> delegate;
@@ -14,6 +16,8 @@
 - (void)binaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
 - (void)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
 - (void)executeOperation:(NSDecimalNumber *)newOperand;
+
+- (void)addOperation:(NSString *)operation withExecuteBlock:(ExecuteOperation)executeBlock;
 
 - (void)clearValue;
 

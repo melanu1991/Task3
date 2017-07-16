@@ -2,8 +2,6 @@
 #import "Constants.h"
 #import "NotationSystemFactory.h"
 
-typedef NSDecimalNumber *(^ExecuteOperation)(void);
-
 @interface CalculatorModel ()
 
 @property (nonatomic, copy) NSString *operation;
@@ -82,7 +80,10 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 }
 
 - (void)addOperation:(NSString *)operation withExecuteBlock:(ExecuteOperation)executeBlock {
-    self.arrayOfOperation[operation] = executeBlock;
+    NSArray *allOperation = [self.arrayOfOperation allKeys];
+    if (![allOperation containsObject:operation]) {
+        self.arrayOfOperation[operation] = executeBlock;
+    }
 }
 
 - (id<SystemProtocol>)system {

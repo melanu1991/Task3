@@ -1,6 +1,8 @@
 #import "ViewController.h"
 #import "Constants.h"
 
+typedef NSDecimalNumber *(^ExecuteOperation)(void);
+
 @interface ViewController ()
 @property (nonatomic, assign, getter=isWaitNextInput) BOOL waitNextInput;
 @property (nonatomic, strong) UISwipeGestureRecognizer *swipeLeft;
@@ -89,6 +91,9 @@
 - (IBAction)buttonNumberPressed:(UIButton *)sender {
     NSString *value = [sender titleForState:UIControlStateNormal];
     NSString *result = nil;
+    if ([value isEqualToString:VAKPi]) {
+        value = [NSString stringWithFormat:@"%f", M_PI];
+    }
     if (self.calcModel.equalOperation) {
         self.resultLabel.text = value;
         self.calcModel.equalOperation = NO;
@@ -146,17 +151,56 @@
 - (IBAction)unaryOperatorKeyIsPressed:(id)sender {
     [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
     self.calcModel.equalOperation = NO;
-    [self.calcModel unaryOperationWithOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:[sender titleForState:UIControlStateNormal]];
+    NSString *operation = [sender titleForState:UIControlStateNormal];
+    [self.calcModel addOperation:operation withExecuteBlock:[self returnSelectedExecuteBlockWithName:operation]];
+    [self.calcModel unaryOperationWithOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:operation];
     self.waitNextInput = YES;
     [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];    
 }
 
 - (IBAction)numberSystemButtonPressed:(UIButton *)sender {
     NSString *newSystem = [sender titleForState:UIControlStateNormal];
-
     [self changeStateNotationButtonsForSystem:newSystem];
     [self.calcModel changeNumberSystemWithNewSystem:newSystem withCurrentValue:self.resultLabel.text];
     
+}
+
+#pragma mark - add new operation
+
+- (ExecuteOperation )returnSelectedExecuteBlockWithName:(NSString *)name {
+    ExecuteOperation executeBlock = nil;
+    NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
+    if ([name isEqualToString:VAKSinOperation]) {
+        executeBlock = ^{
+            NSString *resultString = [NSString stringWithFormat:@"%f", sin(currentNumber.doubleValue)];
+            return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
+        };
+    }
+    else if ([name isEqualToString:VAKCosOperation]) {
+        executeBlock = ^{
+            NSString *resultString = [NSString stringWithFormat:@"%f", cos(currentNumber.doubleValue)];
+            return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
+        };
+    }
+    else if ([name isEqualToString:VAKTanOperation]) {
+        executeBlock = ^{
+            NSString *resultString = [NSString stringWithFormat:@"%f", tan(currentNumber.doubleValue)];
+            return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
+        };
+    }
+    else if ([name isEqualToString:VAKCtgOperation]) {
+        executeBlock = ^{
+            NSString *resultString = [NSString stringWithFormat:@"%f", 1/tan(currentNumber.doubleValue)];
+            return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
+        };
+    }
+    else if ([name isEqualToString:VAKLnOperation]) {
+        executeBlock = ^{
+            NSString *resultString = [NSString stringWithFormat:@"%f", log(currentNumber.doubleValue)];
+            return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
+        };
+    }
+    return executeBlock;
 }
 
 #pragma mark - delegate protocol
