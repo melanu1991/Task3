@@ -67,6 +67,7 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
     
     self.calcModel = [[CalculatorModel alloc]init];
     self.calcModel.delegate = self;
+    self.waitNextInput = YES;
     [self changeStateNotationButtonsForSystem:VAKSystemDec];
 }
 
@@ -74,55 +75,71 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
     if ([item.title isEqualToString:VAKSimpleCalc] && ![self.beforeItem isEqual:item]) {
         [self.stackView1 addArrangedSubview:self.reverseButton];
         [self.stackView1 addArrangedSubview:self.modButton];
-        [self.stackView1 removeArrangedSubview:self.sqrtButton];
+        
         [self.stackView1 removeArrangedSubview:self.aButton];
-        [self.stackView1 removeArrangedSubview:self.sinButton];
         [self.stackView2 removeArrangedSubview:self.bButton];
-        [self.stackView2 removeArrangedSubview:self.cosButton];
         [self.stackView3 removeArrangedSubview:self.cButton];
-        [self.stackView3 removeArrangedSubview:self.tanButton];
         [self.stackView4 removeArrangedSubview:self.dButton];
-        [self.stackView4 removeArrangedSubview:self.ctgButton];
         [self.stackView5 removeArrangedSubview:self.eButton];
+        [self.stackView1 removeArrangedSubview:self.sqrtButton];
+        [self.stackView1 removeArrangedSubview:self.sinButton];
+        [self.stackView2 removeArrangedSubview:self.cosButton];
+        [self.stackView3 removeArrangedSubview:self.tanButton];
+        [self.stackView4 removeArrangedSubview:self.ctgButton];
         [self.stackView5 removeArrangedSubview:self.piButton];
         [self.stackView5 removeArrangedSubview:self.lnButton];
         self.stackView6.hidden = YES;
+        
+        if (![self.calcModel.currentNumberSystem isEqualToString:VAKSystemDec] && ![self.beforeItem.title isEqualToString:VAKIngenerCalc]) {
+            [self changeStateNotationButtonsForSystem:VAKSystemDec];
+            [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
+        }
     }
     else if ([item.title isEqualToString:VAKIngenerCalc] && ![self.beforeItem isEqual:item]) {
         [self.stackView1 addArrangedSubview:self.reverseButton];
         [self.stackView1 addArrangedSubview:self.sqrtButton];
         [self.stackView1 addArrangedSubview:self.modButton];
-        [self.stackView1 removeArrangedSubview:self.aButton];
         [self.stackView1 addArrangedSubview:self.sinButton];
-        [self.stackView2 removeArrangedSubview:self.bButton];
         [self.stackView2 addArrangedSubview:self.cosButton];
-        [self.stackView3 removeArrangedSubview:self.cButton];
         [self.stackView3 addArrangedSubview:self.tanButton];
-        [self.stackView4 removeArrangedSubview:self.dButton];
         [self.stackView4 addArrangedSubview:self.ctgButton];
-        [self.stackView5 removeArrangedSubview:self.eButton];
         [self.stackView5 addArrangedSubview:self.piButton];
         [self.stackView5 addArrangedSubview:self.lnButton];
+        
+        [self.stackView1 removeArrangedSubview:self.aButton];
+        [self.stackView2 removeArrangedSubview:self.bButton];
+        [self.stackView3 removeArrangedSubview:self.cButton];
+        [self.stackView4 removeArrangedSubview:self.dButton];
+        [self.stackView5 removeArrangedSubview:self.eButton];
         self.stackView6.hidden = YES;
+        
+        if (![self.calcModel.currentNumberSystem isEqualToString:VAKSystemDec] && ![self.beforeItem.title isEqualToString:VAKSimpleCalc]) {
+            [self changeStateNotationButtonsForSystem:VAKSystemDec];
+            [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
+        }
     }
     else if ([item.title isEqualToString:VAKNotationCalc] && ![self.beforeItem isEqual:item]) {
         [self.stackView1 addArrangedSubview:self.aButton];
+        [self.stackView2 addArrangedSubview:self.bButton];
+        [self.stackView3 addArrangedSubview:self.cButton];
+        [self.stackView4 addArrangedSubview:self.dButton];
+        [self.stackView5 addArrangedSubview:self.eButton];
+        
         [self.stackView1 removeArrangedSubview:self.sinButton];
         [self.stackView1 removeArrangedSubview:self.modButton];
         [self.stackView1 removeArrangedSubview:self.reverseButton];
         [self.stackView1 removeArrangedSubview:self.sqrtButton];
-        [self.stackView2 addArrangedSubview:self.bButton];
         [self.stackView2 removeArrangedSubview:self.cosButton];
-        [self.stackView3 addArrangedSubview:self.cButton];
         [self.stackView3 removeArrangedSubview:self.tanButton];
-        [self.stackView4 addArrangedSubview:self.dButton];
         [self.stackView4 removeArrangedSubview:self.ctgButton];
-        [self.stackView5 addArrangedSubview:self.eButton];
         [self.stackView5 removeArrangedSubview:self.piButton];
         [self.stackView6 removeArrangedSubview:self.lnButton];
         [self.stackView5 removeArrangedSubview:self.lnButton];
         self.stackView6.hidden = NO;
+        
+        [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];
     }
+    
     [self.beforeItem setTintColor:[UIColor blueColor]];
     self.beforeItem = item;
     [item setTintColor:[UIColor grayColor]];

@@ -10,7 +10,6 @@
 @property (nonatomic, copy) NSDecimalNumber *beforeOperand;
 @property (nonatomic, assign, getter=isFirstOperand) BOOL firstOperand;
 @property (nonatomic, assign, getter=isBinaryOperation) BOOL binaryOperation;
-@property (nonatomic, copy) NSString *currentNumberSystem;
 @property (nonatomic, strong) NSMutableDictionary *arrayOfOperation;
 @property (nonatomic, strong) id<SystemProtocol> system;
 

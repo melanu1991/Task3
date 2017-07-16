@@ -12,6 +12,7 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 @property (nonatomic,strong) NSNumberFormatter *formatterDecimal;
 @property (nonatomic, assign, getter=isNextOperand) BOOL nextOperand;
 @property (nonatomic, assign, getter=isEqualOperation) BOOL equalOperation;
+@property (nonatomic, copy) NSString *currentNumberSystem;
 
 - (void)binaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
 - (void)unaryOperationWithOperand:(NSDecimalNumber *)operand operation:(NSString *)operation;
