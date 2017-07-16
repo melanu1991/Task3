@@ -137,6 +137,7 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
         [self.stackView5 removeArrangedSubview:self.lnButton];
         self.stackView6.hidden = NO;
         
+        [self changeStateNotationButtonsForSystem:self.calcModel.currentNumberSystem];
         [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];
     }
     
@@ -269,33 +270,37 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 
 - (ExecuteOperation )returnSelectedExecuteBlockWithName:(NSString *)name {
     ExecuteOperation executeBlock = nil;
-    NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
     if ([name isEqualToString:VAKSinOperation]) {
         executeBlock = ^{
+            NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
             NSString *resultString = [NSString stringWithFormat:@"%f", sin(currentNumber.doubleValue)];
             return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
         };
     }
     else if ([name isEqualToString:VAKCosOperation]) {
         executeBlock = ^{
+            NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
             NSString *resultString = [NSString stringWithFormat:@"%f", cos(currentNumber.doubleValue)];
             return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
         };
     }
     else if ([name isEqualToString:VAKTanOperation]) {
         executeBlock = ^{
+            NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
             NSString *resultString = [NSString stringWithFormat:@"%f", tan(currentNumber.doubleValue)];
             return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
         };
     }
     else if ([name isEqualToString:VAKCtgOperation]) {
         executeBlock = ^{
+            NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
             NSString *resultString = [NSString stringWithFormat:@"%f", 1/tan(currentNumber.doubleValue)];
             return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
         };
     }
     else if ([name isEqualToString:VAKLnOperation]) {
         executeBlock = ^{
+            NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
             NSString *resultString = [NSString stringWithFormat:@"%f", log(currentNumber.doubleValue)];
             return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
         };
