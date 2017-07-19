@@ -152,7 +152,7 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
     [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
     self.calcModel.equalOperation = NO;
     NSString *operation = [sender titleForState:UIControlStateNormal];
-    [self.calcModel addOperation:operation withExecuteBlock:[self returnSelectedExecuteBlockWithName:operation]];
+    [self.calcModel addOperation:operation withExecuteBlock:[self operationForType:operation]];
     [self.calcModel unaryOperationWithOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:operation];
     self.waitNextInput = YES;
     [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];    
@@ -167,7 +167,7 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 
 #pragma mark - add new operation
 
-- (ExecuteOperation )returnSelectedExecuteBlockWithName:(NSString *)name {
+- (ExecuteOperation )operationForType:(NSString *)name {
     ExecuteOperation executeBlock = nil;
     NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
     if ([name isEqualToString:VAKSinOperation]) {
