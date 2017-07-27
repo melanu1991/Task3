@@ -16,6 +16,12 @@ static NSString * const VAKDivOperation = @"/";
 static NSString * const VAKSqrtOperation = @"√";
 static NSString * const VAKPlusMinusOperation = @"±";
 static NSString * const VAKProcentOperation = @"%";
+static NSString * const VAKSinOperation = @"Sin";
+static NSString * const VAKCosOperation = @"Cos";
+static NSString * const VAKTanOperation = @"Tan";
+static NSString * const VAKCtgOperation = @"Ctg";
+static NSString * const VAKLnOperation = @"Ln";
+static NSString * const VAKPi = @"П";
 
 static NSString * const VAKEmptyString = @"";
 static NSString * const VAKDotCharacter = @".";
