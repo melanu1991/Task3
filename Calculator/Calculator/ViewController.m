@@ -137,7 +137,12 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
         [self.stackView5 removeArrangedSubview:self.lnButton];
         self.stackView6.hidden = NO;
         
-        [self changeStateNotationButtonsForSystem:self.calcModel.currentNumberSystem];
+        if (self.calcModel.currentNumberSystem) {
+            [self changeStateNotationButtonsForSystem:self.calcModel.currentNumberSystem];
+        }
+        else {
+            [self changeStateNotationButtonsForSystem:VAKSystemDec];
+        }
         [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];
     }
     
@@ -253,7 +258,7 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
     [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
     self.calcModel.equalOperation = NO;
     NSString *operation = [sender titleForState:UIControlStateNormal];
-    [self.calcModel addOperation:operation withExecuteBlock:[self returnSelectedExecuteBlockWithName:operation]];
+    [self.calcModel addOperation:operation withExecuteBlock:[self operationForType:operation]];
     [self.calcModel unaryOperationWithOperand:(NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text] operation:operation];
     self.waitNextInput = YES;
     [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];    
@@ -268,7 +273,7 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 
 #pragma mark - add new operation
 
-- (ExecuteOperation )returnSelectedExecuteBlockWithName:(NSString *)name {
+- (ExecuteOperation )operationForType:(NSString *)name {
     ExecuteOperation executeBlock = nil;
     if ([name isEqualToString:VAKSinOperation]) {
         executeBlock = ^{
