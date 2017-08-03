@@ -22,22 +22,9 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 @property (weak, nonatomic) IBOutlet UIButton *octButton;
 @property (weak, nonatomic) IBOutlet UIButton *decButton;
 @property (weak, nonatomic) IBOutlet UIButton *hexButton;
-@property (weak, nonatomic) IBOutlet UIButton *aButton;
-@property (weak, nonatomic) IBOutlet UIButton *bButton;
-@property (weak, nonatomic) IBOutlet UIButton *cButton;
-@property (weak, nonatomic) IBOutlet UIButton *dButton;
-@property (weak, nonatomic) IBOutlet UIButton *eButton;
-@property (weak, nonatomic) IBOutlet UIButton *fButton;
-@property (weak, nonatomic) IBOutlet UIButton *sinButton;
-@property (weak, nonatomic) IBOutlet UIButton *cosButton;
-@property (weak, nonatomic) IBOutlet UIButton *tanButton;
-@property (weak, nonatomic) IBOutlet UIButton *ctgButton;
-@property (weak, nonatomic) IBOutlet UIButton *piButton;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *simpleCalcMode;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *ingenerCalcMode;
 @property (weak, nonatomic) IBOutlet UIButton *lnButton;
-@property (weak, nonatomic) IBOutlet UIButton *dotButton;
-@property (weak, nonatomic) IBOutlet UIButton *reverseButton;
-@property (weak, nonatomic) IBOutlet UIButton *sqrtButton;
-@property (weak, nonatomic) IBOutlet UIButton *modButton;
 
 @property (strong, nonatomic) UIBarButtonItem *beforeItem;
 
@@ -73,21 +60,14 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 
 - (void)changeCalc:(UIBarButtonItem *)item {
     if ([item.title isEqualToString:VAKSimpleCalc] && ![self.beforeItem isEqual:item]) {
-        [self.stackView1 addArrangedSubview:self.reverseButton];
-        [self.stackView1 addArrangedSubview:self.modButton];
-        
-        [self.stackView1 removeArrangedSubview:self.aButton];
-        [self.stackView2 removeArrangedSubview:self.bButton];
-        [self.stackView3 removeArrangedSubview:self.cButton];
-        [self.stackView4 removeArrangedSubview:self.dButton];
-        [self.stackView5 removeArrangedSubview:self.eButton];
-        [self.stackView1 removeArrangedSubview:self.sqrtButton];
-        [self.stackView1 removeArrangedSubview:self.sinButton];
-        [self.stackView2 removeArrangedSubview:self.cosButton];
-        [self.stackView3 removeArrangedSubview:self.tanButton];
-        [self.stackView4 removeArrangedSubview:self.ctgButton];
-        [self.stackView5 removeArrangedSubview:self.piButton];
-        [self.stackView5 removeArrangedSubview:self.lnButton];
+        for (int i = 0; i < 2; i++) {
+            UIButton *button = self.simpleCalcMode[i];
+            button.hidden = NO;
+        }
+        for (int i = 2; i < self.simpleCalcMode.count; i++) {
+            UIButton *button = self.simpleCalcMode[i];
+            button.hidden = YES;
+        }
         self.stackView6.hidden = YES;
         
         if (![self.calcModel.currentNumberSystem isEqualToString:VAKSystemDec] && ![self.beforeItem.title isEqualToString:VAKIngenerCalc]) {
@@ -96,21 +76,15 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
         }
     }
     else if ([item.title isEqualToString:VAKIngenerCalc] && ![self.beforeItem isEqual:item]) {
-        [self.stackView1 addArrangedSubview:self.reverseButton];
-        [self.stackView1 addArrangedSubview:self.sqrtButton];
-        [self.stackView1 addArrangedSubview:self.modButton];
-        [self.stackView1 addArrangedSubview:self.sinButton];
-        [self.stackView2 addArrangedSubview:self.cosButton];
-        [self.stackView3 addArrangedSubview:self.tanButton];
-        [self.stackView4 addArrangedSubview:self.ctgButton];
-        [self.stackView5 addArrangedSubview:self.piButton];
+        for (int i = 0; i < 9; i++) {
+            UIButton *button = self.ingenerCalcMode[i];
+            button.hidden = NO;
+        }
+        for (int i = 9; i < self.ingenerCalcMode.count; i++) {
+            UIButton *button = self.ingenerCalcMode[i];
+            button.hidden = YES;
+        }
         [self.stackView5 addArrangedSubview:self.lnButton];
-        
-        [self.stackView1 removeArrangedSubview:self.aButton];
-        [self.stackView2 removeArrangedSubview:self.bButton];
-        [self.stackView3 removeArrangedSubview:self.cButton];
-        [self.stackView4 removeArrangedSubview:self.dButton];
-        [self.stackView5 removeArrangedSubview:self.eButton];
         self.stackView6.hidden = YES;
         
         if (![self.calcModel.currentNumberSystem isEqualToString:VAKSystemDec] && ![self.beforeItem.title isEqualToString:VAKSimpleCalc]) {
@@ -119,22 +93,14 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
         }
     }
     else if ([item.title isEqualToString:VAKNotationCalc] && ![self.beforeItem isEqual:item]) {
-        [self.stackView1 addArrangedSubview:self.aButton];
-        [self.stackView2 addArrangedSubview:self.bButton];
-        [self.stackView3 addArrangedSubview:self.cButton];
-        [self.stackView4 addArrangedSubview:self.dButton];
-        [self.stackView5 addArrangedSubview:self.eButton];
-        
-        [self.stackView1 removeArrangedSubview:self.sinButton];
-        [self.stackView1 removeArrangedSubview:self.modButton];
-        [self.stackView1 removeArrangedSubview:self.reverseButton];
-        [self.stackView1 removeArrangedSubview:self.sqrtButton];
-        [self.stackView2 removeArrangedSubview:self.cosButton];
-        [self.stackView3 removeArrangedSubview:self.tanButton];
-        [self.stackView4 removeArrangedSubview:self.ctgButton];
-        [self.stackView5 removeArrangedSubview:self.piButton];
-        [self.stackView6 removeArrangedSubview:self.lnButton];
-        [self.stackView5 removeArrangedSubview:self.lnButton];
+        for (int i = 0; i < 9; i++) {
+            UIButton *button = self.ingenerCalcMode[i];
+            button.hidden = YES;
+        }
+        for (int i = 9; i < self.ingenerCalcMode.count; i++) {
+            UIButton *button = self.ingenerCalcMode[i];
+            button.hidden = NO;
+        }
         self.stackView6.hidden = NO;
         
         if (self.calcModel.currentNumberSystem) {
