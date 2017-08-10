@@ -514,8 +514,8 @@
                     <connections>
                         <outlet property="binButton" destination="5SM-3k-gxw" id="0MI-BV-nOu"/>
                         <outlet property="decButton" destination="dSe-o8-3mQ" id="Aw1-sl-0WJ"/>
-                        <outlet property="fButton" destination="MZx-Qn-QZO" id="yqy-Jh-JSR"/>
                         <outlet property="hexButton" destination="2gs-lv-qmc" id="drK-W7-OhH"/>
+                        <outlet property="lnButton" destination="9VT-Gz-vft" id="sJb-YU-jP8"/>
                         <outlet property="octButton" destination="zeB-dl-1jJ" id="mqx-GA-8dV"/>
                         <outlet property="resultLabel" destination="t54-t3-ueG" id="oFK-Jh-9as"/>
                         <outlet property="stackView1" destination="ggp-8M-bQ6" id="RHB-SI-5d9"/>
@@ -524,8 +524,6 @@
                         <outlet property="stackView4" destination="bxH-sE-iaa" id="Yjh-eu-J5i"/>
                         <outlet property="stackView5" destination="jSu-YX-E4P" id="Jid-CF-rcZ"/>
                         <outlet property="stackView6" destination="brD-8j-DH4" id="ngk-5h-wp8"/>
-                        <outletCollection property="disableOperation" destination="Mik-Lc-dqg" id="zNv-QX-cGO"/>
-                        <outletCollection property="disableOperation" destination="S8i-q2-FYi" id="QeO-WL-tee"/>
                         <outletCollection property="digitButtons" destination="k89-MH-Xa7" id="JlB-Gz-cG6"/>
                         <outletCollection property="digitButtons" destination="tXs-qr-Pau" id="6SP-le-6C2"/>
                         <outletCollection property="digitButtons" destination="y96-dP-wVg" id="6za-bY-S10"/>
@@ -543,6 +541,33 @@
                         <outletCollection property="digitButtons" destination="Ykn-x7-f0K" id="X1X-ej-i02"/>
                         <outletCollection property="digitButtons" destination="MZx-Qn-QZO" id="H7W-AZ-RLt"/>
                         <outletCollection property="digitButtons" destination="WG7-Dj-aV6" id="wn5-X2-9uc"/>
+                        <outletCollection property="simpleCalcMode" destination="Mik-Lc-dqg" id="Wo8-eJ-aRA"/>
+                        <outletCollection property="simpleCalcMode" destination="9oh-2V-Czn" id="VCx-Wq-XEr"/>
+                        <outletCollection property="simpleCalcMode" destination="mdd-hJ-Wgu" id="lc9-tv-kel"/>
+                        <outletCollection property="simpleCalcMode" destination="RVs-AH-ydq" id="jEp-lY-q0H"/>
+                        <outletCollection property="simpleCalcMode" destination="xGa-WX-k28" id="GEA-lD-Q6V"/>
+                        <outletCollection property="simpleCalcMode" destination="ipE-aj-pQa" id="Dh3-mS-UI5"/>
+                        <outletCollection property="simpleCalcMode" destination="Ykn-x7-f0K" id="quj-wx-Hqf"/>
+                        <outletCollection property="simpleCalcMode" destination="Vju-N1-NIe" id="KW4-wt-SiV"/>
+                        <outletCollection property="simpleCalcMode" destination="EaE-5L-83N" id="ugG-YY-NAN"/>
+                        <outletCollection property="simpleCalcMode" destination="DFv-xS-VAY" id="e0f-PA-iGj"/>
+                        <outletCollection property="simpleCalcMode" destination="zPf-HS-Z8L" id="tIF-Zi-9da"/>
+                        <outletCollection property="simpleCalcMode" destination="WG7-Dj-aV6" id="Hs1-Qy-vmz"/>
+                        <outletCollection property="simpleCalcMode" destination="9VT-Gz-vft" id="PbU-5H-8HI"/>
+                        <outletCollection property="ingenerCalcMode" destination="Mik-Lc-dqg" id="05U-39-Asd"/>
+                        <outletCollection property="ingenerCalcMode" destination="9oh-2V-Czn" id="EbC-FC-lwU"/>
+                        <outletCollection property="ingenerCalcMode" destination="Fvg-qb-O0W" id="BQ7-Qk-6wV"/>
+                        <outletCollection property="ingenerCalcMode" destination="Vju-N1-NIe" id="BEb-xb-T5c"/>
+                        <outletCollection property="ingenerCalcMode" destination="EaE-5L-83N" id="A9B-Ft-JDj"/>
+                        <outletCollection property="ingenerCalcMode" destination="DFv-xS-VAY" id="sTh-f4-lFy"/>
+                        <outletCollection property="ingenerCalcMode" destination="zPf-HS-Z8L" id="nfJ-x2-BxO"/>
+                        <outletCollection property="ingenerCalcMode" destination="WG7-Dj-aV6" id="7jA-ht-77X"/>
+                        <outletCollection property="ingenerCalcMode" destination="9VT-Gz-vft" id="dDb-VT-Qr9"/>
+                        <outletCollection property="ingenerCalcMode" destination="mdd-hJ-Wgu" id="yDh-fM-aie"/>
+                        <outletCollection property="ingenerCalcMode" destination="RVs-AH-ydq" id="8cp-eL-QZy"/>
+                        <outletCollection property="ingenerCalcMode" destination="xGa-WX-k28" id="A1O-eQ-fJt"/>
+                        <outletCollection property="ingenerCalcMode" destination="ipE-aj-pQa" id="FDf-fa-yk4"/>
+                        <outletCollection property="ingenerCalcMode" destination="Ykn-x7-f0K" id="nxr-wr-Z7o"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -9,9 +9,7 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 @property (weak, nonatomic) IBOutlet UILabel *resultLabel;
 @property (nonatomic, strong) CalculatorModel *calcModel;
 
-@property (weak, nonatomic) IBOutletCollection(UIButton) NSArray *digitButtons;
-
-@property (weak, nonatomic) IBOutletCollection(UIButton) NSArray *disableOperation;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *digitButtons;
 
 @property (weak, nonatomic) IBOutlet UIStackView *stackView1;
 @property (weak, nonatomic) IBOutlet UIStackView *stackView2;
@@ -24,7 +22,11 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 @property (weak, nonatomic) IBOutlet UIButton *octButton;
 @property (weak, nonatomic) IBOutlet UIButton *decButton;
 @property (weak, nonatomic) IBOutlet UIButton *hexButton;
-@property (weak, nonatomic) IBOutlet UIButton *fButton;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *simpleCalcMode;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *ingenerCalcMode;
+@property (weak, nonatomic) IBOutlet UIButton *lnButton;
+
+@property (strong, nonatomic) UIBarButtonItem *beforeItem;
 
 @end
 
@@ -38,11 +40,81 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
     [self.view addGestureRecognizer:self.swipeLeft];
     
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"About" style:UIBarButtonItemStylePlain target:self action:@selector(transitionAbout)];
+    item.tintColor = [UIColor blueColor];
     self.navigationItem.leftBarButtonItem = item;
+    
+    UIBarButtonItem *simpleCalc = [[UIBarButtonItem alloc]initWithTitle:VAKSimpleCalc style:UIBarButtonItemStylePlain target:self action:@selector(changeCalc:)];
+    UIBarButtonItem *ingenerCalc = [[UIBarButtonItem alloc]initWithTitle:VAKIngenerCalc style:UIBarButtonItemStylePlain target:self action:@selector(changeCalc:)];
+    UIBarButtonItem *notationCalc = [[UIBarButtonItem alloc]initWithTitle:VAKNotationCalc style:UIBarButtonItemStylePlain target:self action:@selector(changeCalc:)];
+    simpleCalc.tintColor = [UIColor blueColor];
+    ingenerCalc.tintColor = [UIColor blueColor];
+    notationCalc.tintColor = [UIColor blueColor];
+    self.navigationItem.rightBarButtonItems = @[simpleCalc, ingenerCalc, notationCalc];
+    [self changeCalc:simpleCalc];
     
     self.calcModel = [[CalculatorModel alloc]init];
     self.calcModel.delegate = self;
+    self.waitNextInput = YES;
     [self changeStateNotationButtonsForSystem:VAKSystemDec];
+}
+
+- (void)changeCalc:(UIBarButtonItem *)item {
+    if ([item.title isEqualToString:VAKSimpleCalc] && ![self.beforeItem isEqual:item]) {
+        for (int i = 0; i < 2; i++) {
+            UIButton *button = self.simpleCalcMode[i];
+            button.hidden = NO;
+        }
+        for (int i = 2; i < self.simpleCalcMode.count; i++) {
+            UIButton *button = self.simpleCalcMode[i];
+            button.hidden = YES;
+        }
+        self.stackView6.hidden = YES;
+        
+        if (![self.calcModel.currentNumberSystem isEqualToString:VAKSystemDec] && ![self.beforeItem.title isEqualToString:VAKIngenerCalc]) {
+            [self changeStateNotationButtonsForSystem:VAKSystemDec];
+            [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
+        }
+    }
+    else if ([item.title isEqualToString:VAKIngenerCalc] && ![self.beforeItem isEqual:item]) {
+        for (int i = 0; i < 9; i++) {
+            UIButton *button = self.ingenerCalcMode[i];
+            button.hidden = NO;
+        }
+        for (int i = 9; i < self.ingenerCalcMode.count; i++) {
+            UIButton *button = self.ingenerCalcMode[i];
+            button.hidden = YES;
+        }
+        [self.stackView5 addArrangedSubview:self.lnButton];
+        self.stackView6.hidden = YES;
+        
+        if (![self.calcModel.currentNumberSystem isEqualToString:VAKSystemDec] && ![self.beforeItem.title isEqualToString:VAKSimpleCalc]) {
+            [self changeStateNotationButtonsForSystem:VAKSystemDec];
+            [self.calcModel convertAnyNumberSystemToDecimalNumberSystemWithNumber:self.resultLabel.text];
+        }
+    }
+    else if ([item.title isEqualToString:VAKNotationCalc] && ![self.beforeItem isEqual:item]) {
+        for (int i = 0; i < 9; i++) {
+            UIButton *button = self.ingenerCalcMode[i];
+            button.hidden = YES;
+        }
+        for (int i = 9; i < self.ingenerCalcMode.count; i++) {
+            UIButton *button = self.ingenerCalcMode[i];
+            button.hidden = NO;
+        }
+        self.stackView6.hidden = NO;
+        
+        if (self.calcModel.currentNumberSystem) {
+            [self changeStateNotationButtonsForSystem:self.calcModel.currentNumberSystem];
+        }
+        else {
+            [self changeStateNotationButtonsForSystem:VAKSystemDec];
+        }
+        [self.calcModel convertDecimalNumberSystemToAnyNumberSystemWithNumber:self.resultLabel.text];
+    }
+    
+    [self.beforeItem setTintColor:[UIColor blueColor]];
+    self.beforeItem = item;
+    [item setTintColor:[UIColor grayColor]];
 }
 
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipe {
@@ -56,25 +128,25 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
     }
 }
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
-
-    if (newCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
-        [self.stackView1 addArrangedSubview:self.binButton];
-        [self.stackView2 addArrangedSubview:self.octButton];
-        [self.stackView3 addArrangedSubview:self.decButton];
-        [self.stackView4 addArrangedSubview:self.hexButton];
-        [self.stackView5 addArrangedSubview:self.fButton];
-        self.stackView6.hidden = true;
-    } else {
-        self.stackView6.hidden = false;
-        [self.stackView6 addArrangedSubview:self.binButton];
-        [self.stackView6 addArrangedSubview:self.octButton];
-        [self.stackView6 addArrangedSubview:self.decButton];
-        [self.stackView6 addArrangedSubview:self.hexButton];
-        [self.stackView6 addArrangedSubview:self.fButton];
-    }
-}
+//- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+//    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+//
+//    if (newCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
+//        [self.stackView1 addArrangedSubview:self.binButton];
+//        [self.stackView2 addArrangedSubview:self.octButton];
+//        [self.stackView3 addArrangedSubview:self.decButton];
+//        [self.stackView4 addArrangedSubview:self.hexButton];
+//        [self.stackView5 addArrangedSubview:self.fButton];
+//        self.stackView6.hidden = true;
+//    } else {
+//        self.stackView6.hidden = false;
+//        [self.stackView6 addArrangedSubview:self.binButton];
+//        [self.stackView6 addArrangedSubview:self.octButton];
+//        [self.stackView6 addArrangedSubview:self.decButton];
+//        [self.stackView6 addArrangedSubview:self.hexButton];
+//        [self.stackView6 addArrangedSubview:self.fButton];
+//    }
+//}
 
 #pragma mark - action
 
@@ -169,33 +241,37 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
 
 - (ExecuteOperation )operationForType:(NSString *)name {
     ExecuteOperation executeBlock = nil;
-    NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
     if ([name isEqualToString:VAKSinOperation]) {
         executeBlock = ^{
+            NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
             NSString *resultString = [NSString stringWithFormat:@"%f", sin(currentNumber.doubleValue)];
             return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
         };
     }
     else if ([name isEqualToString:VAKCosOperation]) {
         executeBlock = ^{
+            NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
             NSString *resultString = [NSString stringWithFormat:@"%f", cos(currentNumber.doubleValue)];
             return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
         };
     }
     else if ([name isEqualToString:VAKTanOperation]) {
         executeBlock = ^{
+            NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
             NSString *resultString = [NSString stringWithFormat:@"%f", tan(currentNumber.doubleValue)];
             return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
         };
     }
     else if ([name isEqualToString:VAKCtgOperation]) {
         executeBlock = ^{
+            NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
             NSString *resultString = [NSString stringWithFormat:@"%f", 1/tan(currentNumber.doubleValue)];
             return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
         };
     }
     else if ([name isEqualToString:VAKLnOperation]) {
         executeBlock = ^{
+            NSDecimalNumber *currentNumber = (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:self.resultLabel.text];
             NSString *resultString = [NSString stringWithFormat:@"%f", log(currentNumber.doubleValue)];
             return (NSDecimalNumber *)[self.calcModel.formatterDecimal numberFromString:resultString];
         };
@@ -223,27 +299,25 @@ typedef NSDecimalNumber *(^ExecuteOperation)(void);
     int countDigitsNotation = 0;
     if ([notation isEqualToString:VAKSystemBin]) {
         countDigitsNotation = VAKCountBinaryNumber;
-        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
     }
     else if ([notation isEqualToString:VAKSystemDec]) {
         countDigitsNotation = VAKCountDecNumber;
-        [self.disableOperation setValue:@"YES" forKey:@"enabled"];
     }
     else if ([notation isEqualToString:VAKSystemHex]) {
         countDigitsNotation = VAKCountHexNumber;
-        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
     }
     else {
         countDigitsNotation = VAKCountOctNumber;
-        [self.disableOperation setValue:@"NO" forKey:@"enabled"];
     }
     for (int i = 0; i < countDigitsNotation; i++) {
         UIButton *currentButton = self.digitButtons[i];
         [currentButton setValue:@"YES" forKey:@"enabled"];
+        [currentButton setTintColor:[UIColor blackColor]];
     }
     for (int i = countDigitsNotation; i < VAKCountHexNumber; i++) {
         UIButton *currentButton = self.digitButtons[i];
         [currentButton setValue:@"NO" forKey:@"enabled"];
+        [currentButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     }
 }
 
